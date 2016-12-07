@@ -1,5 +1,6 @@
 package ch.heigvd.gamification.web;
 
+import ch.heigvd.gamification.exception.BadgeNotFoundException;
 import ch.heigvd.gamification.model.Badge;
 import ch.heigvd.gamification.model.BadgeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +26,9 @@ class BadgeRestController {
 
     @RequestMapping(method = RequestMethod.GET, value = "/{badgeId}")
     Badge getBadge(@PathVariable Long badgeId) {
-        return this.badgeRepository.findOne(badgeId);
+        return this.badgeRepository.findById(badgeId).orElseThrow(
+                () -> new BadgeNotFoundException(badgeId)
+        );
     }
 
     @RequestMapping(method = RequestMethod.POST)
