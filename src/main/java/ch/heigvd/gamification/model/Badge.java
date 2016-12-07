@@ -6,6 +6,7 @@ import javax.persistence.*;
  * Created by sebbos on 07.12.2016.
  */
 @Entity
+@Table(name="badge")
 public class Badge {
 
     @Id
