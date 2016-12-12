@@ -4,6 +4,8 @@ services:
     build: ./images/mysql
     environment:
      - MYSQL_ROOT_PASSWORD=root
+    ports:
+     - "3306:3306"
   open-jdk:
     build: ./images/open-jdk
     ports:
