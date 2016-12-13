@@ -4,6 +4,8 @@ A gamification platform for aplications that want to attribute badges and points
 
 Applications can register to the platform and create rules, badges and point scales for their users. When there is an event notified to the platform related to an user (for example a message posted), his state is modified and accordingly to the rules established, he can gain point or badges.
 
+This project was made with [Spring Boot](https://projects.spring.io/spring-boot/) in the AMT course at HEIG-VD. 
+
 Note that this is still a work in progress.
 
 # Deployment
@@ -33,3 +35,7 @@ What you could want is run only the mysql docker and run the project in your IDE
 1. `$ docker-compose up --build mysql` to run only the mysql container.
 2. create a custom profile in `/src/main/resources/` (for example `application-custom.properties`), and specify the connexion url of the mysql container (you can take the content of `application-default.properties` and replace the `db` part by the correct host).
 3. In your IDE, specify that you want to run the Spring Boot project with the `custom` profile (or any profile you created). It will override the defualt profile.
+
+# Authors
+
+Made by [Sébastien Boson](https://github.com/sebastie-boson), [Benjamin Schubert](https://github.com/BenjaminSchubert), [Mathieu Urstein](https://github.com/MathieuUrstein) et [Basile Vu](https://github.com/Flagoul).
