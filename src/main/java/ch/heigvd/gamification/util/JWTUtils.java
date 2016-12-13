@@ -6,6 +6,7 @@ import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTCreationException;
 import com.auth0.jwt.exceptions.JWTVerificationException;
+import com.auth0.jwt.interfaces.DecodedJWT;
 
 import java.io.UnsupportedEncodingException;
 
@@ -37,10 +38,11 @@ public class JWTUtils {
         return header.substring(SCHEMA.length() + 1);
     }
 
-    public static String generateToken() {
+    public static String generateToken(String subject) {
         try {
             return JWT.create()
                     .withIssuer(ISSUER)
+                    .withSubject(subject)
                     .sign(Algorithm.HMAC256(SECRET_KEY));
         } catch (JWTCreationException | UnsupportedEncodingException e) {
             e.printStackTrace();
@@ -48,13 +50,12 @@ public class JWTUtils {
         }
     }
 
-    public static boolean isTokenValid(String token) {
+    public static DecodedJWT verifyToken(String token) {
         createJWTVerifierIfNotExisting();
         try {
-            verifier.verify(token);
-            return true;
+            return verifier.verify(token);
         } catch (JWTVerificationException exception){
-            return false;
+            return null;
         }
     }
 }

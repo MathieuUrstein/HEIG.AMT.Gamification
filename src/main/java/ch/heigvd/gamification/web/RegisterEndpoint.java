@@ -51,15 +51,14 @@ public class RegisterEndpoint {
 
         app = new Application();
         app.setName(credentials.getName());
-        app.setPassword(credentials.getName()); // FIXME hash
+        app.setPassword(credentials.getPassword()); // FIXME hash
 
         applicationRepository.save(app);
-        System.out.println(applicationRepository.findByName(credentials.getName()));
 
         // FIXME url ?
         return ResponseEntity
                 .status(HttpStatus.CREATED)
-                .header("Authorization", JWTUtils.generateToken())
+                .header("Authorization", JWTUtils.generateToken(app.getName()))
                 .build();
     }
 }

@@ -52,7 +52,7 @@ public class AuthenticationRestController {
 
         return ResponseEntity
                 .ok()
-                .header("Authorization", JWTUtils.generateToken())
+                .header("Authorization", JWTUtils.generateToken(app.getName()))
                 .build();
     }
 }
