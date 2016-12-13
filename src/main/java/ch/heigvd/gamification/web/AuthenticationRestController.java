@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping(URIs.AUTH)
 public class AuthenticationRestController {
+    
     public ResponseEntity login(@RequestBody CredentialsDTO credentials) {
 
         // TODO request app from DB
