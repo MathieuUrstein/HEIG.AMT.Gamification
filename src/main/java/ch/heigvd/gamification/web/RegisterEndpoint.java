@@ -1,10 +1,8 @@
 package ch.heigvd.gamification.web;
 
-
 import ch.heigvd.gamification.dao.ApplicationRepository;
 import ch.heigvd.gamification.dto.CredentialsDTO;
 import ch.heigvd.gamification.model.Application;
-import ch.heigvd.gamification.util.AuthenticationUtils;
 import ch.heigvd.gamification.util.JWTUtils;
 import ch.heigvd.gamification.util.URIs;
 import ch.heigvd.gamification.validator.CredentialsDTOValidator;
@@ -20,12 +18,12 @@ import javax.validation.Valid;
 import java.util.List;
 
 @RestController
-@RequestMapping(URIs.AUTH)
-public class AuthenticationRestController {
+@RequestMapping(URIs.REGISTER)
+public class RegisterEndpoint {
     private final ApplicationRepository applicationRepository;
 
     @Autowired
-    public AuthenticationRestController(ApplicationRepository applicationRepository) {
+    public RegisterEndpoint(ApplicationRepository applicationRepository) {
         this.applicationRepository = applicationRepository;
     }
 
@@ -36,7 +34,8 @@ public class AuthenticationRestController {
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    @ResponseBody List<FieldError> processValidationError(MethodArgumentNotValidException ex) {
+    @ResponseBody
+    List<FieldError> processValidationError(MethodArgumentNotValidException ex) {
         return ex.getBindingResult().getFieldErrors(); // FIXME return custom Error
     }
 
@@ -44,14 +43,22 @@ public class AuthenticationRestController {
     public ResponseEntity login(@Valid @RequestBody CredentialsDTO credentials) {
         Application app = applicationRepository.findByName(credentials.getName());
 
-        if (app == null || !AuthenticationUtils.isPasswordValid(credentials.getPassword(), app.getPassword())) {
+        if (app != null) {
             return ResponseEntity
-                    .status(HttpStatus.UNAUTHORIZED)
-                    .build();
+                    .status(HttpStatus.CONFLICT)
+                    .build(); // FIXME error message ?
         }
 
+        app = new Application();
+        app.setName(credentials.getName());
+        app.setPassword(credentials.getName()); // FIXME hash
+
+        applicationRepository.save(app);
+        System.out.println(applicationRepository.findByName(credentials.getName()));
+
+        // FIXME url ?
         return ResponseEntity
-                .ok()
+                .status(HttpStatus.CREATED)
                 .header("Authorization", JWTUtils.generateToken())
                 .build();
     }
