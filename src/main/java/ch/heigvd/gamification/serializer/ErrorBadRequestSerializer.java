@@ -1,10 +1,10 @@
 package ch.heigvd.gamification.serializer;
 
 import ch.heigvd.gamification.error.ErrorBadRequest;
-import ch.heigvd.gamification.error.ErrorField;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.ser.std.StdSerializer;
+import org.springframework.validation.FieldError;
 
 import java.io.IOException;
 
@@ -24,10 +24,10 @@ public class ErrorBadRequestSerializer extends StdSerializer<ErrorBadRequest> {
     public void serialize(ErrorBadRequest errorBadRequest, JsonGenerator jsonGenerator, SerializerProvider serializerProvider) throws IOException {
         jsonGenerator.writeStartObject();
 
-        for (ErrorField errorField : errorBadRequest.getErrors()) {
-            jsonGenerator.writeObjectFieldStart(errorField.getField());
-            jsonGenerator.writeStringField("code", errorField.getError().getFirst());
-            jsonGenerator.writeStringField("message", errorField.getError().getSecond());
+        for (FieldError fieldError : errorBadRequest.getErrors()) {
+            jsonGenerator.writeObjectFieldStart(fieldError.getField());
+            jsonGenerator.writeStringField("code", fieldError.getCode());
+            jsonGenerator.writeStringField("message", fieldError.getDefaultMessage());
             jsonGenerator.writeEndObject();
         }
 

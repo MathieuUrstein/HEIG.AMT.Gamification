@@ -1,8 +1,6 @@
 package ch.heigvd.gamification.web.controller;
 
 import ch.heigvd.gamification.error.ErrorBadRequest;
-import ch.heigvd.gamification.error.ErrorField;
-import org.springframework.data.util.Pair;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
@@ -27,9 +25,7 @@ public class GlobalControllerExceptionHandler {
         ErrorBadRequest errorBadRequest = new ErrorBadRequest();
 
         for (FieldError fieldError : fieldErrors) {
-            Pair<String, String > error = Pair.of(fieldError.getCode(), fieldError.getDefaultMessage());
-
-            errorBadRequest.addError(new ErrorField(fieldError.getField(), error));
+            errorBadRequest.addError(fieldError);
         }
 
         return errorBadRequest;

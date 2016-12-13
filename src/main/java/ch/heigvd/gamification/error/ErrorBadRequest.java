@@ -2,6 +2,7 @@ package ch.heigvd.gamification.error;
 
 import ch.heigvd.gamification.serializer.ErrorBadRequestSerializer;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import org.springframework.validation.FieldError;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -11,25 +12,25 @@ import java.util.List;
  */
 @JsonSerialize(using = ErrorBadRequestSerializer.class)
 public class ErrorBadRequest {
-    private List<ErrorField> errors;
+    private List<FieldError> errors;
 
     public ErrorBadRequest() {
         errors = new LinkedList<>();
     }
 
-    public ErrorBadRequest(List<ErrorField> errors) {
+    public ErrorBadRequest(List<FieldError> errors) {
         this.errors = errors;
     }
 
-    public void addError(ErrorField error) {
+    public void addError(FieldError error) {
         errors.add(error);
     }
 
-    public void setErrors(List<ErrorField> errors) {
+    public void setErrors(List<FieldError> errors) {
         this.errors = errors;
     }
 
-    public List<ErrorField> getErrors() {
+    public List<FieldError> getErrors() {
         return errors;
     }
 }
