@@ -14,12 +14,12 @@ To deploy our app, you will need the following:
 
 Before anything, you may need to stop any service running on port 3306 and 9090.
 
-1. Clone the repo and cd into it
+1. Clone the repo and cd into it.
 2. `$ ./deploy.sh`
-3. That's it, the app should be listening at [http://localhost:9090/](http://localhost:9090/). Of course, if you don't run docker directly
-on your system (for example on a vm), the host should be the adress of the docker host and not `localhost`.
+3. That's it, the app should be listening at [http://localhost:9090/](http://localhost:9090/). Of course, if you don't run docker directly on your system (for example on a vm), the host should be the adress of the docker host and not `localhost`.
 
 If for any reason you prefer to do it manually instead of running the script, you can do the following:
+
 1. `$ mvn package`
 2. `$ cp target/gamification-0.0.1-SNAPSHOT.jar images/open-jdk/gamification.jar`
 3. `$ docker-compose up --build`
