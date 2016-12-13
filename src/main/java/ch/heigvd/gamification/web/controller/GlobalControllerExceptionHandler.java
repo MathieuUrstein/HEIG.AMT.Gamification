@@ -22,8 +22,6 @@ public class GlobalControllerExceptionHandler {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(MethodArgumentNotValidException.class)
     @ResponseBody ErrorBadRequest handleBadRequest(MethodArgumentNotValidException e) {
-        System.out.println("ICI");
-
         BindingResult bindingResult = e.getBindingResult();
         List<FieldError> fieldErrors = bindingResult.getFieldErrors();
         ErrorBadRequest errorBadRequest = new ErrorBadRequest();
