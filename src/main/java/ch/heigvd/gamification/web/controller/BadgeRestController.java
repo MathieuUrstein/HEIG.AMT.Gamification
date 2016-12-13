@@ -1,4 +1,4 @@
-package ch.heigvd.gamification.web;
+package ch.heigvd.gamification.web.controller;
 
 import ch.heigvd.gamification.dto.BadgeDTO;
 import ch.heigvd.gamification.exception.BadgeNotFoundException;
@@ -37,6 +37,18 @@ class BadgeRestController {
         binder.setValidator(new BadgeDTOValidator());
     }
 
+    /*@Bean
+    public ErrorAttributes errorAttributes() {
+        return new DefaultErrorAttributes() {
+            @Override
+            public Map<String, Object> getErrorAttributes(RequestAttributes requestAttributes, boolean includeStackTrace) {
+                Map<String, Object> errorAttributes = new HashMap<>();
+
+                return errorAttributes;
+            }
+        };
+    }*/
+
     @RequestMapping(method = RequestMethod.GET)
     Collection<Badge> getBadges() {
         return this.badgeRepository.findAll();
@@ -69,4 +81,29 @@ class BadgeRestController {
         this.badgeRepository.delete(badgeId);
         return ResponseEntity.noContent().build();
     }
+
+    /*@ExceptionHandler(MethodArgumentNotValidException.class)
+    public String handleMethodArgumentNotValidException(MethodArgumentNotValidException e, Model model) {
+        // Compute your generic error message/code with e.
+        // Or just use a generic error/code, in which case you can remove e from the parameters
+        String genericErrorMessage = "Some technical exception has occured blah blah blah" ;
+
+        // There are many other ways to pass an error to the view, but you get the idea
+        model.addAttribute("myErrors", genericErrorMessage);
+
+        return "myView";
+    }*/
+
+    /*@ExceptionHandler(MethodArgumentNotValidException.class)
+    public ModelAndView handleMethodArgumentNotValidException(HttpServletRequest request, Exception ex){
+        System.out.println("JE SUIS ICI");
+
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.addObject("exception", ex);
+        modelAndView.addObject("url", request.getRequestURL());
+
+        modelAndView.setViewName("error");
+
+        return modelAndView;
+    }*/
 }

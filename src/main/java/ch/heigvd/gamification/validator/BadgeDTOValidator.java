@@ -1,6 +1,7 @@
 package ch.heigvd.gamification.validator;
 
 import ch.heigvd.gamification.dto.BadgeDTO;
+import ch.heigvd.gamification.error.ErrorsCodes;
 import org.springframework.validation.Errors;
 import org.springframework.validation.ValidationUtils;
 import org.springframework.validation.Validator;
@@ -16,6 +17,13 @@ public class BadgeDTOValidator implements Validator {
 
     @Override
     public void validate(Object o, Errors errors) {
-        ValidationUtils.rejectIfEmpty(errors, "name", "name.empty");
+        BadgeDTO badgeDTO = (BadgeDTO) o;
+
+        if (badgeDTO.getName() == null) {
+            errors.rejectValue("name", ErrorsCodes.FIELD_REQUIRED, ErrorsCodes.FIELD_REQUIRED_MESSAGE);
+        }
+        else {
+            ValidationUtils.rejectIfEmpty(errors, "name", ErrorsCodes.FIELD_EMPTY, ErrorsCodes.FIELD_EMPTY_MESSAGE);
+        }
     }
 }
