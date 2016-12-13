@@ -12,7 +12,7 @@ To deploy our app, you will need the following:
 - Docker version 1.12.3 and docker-compose
 - Apache Maven 3.3.9
 
-Before anything, you may need to stop any service running on port 3306 and 9090.
+*Warning: Before anything, you may need to stop any service running on port 3306 and 9090.*
 
 1. Clone the repo and cd into it.
 2. `$ ./deploy.sh`
@@ -31,4 +31,5 @@ If you want to work on the project, you can of course edit files and re-run `dep
 What you could want is run only the mysql docker and run the project in your IDE. In order to do that, you will need to do the following:
 
 1. `$ docker-compose up --build mysql` to run only the mysql container.
-2. create a custom profile in `/src/main/resources/` (for example `application-perso.properties`), and specify the connexion url of the mysql container (you can take the content of `application-default.properties` and replace the `db` part by the correct host).
+2. create a custom profile in `/src/main/resources/` (for example `application-custom.properties`), and specify the connexion url of the mysql container (you can take the content of `application-default.properties` and replace the `db` part by the correct host).
+3. In your IDE, specify that you want to run the Spring Boot project with the `custom` profile (or any profile you created). It will override the defualt profile.
