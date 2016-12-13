@@ -2,6 +2,7 @@ package ch.heigvd.gamification.web;
 
 import ch.heigvd.gamification.dto.BadgeDTO;
 import ch.heigvd.gamification.exception.BadgeNotFoundException;
+import ch.heigvd.gamification.model.Application;
 import ch.heigvd.gamification.model.Badge;
 import ch.heigvd.gamification.model.BadgeRepository;
 import ch.heigvd.gamification.validator.BadgeDTOValidator;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import javax.servlet.ServletRequest;
 import javax.validation.Valid;
 import java.net.URI;
 import java.util.Collection;
@@ -48,7 +50,10 @@ class BadgeRestController {
     }
 
     @RequestMapping(method = RequestMethod.POST)
-    ResponseEntity addBadge(@Valid @RequestBody BadgeDTO badgeDTO) {
+    ResponseEntity addBadge(@Valid @RequestBody BadgeDTO badgeDTO, ServletRequest request) {
+        Application app = (Application)request.getAttribute("application");
+        System.out.println(app.getName());
+
         // TODO : image with a url
         Badge result = badgeRepository.save(new Badge(badgeDTO.getName(), badgeDTO.getImage()));
 

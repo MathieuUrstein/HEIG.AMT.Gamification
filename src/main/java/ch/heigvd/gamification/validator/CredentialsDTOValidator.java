@@ -14,7 +14,7 @@ public class CredentialsDTOValidator implements Validator {
 
     @Override
     public void validate(Object o, Errors errors) {
-        ValidationUtils.rejectIfEmpty(errors, "applicationName", "42"); // FIXME error code
+        ValidationUtils.rejectIfEmpty(errors, "name", "42"); // FIXME error code
         ValidationUtils.rejectIfEmpty(errors, "password", "42"); // FIXME error code
     }
 }

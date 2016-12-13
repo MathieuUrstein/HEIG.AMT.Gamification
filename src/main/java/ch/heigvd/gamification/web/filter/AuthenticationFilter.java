@@ -1,10 +1,15 @@
 package ch.heigvd.gamification.web.filter;
 
+import ch.heigvd.gamification.dao.ApplicationRepository;
+import ch.heigvd.gamification.model.Application;
 import ch.heigvd.gamification.util.AuthenticationUtils;
 import ch.heigvd.gamification.util.JWTUtils;
 import ch.heigvd.gamification.util.URIs;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.exceptions.JWTDecodeException;
+import com.auth0.jwt.interfaces.DecodedJWT;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.*;
@@ -14,6 +19,13 @@ import java.io.IOException;
 
 @Component
 public class AuthenticationFilter implements Filter {
+    private final ApplicationRepository applicationRepository;
+
+    @Autowired
+    public AuthenticationFilter(ApplicationRepository applicationRepository) {
+        this.applicationRepository = applicationRepository;
+    }
+
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {}
 
@@ -33,25 +45,30 @@ public class AuthenticationFilter implements Filter {
         String token = JWTUtils.extractToken(request.getHeader("Authorization"));
         if (token == null) {
             System.out.println("No JWT found");
-            response.setStatus(401);
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             return;
         }
 
         try {
             JWT.decode(token);
 
-            if (!JWTUtils.isTokenValid(token)) {
+            DecodedJWT jwt = JWTUtils.verifyToken(token);
+            Application app;
+
+            if (jwt == null || (app = applicationRepository.findByName(jwt.getSubject())) == null) {
                 System.out.println("JWT is not valid");
-                response.setStatus(403);
+                response.setStatus(HttpServletResponse.SC_FORBIDDEN);
                 return;
             }
 
             System.out.println("JWT OK!");
+
+            servletRequest.setAttribute("application", app);
             chain.doFilter(servletRequest, servletResponse);
 
         } catch (JWTDecodeException exception) {
             System.out.println("Invalid JWT format");
-            response.setStatus(401);
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
         }
     }
 

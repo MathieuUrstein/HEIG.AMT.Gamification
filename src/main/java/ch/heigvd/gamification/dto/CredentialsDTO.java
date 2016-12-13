@@ -1,17 +1,17 @@
 package ch.heigvd.gamification.dto;
 
 public class CredentialsDTO {
-    private String applicationName;
+    private String name;
     private String password;
 
     public CredentialsDTO() {}
 
-    public String getApplicationName() {
-        return applicationName;
+    public String getName() {
+        return name;
     }
 
-    public void setApplicationName(String applicationName) {
-        this.applicationName = applicationName;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getPassword() {
