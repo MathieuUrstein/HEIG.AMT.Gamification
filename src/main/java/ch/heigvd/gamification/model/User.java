@@ -1,5 +1,7 @@
 package ch.heigvd.gamification.model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import javax.persistence.*;
 import java.util.LinkedList;
 import java.util.List;
@@ -20,12 +22,15 @@ public class User {
     private Application application;
 
     @OneToMany(targetEntity = Event.class, fetch = FetchType.LAZY, cascade = {CascadeType.ALL}, mappedBy = "user")
+    @JsonManagedReference
     private List<Event> events = new LinkedList<>();
 
     @OneToMany(targetEntity = BadgeAward.class, fetch = FetchType.LAZY, cascade = {CascadeType.ALL}, mappedBy = "user")
+    @JsonManagedReference
     private List<BadgeAward> badgeAwards = new LinkedList<>();
 
     @OneToMany(targetEntity = PointAward.class, fetch = FetchType.LAZY, cascade = {CascadeType.ALL}, mappedBy = "user")
+    @JsonManagedReference
     private List<PointAward> pointAwards = new LinkedList<>();
 
 

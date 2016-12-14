@@ -1,6 +1,6 @@
 package ch.heigvd.gamification.model;
 
-import org.springframework.transaction.annotation.Transactional;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import javax.persistence.*;
 import java.util.LinkedList;
@@ -23,20 +23,21 @@ public class Application {
     @Column(name = "salt", nullable = false)
     private String salt;
 
-    @OneToMany(targetEntity = User.class, fetch = FetchType.LAZY, cascade = {CascadeType.ALL},
-            mappedBy = "application")
+    @OneToMany(targetEntity = User.class, fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "application")
+    @JsonManagedReference
     private List<User> users = new LinkedList<>();
 
-    @OneToMany(targetEntity = PointScale.class, fetch = FetchType.LAZY, cascade = {CascadeType.ALL},
-            mappedBy = "application")
+    @OneToMany(targetEntity = PointScale.class, fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "application")
+    @JsonManagedReference
     private List<PointScale> pointScales = new LinkedList<>();
 
-    @OneToMany(targetEntity = Badge.class, fetch = FetchType.LAZY, cascade = {CascadeType.ALL},
-            mappedBy = "application")
+    // FIXME EAGER -> LAZY
+    @OneToMany(targetEntity = Badge.class, fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "application")
+    @JsonManagedReference
     private List<Badge> badges = new LinkedList<>();
 
-    @OneToMany(targetEntity = Rule.class, fetch = FetchType.LAZY, cascade = {CascadeType.ALL},
-            mappedBy = "application")
+    @OneToMany(targetEntity = Rule.class, fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "application")
+    @JsonManagedReference
     private List<Rule> rules = new LinkedList<>();
 
 

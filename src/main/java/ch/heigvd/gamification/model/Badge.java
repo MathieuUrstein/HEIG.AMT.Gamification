@@ -1,12 +1,14 @@
 package ch.heigvd.gamification.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.*;
 import java.util.LinkedList;
 import java.util.List;
 
-
+@Transactional
 @Entity
 @Table(name="badge")
 public class Badge {
@@ -22,10 +24,12 @@ public class Badge {
     private byte[] image;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "application_id") // FIXME nullable false
+    @JoinColumn(name = "application_id", nullable = false)
+    @JsonBackReference
     private Application application;
 
-    @OneToMany(targetEntity = BadgeAward.class, fetch = FetchType.LAZY, cascade = {CascadeType.ALL}, mappedBy = "badge")
+    @OneToMany(targetEntity = BadgeAward.class, fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "badge")
+    @JsonManagedReference
     private List<BadgeAward> badgeAwards = new LinkedList<>();
 
 
@@ -61,7 +65,7 @@ public class Badge {
 
     public void setApplication(Application application) {
         this.application = application;
-        //application.addBadge(this);
+        application.addBadge(this);
     }
 
     public List<BadgeAward> getBadgeAwards() {

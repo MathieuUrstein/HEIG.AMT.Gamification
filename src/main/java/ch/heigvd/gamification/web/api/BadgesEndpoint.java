@@ -12,6 +12,7 @@ import org.hibernate.annotations.SourceType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -20,7 +21,6 @@ import javax.servlet.ServletRequest;
 import javax.validation.Valid;
 import java.net.URI;
 import java.util.Collection;
-
 
 @RestController
 @RequestMapping(URIs.BADGES)
@@ -46,7 +46,9 @@ public class BadgesEndpoint {
 
     @RequestMapping(method = RequestMethod.GET, value = "/{badgeId}")
     public Badge getBadge(@PathVariable Long badgeId, ServletRequest request) {
-        System.out.println("TEST");
+        Application app = (Application)request.getAttribute("application");
+        System.out.println(app.getName());
+        System.out.println(app.getBadges().size());
 
         return badgeRepository.findById(badgeId).orElseThrow(
                 () -> new NotFoundException("badge", badgeId)
@@ -63,7 +65,7 @@ public class BadgesEndpoint {
             Badge badge = new Badge();
             badge.setName(badgeDTO.getName());
             badge.setImage(badgeDTO.getImage());
-            //badge.setApplication(app);
+            badge.setApplication(app);
 
             badgeRepository.save(badge);
 
