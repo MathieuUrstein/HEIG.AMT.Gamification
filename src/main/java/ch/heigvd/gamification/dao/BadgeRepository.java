@@ -1,5 +1,6 @@
-package ch.heigvd.gamification.model;
+package ch.heigvd.gamification.dao;
 
+import ch.heigvd.gamification.model.Badge;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

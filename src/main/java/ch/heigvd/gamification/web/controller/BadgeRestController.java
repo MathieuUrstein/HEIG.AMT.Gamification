@@ -1,12 +1,14 @@
-package ch.heigvd.gamification.web;
+package ch.heigvd.gamification.web.controller;
 
+import ch.heigvd.gamification.dao.BadgeRepository;
 import ch.heigvd.gamification.dto.BadgeDTO;
+import ch.heigvd.gamification.exception.BadgeAlreadyExistsException;
 import ch.heigvd.gamification.exception.BadgeNotFoundException;
 import ch.heigvd.gamification.model.Application;
 import ch.heigvd.gamification.model.Badge;
-import ch.heigvd.gamification.model.BadgeRepository;
 import ch.heigvd.gamification.validator.BadgeDTOValidator;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
@@ -39,12 +41,12 @@ class BadgeRestController {
 
     @RequestMapping(method = RequestMethod.GET)
     Collection<Badge> getBadges() {
-        return this.badgeRepository.findAll();
+        return badgeRepository.findAll();
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/{badgeId}")
     Badge getBadge(@PathVariable Long badgeId) {
-        return this.badgeRepository.findById(badgeId).orElseThrow(
+        return badgeRepository.findById(badgeId).orElseThrow(
                 () -> new BadgeNotFoundException(badgeId)
         );
     }
@@ -55,18 +57,29 @@ class BadgeRestController {
         System.out.println(app.getName());
 
         // TODO : image with a url
-        Badge result = badgeRepository.save(new Badge(badgeDTO.getName(), badgeDTO.getImage()));
 
-        URI location = ServletUriComponentsBuilder
-                .fromCurrentRequest().path("/{id}")
-                .buildAndExpand(result.getId()).toUri();
+        try {
+            Badge result = badgeRepository.save(new Badge(badgeDTO.getName(), badgeDTO.getImage()));
 
-        return ResponseEntity.created(location).build();
+            URI location = ServletUriComponentsBuilder
+                    .fromCurrentRequest().path("/{id}")
+                    .buildAndExpand(result.getId()).toUri();
+
+            return ResponseEntity.created(location).build();
+        }
+        catch (DataIntegrityViolationException e) {
+            throw new BadgeAlreadyExistsException(badgeDTO.getName());
+        }
     }
 
     @RequestMapping(method = RequestMethod.DELETE, value = "/{badgeId}")
     ResponseEntity deleteBadge(@PathVariable Long badgeId) {
-        this.badgeRepository.delete(badgeId);
-        return ResponseEntity.noContent().build();
+        Badge badge = badgeRepository.findById(badgeId).orElseThrow(
+                () -> new BadgeNotFoundException(badgeId)
+        );
+
+        badgeRepository.delete(badge);
+
+        return ResponseEntity.ok().build();
     }
 }
