@@ -37,20 +37,20 @@ What you could want is run only the mysql docker and run the project in your IDE
 you will need to do the following:
 
 1. `$ docker-compose up --build mysql` to run only the mysql container.
-2. create a custom profile in `/src/main/resources/` (for example `application-local.properties`), and 
-specify the connexion url of the mysql container (you can take the content of 
-`application-default.properties` and replace the `db` part by the correct host).
-3. In your IDE, specify that you want to run the Spring Boot project with the `local` profile (or any 
-profile you created). It will override the default profile.
+2. create a [configuration file](http://docs.spring.io/spring-boot/docs/current/reference/html/boot-features-external-config.html#boot-features-external-config-profile-specific-properties)
+in `/src/main/resources/` named `application-default.properties`. You can name it differently (`application-{profile}.properties`),
+but you will have to specify later the profile used when you run the project.
+3. Inside, put the following line: `spring.datasource.url=jdbc:mysql://<host for the docker>:3306/gamification?useSSL=false`.
+4. You can now run the project from your IDE.
 
 Note: the basic behavior of the server is to keep the values registered in the DB. This can be changed by 
-adding the `spring.jpa.hibernate.ddl-auto` parameter in your application-local.properties and set it
-to wanted behavior (see the [Hibernate documentation](https://docs.jboss.org/hibernate/orm/5.2/userguide/html_single/Hibernate_User_Guide.html#configurations-hbmddl) 
-to see them).
+adding the `spring.jpa.hibernate.ddl-auto` parameter in your `application-default.properties` and set it
+to wanted behavior (check the [Hibernate documentation](https://docs.jboss.org/hibernate/orm/5.2/userguide/html_single/Hibernate_User_Guide.html#configurations-hbmddl) 
+to see the possible values).
 
 # Authors
 
 Made by [Sébastien Boson](https://github.com/sebastie-boson), 
 [Benjamin Schubert](https://github.com/BenjaminSchubert), 
-[Mathieu Urstein](https://github.com/MathieuUrstein) et 
+[Mathieu Urstein](https://github.com/MathieuUrstein) and 
 [Basile Vu](https://github.com/Flagoul).
