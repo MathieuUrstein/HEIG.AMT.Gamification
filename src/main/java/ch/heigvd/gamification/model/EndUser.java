@@ -20,6 +20,10 @@ public class EndUser {
 
     public EndUser() {}
 
+    public EndUser(String username) {
+        this.username = username;
+    }
+
     public long getId() {
         return id;
     }

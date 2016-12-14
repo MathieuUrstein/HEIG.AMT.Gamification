@@ -2,14 +2,12 @@ package ch.heigvd.gamification.web.filter;
 
 import ch.heigvd.gamification.dao.ApplicationRepository;
 import ch.heigvd.gamification.model.Application;
-import ch.heigvd.gamification.util.AuthenticationUtils;
 import ch.heigvd.gamification.util.JWTUtils;
 import ch.heigvd.gamification.util.URIs;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.exceptions.JWTDecodeException;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.*;
@@ -41,6 +39,15 @@ public class AuthenticationFilter implements Filter {
             chain.doFilter(servletRequest, response);
             return;
         }
+
+        checkJWTAndDoFilter(servletRequest, servletResponse, chain);
+    }
+
+    private void checkJWTAndDoFilter(ServletRequest servletRequest, ServletResponse servletResponse,
+                                     FilterChain chain) throws IOException, ServletException {
+
+        HttpServletRequest request = (HttpServletRequest) servletRequest;
+        HttpServletResponse response = (HttpServletResponse) servletResponse;
 
         String token = JWTUtils.extractToken(request.getHeader("Authorization"));
         if (token == null) {
