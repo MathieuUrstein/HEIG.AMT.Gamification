@@ -18,7 +18,8 @@ To deploy our app, you will need the following:
 
 1. Clone the repo and cd into it.
 2. `$ ./deploy.sh`
-3. That's it, the app should be listening at [http://localhost:9090/](http://localhost:9090/). Of course, if you don't run docker directly on your system (for example on a vm), the host should be the adress of the docker host and not `localhost`.
+3. That's it, the app should be listening at [http://localhost:9090/](http://localhost:9090/). Of course, 
+if you don't run docker directly on your system (for example on a vm), the host should be the adress of the docker host and not `localhost`.
 
 If for any reason you prefer to do it manually instead of running the script, you can do the following:
 
@@ -28,14 +29,28 @@ If for any reason you prefer to do it manually instead of running the script, yo
 
 # Development
 
-If you want to work on the project, you can of course edit files and re-run `deploy.sh` each time, but that's a bit long since you have to restart the dockers each time and you can't run the project directly from your IDE (because the host in the url of the DB connexion is an alias defined in the docker-compose).
+If you want to work on the project, you can of course edit files and re-run `deploy.sh` each time, but 
+that's a bit long since you have to restart the dockers each time and you can't run the project directly 
+from your IDE (because the host in the url of the DB connexion is an alias defined in the docker-compose).
 
-What you could want is run only the mysql docker and run the project in your IDE. In order to do that, you will need to do the following:
+What you could want is run only the mysql docker and run the project in your IDE. In order to do that, 
+you will need to do the following:
 
 1. `$ docker-compose up --build mysql` to run only the mysql container.
-2. create a custom profile in `/src/main/resources/` (for example `application-custom.properties`), and specify the connexion url of the mysql container (you can take the content of `application-default.properties` and replace the `db` part by the correct host).
-3. In your IDE, specify that you want to run the Spring Boot project with the `custom` profile (or any profile you created). It will override the defualt profile.
+2. create a custom profile in `/src/main/resources/` (for example `application-local.properties`), and 
+specify the connexion url of the mysql container (you can take the content of 
+`application-default.properties` and replace the `db` part by the correct host).
+3. In your IDE, specify that you want to run the Spring Boot project with the `local` profile (or any 
+profile you created). It will override the default profile.
+
+Note: the basic behavior of the server is to keep the values registered in the DB. This can be changed by 
+adding the `spring.jpa.hibernate.ddl-auto` parameter in your application-local.properties and set it
+to wanted behavior (see the [Hibernate documentation](https://docs.jboss.org/hibernate/orm/5.2/userguide/html_single/Hibernate_User_Guide.html#configurations-hbmddl) 
+to see them).
 
 # Authors
 
-Made by [Sébastien Boson](https://github.com/sebastie-boson), [Benjamin Schubert](https://github.com/BenjaminSchubert), [Mathieu Urstein](https://github.com/MathieuUrstein) et [Basile Vu](https://github.com/Flagoul).
+Made by [Sébastien Boson](https://github.com/sebastie-boson), 
+[Benjamin Schubert](https://github.com/BenjaminSchubert), 
+[Mathieu Urstein](https://github.com/MathieuUrstein) et 
+[Basile Vu](https://github.com/Flagoul).

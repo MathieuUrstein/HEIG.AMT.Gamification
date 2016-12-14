@@ -4,4 +4,4 @@ target
 
 *.jar
 
-application-perso.properties
+application-local.properties
