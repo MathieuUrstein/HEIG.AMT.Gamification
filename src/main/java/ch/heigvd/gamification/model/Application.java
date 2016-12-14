@@ -1,5 +1,7 @@
 package ch.heigvd.gamification.model;
 
+import org.springframework.transaction.annotation.Transactional;
+
 import javax.persistence.*;
 import java.util.LinkedList;
 import java.util.List;
@@ -94,7 +96,7 @@ public class Application {
         return badges;
     }
 
-    public void addBadges(Badge badge) {
+    public void addBadge(Badge badge) {
         badges.add(badge);
     }
 

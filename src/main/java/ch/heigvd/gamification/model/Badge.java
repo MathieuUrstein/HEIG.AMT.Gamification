@@ -1,5 +1,7 @@
 package ch.heigvd.gamification.model;
 
+import org.springframework.transaction.annotation.Transactional;
+
 import javax.persistence.*;
 import java.util.LinkedList;
 import java.util.List;
@@ -20,7 +22,7 @@ public class Badge {
     private byte[] image;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "application_id", nullable = false)
+    @JoinColumn(name = "application_id") // FIXME nullable false
     private Application application;
 
     @OneToMany(targetEntity = BadgeAward.class, fetch = FetchType.LAZY, cascade = {CascadeType.ALL}, mappedBy = "badge")
@@ -28,11 +30,6 @@ public class Badge {
 
 
     public Badge() {}
-
-    public Badge(String name, byte[] image) {
-        this.name = name;
-        this.image = image;
-    }
 
     private void setId(Long id) {
         this.id = id;
@@ -64,6 +61,7 @@ public class Badge {
 
     public void setApplication(Application application) {
         this.application = application;
+        //application.addBadge(this);
     }
 
     public List<BadgeAward> getBadgeAwards() {
