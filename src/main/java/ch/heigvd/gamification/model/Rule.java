@@ -20,7 +20,7 @@ public class Rule {
 
     public Rule() {}
 
-    public Long getId() {
+    public long getId() {
         return id;
     }
 
