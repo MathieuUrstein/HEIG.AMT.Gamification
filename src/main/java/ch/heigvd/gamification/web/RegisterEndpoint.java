@@ -51,7 +51,7 @@ public class RegisterEndpoint {
 
         app = new Application();
         app.setName(credentials.getName());
-        app.setPassword(credentials.getPassword()); // FIXME hash
+        app.setPassword(credentials.getPassword());
 
         applicationRepository.save(app);
 

@@ -16,12 +16,10 @@ public class Application {
     @Column(name = "password", nullable = false)
     private String password;
 
-    public Application() {}
+    @Column(name = "salt", nullable = false)
+    private String salt;
 
-    public Application(String name, String password) {
-        this.name = name;
-        this.password = password;
-    }
+    public Application() {}
 
     public long getId() {
         return id;
@@ -44,6 +42,16 @@ public class Application {
     }
 
     public void setPassword(String password) {
+        // FIXME hash + salt
         this.password = password;
+        this.salt = "TODO"; // FIXME
+    }
+
+    private String getSalt() {
+        return salt;
+    }
+
+    private void setSalt(String salt) {
+        this.salt = salt;
     }
 }
