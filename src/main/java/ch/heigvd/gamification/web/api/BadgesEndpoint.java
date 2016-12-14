@@ -6,6 +6,7 @@ import ch.heigvd.gamification.exception.BadgeAlreadyExistsException;
 import ch.heigvd.gamification.exception.BadgeNotFoundException;
 import ch.heigvd.gamification.model.Application;
 import ch.heigvd.gamification.model.Badge;
+import ch.heigvd.gamification.util.URIs;
 import ch.heigvd.gamification.validator.BadgeDTOValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -23,36 +24,36 @@ import java.util.Collection;
  * Created by sebbos on 06.12.2016.
  */
 @RestController
-@RequestMapping("/badges")
-class BadgesEndpoint {
+@RequestMapping(URIs.BADGES)
+public class BadgesEndpoint {
     // TODO : endpoint for images (badges)
 
     private final BadgeRepository badgeRepository;
 
     @Autowired
-    BadgesEndpoint(BadgeRepository badgeRepository) {
+    public BadgesEndpoint(BadgeRepository badgeRepository) {
         this.badgeRepository = badgeRepository;
     }
 
     @InitBinder
-    void initBinder(WebDataBinder binder) {
+    public void initBinder(WebDataBinder binder) {
         binder.setValidator(new BadgeDTOValidator());
     }
 
     @RequestMapping(method = RequestMethod.GET)
-    Collection<Badge> getBadges() {
+    public Collection<Badge> getBadges() {
         return badgeRepository.findAll();
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/{badgeId}")
-    Badge getBadge(@PathVariable Long badgeId) {
+    public Badge getBadge(@PathVariable Long badgeId) {
         return badgeRepository.findById(badgeId).orElseThrow(
                 () -> new BadgeNotFoundException(badgeId)
         );
     }
 
     @RequestMapping(method = RequestMethod.POST)
-    ResponseEntity addBadge(@Valid @RequestBody BadgeDTO badgeDTO, ServletRequest request) {
+    public ResponseEntity addBadge(@Valid @RequestBody BadgeDTO badgeDTO, ServletRequest request) {
         Application app = (Application)request.getAttribute("application");
         System.out.println(app.getName());
 
@@ -73,7 +74,7 @@ class BadgesEndpoint {
     }
 
     @RequestMapping(method = RequestMethod.DELETE, value = "/{badgeId}")
-    ResponseEntity deleteBadge(@PathVariable Long badgeId) {
+    public ResponseEntity deleteBadge(@PathVariable Long badgeId) {
         Badge badge = badgeRepository.findById(badgeId).orElseThrow(
                 () -> new BadgeNotFoundException(badgeId)
         );
