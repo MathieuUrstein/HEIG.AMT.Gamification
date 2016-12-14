@@ -14,6 +14,7 @@ public class Badge {
     @Column(name="id")
     private Long id;
 
+    // TODO : improve that (unique)
     @Column(name="name", unique = true, nullable = false, length = 60)
     private String name;
 

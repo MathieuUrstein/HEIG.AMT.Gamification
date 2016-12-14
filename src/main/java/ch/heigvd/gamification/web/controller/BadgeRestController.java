@@ -1,12 +1,14 @@
 package ch.heigvd.gamification.web.controller;
 
+import ch.heigvd.gamification.dao.BadgeRepository;
 import ch.heigvd.gamification.dto.BadgeDTO;
+import ch.heigvd.gamification.exception.BadgeAlreadyExistsException;
 import ch.heigvd.gamification.exception.BadgeNotFoundException;
 import ch.heigvd.gamification.model.Application;
 import ch.heigvd.gamification.model.Badge;
-import ch.heigvd.gamification.model.BadgeRepository;
 import ch.heigvd.gamification.validator.BadgeDTOValidator;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
@@ -37,18 +39,6 @@ class BadgeRestController {
         binder.setValidator(new BadgeDTOValidator());
     }
 
-    /*@Bean
-    public ErrorAttributes errorAttributes() {
-        return new DefaultErrorAttributes() {
-            @Override
-            public Map<String, Object> getErrorAttributes(RequestAttributes requestAttributes, boolean includeStackTrace) {
-                Map<String, Object> errorAttributes = new HashMap<>();
-
-                return errorAttributes;
-            }
-        };
-    }*/
-
     @RequestMapping(method = RequestMethod.GET)
     Collection<Badge> getBadges() {
         return this.badgeRepository.findAll();
@@ -67,13 +57,21 @@ class BadgeRestController {
         System.out.println(app.getName());
 
         // TODO : image with a url
-        Badge result = badgeRepository.save(new Badge(badgeDTO.getName(), badgeDTO.getImage()));
 
-        URI location = ServletUriComponentsBuilder
-                .fromCurrentRequest().path("/{id}")
-                .buildAndExpand(result.getId()).toUri();
+        Badge result;
 
-        return ResponseEntity.created(location).build();
+        try {
+            result = badgeRepository.save(new Badge(badgeDTO.getName(), badgeDTO.getImage()));
+
+            URI location = ServletUriComponentsBuilder
+                    .fromCurrentRequest().path("/{id}")
+                    .buildAndExpand(result.getId()).toUri();
+
+            return ResponseEntity.created(location).build();
+        }
+        catch (DataIntegrityViolationException e) {
+            throw new BadgeAlreadyExistsException(badgeDTO.getName());
+        }
     }
 
     @RequestMapping(method = RequestMethod.DELETE, value = "/{badgeId}")
@@ -81,29 +79,4 @@ class BadgeRestController {
         this.badgeRepository.delete(badgeId);
         return ResponseEntity.noContent().build();
     }
-
-    /*@ExceptionHandler(MethodArgumentNotValidException.class)
-    public String handleMethodArgumentNotValidException(MethodArgumentNotValidException e, Model model) {
-        // Compute your generic error message/code with e.
-        // Or just use a generic error/code, in which case you can remove e from the parameters
-        String genericErrorMessage = "Some technical exception has occured blah blah blah" ;
-
-        // There are many other ways to pass an error to the view, but you get the idea
-        model.addAttribute("myErrors", genericErrorMessage);
-
-        return "myView";
-    }*/
-
-    /*@ExceptionHandler(MethodArgumentNotValidException.class)
-    public ModelAndView handleMethodArgumentNotValidException(HttpServletRequest request, Exception ex){
-        System.out.println("JE SUIS ICI");
-
-        ModelAndView modelAndView = new ModelAndView();
-        modelAndView.addObject("exception", ex);
-        modelAndView.addObject("url", request.getRequestURL());
-
-        modelAndView.setViewName("error");
-
-        return modelAndView;
-    }*/
 }
