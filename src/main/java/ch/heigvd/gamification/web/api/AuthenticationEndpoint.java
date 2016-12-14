@@ -1,6 +1,5 @@
 package ch.heigvd.gamification.web.api;
 
-
 import ch.heigvd.gamification.dao.ApplicationRepository;
 import ch.heigvd.gamification.dto.CredentialsDTO;
 import ch.heigvd.gamification.model.Application;

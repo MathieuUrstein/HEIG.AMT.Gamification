@@ -27,7 +27,7 @@ public class CredentialsDTOValidator implements Validator {
             errors.rejectValue("password", ErrorsCodes.FIELD_REQUIRED, ErrorsCodes.FIELD_REQUIRED_MESSAGE);
         }
         else {
-            ValidationUtils.rejectIfEmpty(errors, ErrorsCodes.FIELD_EMPTY, ErrorsCodes.FIELD_EMPTY_MESSAGE);
+            ValidationUtils.rejectIfEmpty(errors, "password", ErrorsCodes.FIELD_EMPTY, ErrorsCodes.FIELD_EMPTY_MESSAGE);
         }
     }
 }

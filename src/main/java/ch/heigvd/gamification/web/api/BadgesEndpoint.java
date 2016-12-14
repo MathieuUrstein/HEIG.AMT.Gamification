@@ -2,8 +2,8 @@ package ch.heigvd.gamification.web.api;
 
 import ch.heigvd.gamification.dao.BadgeRepository;
 import ch.heigvd.gamification.dto.BadgeDTO;
-import ch.heigvd.gamification.exception.BadgeAlreadyExistsException;
-import ch.heigvd.gamification.exception.BadgeNotFoundException;
+import ch.heigvd.gamification.exception.ConflictException;
+import ch.heigvd.gamification.exception.NotFoundException;
 import ch.heigvd.gamification.model.Application;
 import ch.heigvd.gamification.model.Badge;
 import ch.heigvd.gamification.util.URIs;
@@ -48,7 +48,7 @@ public class BadgesEndpoint {
     @RequestMapping(method = RequestMethod.GET, value = "/{badgeId}")
     public Badge getBadge(@PathVariable Long badgeId) {
         return badgeRepository.findById(badgeId).orElseThrow(
-                () -> new BadgeNotFoundException(badgeId)
+                () -> new NotFoundException("badge", badgeId)
         );
     }
 
@@ -69,14 +69,14 @@ public class BadgesEndpoint {
             return ResponseEntity.created(location).build();
         }
         catch (DataIntegrityViolationException e) {
-            throw new BadgeAlreadyExistsException(badgeDTO.getName());
+            throw new ConflictException("badge", badgeDTO.getName());
         }
     }
 
     @RequestMapping(method = RequestMethod.DELETE, value = "/{badgeId}")
     public ResponseEntity deleteBadge(@PathVariable Long badgeId) {
         Badge badge = badgeRepository.findById(badgeId).orElseThrow(
-                () -> new BadgeNotFoundException(badgeId)
+                () -> new NotFoundException("badge", badgeId)
         );
 
         badgeRepository.delete(badge);
