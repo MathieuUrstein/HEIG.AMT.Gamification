@@ -1,4 +1,4 @@
-package ch.heigvd.gamification.web.controller;
+package ch.heigvd.gamification.web.api;
 
 import ch.heigvd.gamification.dao.BadgeRepository;
 import ch.heigvd.gamification.dto.BadgeDTO;
@@ -24,13 +24,13 @@ import java.util.Collection;
  */
 @RestController
 @RequestMapping("/badges")
-class BadgeRestController {
+class BadgesEndpoint {
     // TODO : endpoint for images (badges)
 
     private final BadgeRepository badgeRepository;
 
     @Autowired
-    BadgeRestController(BadgeRepository badgeRepository) {
+    BadgesEndpoint(BadgeRepository badgeRepository) {
         this.badgeRepository = badgeRepository;
     }
 

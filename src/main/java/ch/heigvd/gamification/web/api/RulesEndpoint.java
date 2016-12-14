@@ -1,4 +1,4 @@
-package ch.heigvd.gamification.web.controller;
+package ch.heigvd.gamification.web.api;
 
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @RequestMapping("/rules")
-public class RuleRestController {
+public class RulesEndpoint {
 
     @RequestMapping(method = RequestMethod.GET)
     String read() {

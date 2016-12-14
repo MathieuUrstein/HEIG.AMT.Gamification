@@ -1,4 +1,4 @@
-package ch.heigvd.gamification.web;
+package ch.heigvd.gamification.web.api;
 
 
 import ch.heigvd.gamification.dao.ApplicationRepository;
@@ -21,11 +21,11 @@ import java.util.List;
 
 @RestController
 @RequestMapping(URIs.AUTH)
-public class AuthenticationRestController {
+public class AuthenticationEndpoint {
     private final ApplicationRepository applicationRepository;
 
     @Autowired
-    public AuthenticationRestController(ApplicationRepository applicationRepository) {
+    public AuthenticationEndpoint(ApplicationRepository applicationRepository) {
         this.applicationRepository = applicationRepository;
     }
 

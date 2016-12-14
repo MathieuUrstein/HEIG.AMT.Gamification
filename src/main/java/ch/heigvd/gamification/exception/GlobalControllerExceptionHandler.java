@@ -1,4 +1,4 @@
-package ch.heigvd.gamification.web.controller;
+package ch.heigvd.gamification.exception;
 
 import ch.heigvd.gamification.error.ErrorBadRequest;
 import org.springframework.boot.autoconfigure.web.DefaultErrorAttributes;
