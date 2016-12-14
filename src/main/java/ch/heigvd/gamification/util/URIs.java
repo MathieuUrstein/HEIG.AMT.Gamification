@@ -4,6 +4,8 @@ public interface URIs {
     String AUTH = "/auth";
     String BADGES = "/badges";
     String USERS = "/users";
-    String POINTS_SCALE = "/pointsScale";
+    String EVENTS = "/events";
+    String POINT_SCALES = "/pointScales";
     String REGISTER = "/register";
+    String RULES = "/rules";
 }

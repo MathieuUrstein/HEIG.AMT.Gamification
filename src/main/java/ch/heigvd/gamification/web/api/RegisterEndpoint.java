@@ -1,7 +1,8 @@
-package ch.heigvd.gamification.web;
+package ch.heigvd.gamification.web.api;
 
 import ch.heigvd.gamification.dao.ApplicationRepository;
 import ch.heigvd.gamification.dto.CredentialsDTO;
+import ch.heigvd.gamification.exception.ConflictException;
 import ch.heigvd.gamification.model.Application;
 import ch.heigvd.gamification.util.JWTUtils;
 import ch.heigvd.gamification.util.URIs;
@@ -9,13 +10,10 @@ import ch.heigvd.gamification.validator.CredentialsDTOValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.FieldError;
-import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.List;
 
 @RestController
 @RequestMapping(URIs.REGISTER)
@@ -28,15 +26,8 @@ public class RegisterEndpoint {
     }
 
     @InitBinder
-    void initBinder(WebDataBinder binder) {
+    public void initBinder(WebDataBinder binder) {
         binder.setValidator(new CredentialsDTOValidator());
-    }
-
-    @ExceptionHandler(MethodArgumentNotValidException.class)
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    @ResponseBody
-    List<FieldError> processValidationError(MethodArgumentNotValidException ex) {
-        return ex.getBindingResult().getFieldErrors(); // FIXME return custom Error
     }
 
     @RequestMapping(method = RequestMethod.POST)
@@ -44,9 +35,7 @@ public class RegisterEndpoint {
         Application app = applicationRepository.findByName(credentials.getName());
 
         if (app != null) {
-            return ResponseEntity
-                    .status(HttpStatus.CONFLICT)
-                    .build(); // FIXME error message ?
+            throw new ConflictException("application", app.getName());
         }
 
         app = new Application();
@@ -55,7 +44,6 @@ public class RegisterEndpoint {
 
         applicationRepository.save(app);
 
-        // FIXME url ?
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .header("Authorization", JWTUtils.generateToken(app.getName()))
