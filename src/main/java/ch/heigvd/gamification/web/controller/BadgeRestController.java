@@ -41,12 +41,12 @@ class BadgeRestController {
 
     @RequestMapping(method = RequestMethod.GET)
     Collection<Badge> getBadges() {
-        return this.badgeRepository.findAll();
+        return badgeRepository.findAll();
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/{badgeId}")
     Badge getBadge(@PathVariable Long badgeId) {
-        return this.badgeRepository.findById(badgeId).orElseThrow(
+        return badgeRepository.findById(badgeId).orElseThrow(
                 () -> new BadgeNotFoundException(badgeId)
         );
     }
@@ -58,10 +58,8 @@ class BadgeRestController {
 
         // TODO : image with a url
 
-        Badge result;
-
         try {
-            result = badgeRepository.save(new Badge(badgeDTO.getName(), badgeDTO.getImage()));
+            Badge result = badgeRepository.save(new Badge(badgeDTO.getName(), badgeDTO.getImage()));
 
             URI location = ServletUriComponentsBuilder
                     .fromCurrentRequest().path("/{id}")
@@ -76,7 +74,12 @@ class BadgeRestController {
 
     @RequestMapping(method = RequestMethod.DELETE, value = "/{badgeId}")
     ResponseEntity deleteBadge(@PathVariable Long badgeId) {
-        this.badgeRepository.delete(badgeId);
-        return ResponseEntity.noContent().build();
+        Badge badge = badgeRepository.findById(badgeId).orElseThrow(
+                () -> new BadgeNotFoundException(badgeId)
+        );
+
+        badgeRepository.delete(badge);
+
+        return ResponseEntity.ok().build();
     }
 }
