@@ -6,7 +6,7 @@ import java.util.List;
 
 @Entity
 @Table(name="user")
-public class EndUser {
+public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
@@ -18,7 +18,15 @@ public class EndUser {
     @OneToMany(targetEntity = Event.class, fetch = FetchType.LAZY, cascade = {CascadeType.ALL}, mappedBy = "endUser")
     private List<Event> events = new LinkedList<>();
 
-    public EndUser() {}
+    public User() {}
+
+    public void addEvent(Event event) {
+        events.add(event);
+    }
+
+    public List<Event> getEvents() {
+        return events;
+    }
 
     public long getId() {
         return id;

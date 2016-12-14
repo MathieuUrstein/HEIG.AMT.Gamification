@@ -11,7 +11,7 @@ public class Badge {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="id")
-    private Long id;
+    private long id;
 
     // TODO : improve that (unique)
     @Column(name="name", unique = true, nullable = false, length = 60)
@@ -28,7 +28,7 @@ public class Badge {
         this.image = image;
     }
 
-    private void setId(Long id) {
+    private void setId(long id) {
         this.id = id;
     }
 
@@ -40,7 +40,7 @@ public class Badge {
         this.image = image;
     }
 
-    public Long getId() {
+    public long getId() {
         return id;
     }
 

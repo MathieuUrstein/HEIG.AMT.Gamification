@@ -46,7 +46,7 @@ public class BadgesEndpoint {
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/{badgeId}")
-    public Badge getBadge(@PathVariable Long badgeId) {
+    public Badge getBadge(@PathVariable long badgeId) {
         return badgeRepository.findById(badgeId).orElseThrow(
                 () -> new NotFoundException("badge", badgeId)
         );
@@ -74,7 +74,7 @@ public class BadgesEndpoint {
     }
 
     @RequestMapping(method = RequestMethod.DELETE, value = "/{badgeId}")
-    public ResponseEntity deleteBadge(@PathVariable Long badgeId) {
+    public ResponseEntity deleteBadge(@PathVariable long badgeId) {
         Badge badge = badgeRepository.findById(badgeId).orElseThrow(
                 () -> new NotFoundException("badge", badgeId)
         );

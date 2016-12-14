@@ -14,9 +14,14 @@ public class Event {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "end_user_id", nullable = false)
-    private EndUser endUser;
+    private User user;
 
     public Event() {}
+
+    public Event(String type, User user) {
+        this.type = type;
+        this.user = user;
+    }
 
     public long getId() {
         return id;
@@ -34,11 +39,11 @@ public class Event {
         this.type = type;
     }
 
-    public EndUser getEndUser() {
-        return endUser;
+    public User getUser() {
+        return user;
     }
 
-    public void setEndUser(EndUser endUser) {
-        this.endUser = endUser;
+    public void setUser(User user) {
+        this.user = user;
     }
 }
