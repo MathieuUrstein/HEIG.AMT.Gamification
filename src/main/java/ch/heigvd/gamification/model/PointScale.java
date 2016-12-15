@@ -8,7 +8,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 @Entity
-@Table(name = "point_scale")
+@Table(name = "point_scale", uniqueConstraints = @UniqueConstraint(columnNames =  {"name", "application_id"}))
 public class PointScale {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
