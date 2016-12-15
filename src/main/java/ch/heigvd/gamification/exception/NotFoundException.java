@@ -9,6 +9,6 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 @ResponseStatus(HttpStatus.NOT_FOUND)
 public class NotFoundException extends RuntimeException {
     public NotFoundException(String element, Long id) {
-        super("could not find " + element + " with '" + id + "'");
+        super("could not find " + element + " with id '" + id + "'");
     }
 }

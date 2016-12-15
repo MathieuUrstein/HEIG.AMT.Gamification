@@ -27,10 +27,10 @@ public class EventDTOValidator implements Validator {
         }
 
         if (eventDTO.getUserName() == null) {
-            errors.rejectValue("username", ErrorsCodes.FIELD_REQUIRED, ErrorsCodes.FIELD_REQUIRED_MESSAGE);
+            errors.rejectValue("userName", ErrorsCodes.FIELD_REQUIRED, ErrorsCodes.FIELD_REQUIRED_MESSAGE);
         }
         else {
-            ValidationUtils.rejectIfEmpty(errors, "username", ErrorsCodes.FIELD_EMPTY, ErrorsCodes.FIELD_EMPTY_MESSAGE);
+            ValidationUtils.rejectIfEmpty(errors, "userName", ErrorsCodes.FIELD_EMPTY, ErrorsCodes.FIELD_EMPTY_MESSAGE);
         }
     }
 }

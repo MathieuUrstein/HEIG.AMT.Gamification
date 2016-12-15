@@ -21,7 +21,7 @@ public class EventProcessor {
     public void processEvent(Application application, EventDTO event) {
         // TODO : gestion concurrence => rejour requête
 
-        User user = userRepository.findByApplicationNameAndUserName(application.getName(), event.getUserName());
+        User user = userRepository.findByApplicationName(application.getName(), event.getUserName());
 
         if (user == null) {
             user = new User();
