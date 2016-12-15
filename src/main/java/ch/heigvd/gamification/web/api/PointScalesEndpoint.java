@@ -14,7 +14,6 @@ import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import javax.servlet.ServletRequest;
 import javax.validation.Valid;
 import java.net.URI;
 
@@ -39,9 +38,9 @@ public class PointScalesEndpoint {
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/{pointScaleId}")
-    public PointScale getPointScale(@PathVariable Long pointScaleId, @RequestAttribute("application") Application app) {
+    public PointScale getPointScale(@PathVariable Long pointScaleId) {
         return pointScaleRepository
-                .findByApplicationNameAndId(app.getName(), pointScaleId)
+                .findById(pointScaleId)
                 .orElseThrow(() -> new NotFoundException("pointScale", pointScaleId));
     }
 
@@ -67,9 +66,9 @@ public class PointScalesEndpoint {
     }
 
     @RequestMapping(method = RequestMethod.DELETE, value = "/{pointScaleId}")
-    public ResponseEntity deleteBadge(@PathVariable Long pointScaleId, @RequestAttribute("application") Application app) {
+    public ResponseEntity deleteBadge(@PathVariable Long pointScaleId) {
         PointScale pointScale = pointScaleRepository
-                .findByApplicationNameAndId(app.getName(), pointScaleId)
+                .findById(pointScaleId)
                 .orElseThrow(() -> new NotFoundException("pointScale", pointScaleId));
 
         pointScaleRepository.delete(pointScale);

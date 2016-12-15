@@ -9,8 +9,6 @@ import ch.heigvd.gamification.util.URIs;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Collection;
-
 @RestController
 @RequestMapping(URIs.USERS)
 public class UsersEndpoint {
@@ -23,10 +21,9 @@ public class UsersEndpoint {
     }
 
     @RequestMapping(method = RequestMethod.GET)
-    Collection<User> getUsers(@RequestAttribute("application") Application app) {
-        return userRepository.findAllByApplicationName(app.getName());
+    Iterable<User> getUsers(@RequestAttribute("application") Application app) {
+        return userRepository.findByApplicationName(app.getName());
     }
-
 
     @RequestMapping(method = RequestMethod.GET, value = "/{username}")
     User getUser(@PathVariable String username, @RequestAttribute("application") Application app) {
