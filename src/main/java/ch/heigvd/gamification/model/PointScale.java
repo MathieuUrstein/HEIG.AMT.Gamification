@@ -8,53 +8,42 @@ import java.util.LinkedList;
 import java.util.List;
 
 @Entity
-@Table(name="badge")
-public class Badge {
+@Table(name = "point_scale")
+public class PointScale {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="id")
+    @Column(name = "id")
     private long id;
 
-    @Column(name="name", nullable = false, length = 60)
+    @Column(name = "name")
     private String name;
-
-    @Column(name="image")
-    private byte[] image;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "application_id", nullable = false)
     @JsonBackReference
     private Application application;
 
-    @OneToMany(targetEntity = BadgeAward.class, fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "badge")
+    @OneToMany(targetEntity = PointAward.class, fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "pointScale")
     @JsonManagedReference
-    private List<BadgeAward> badgeAwards = new LinkedList<>();
+    private List<PointAward> pointAwards = new LinkedList<>();
 
 
-    public Badge() {}
-
-    private void setId(long id) {
-        this.id = id;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public void setImage(byte[] image) {
-        this.image = image;
-    }
+    public PointScale() {}
 
     public long getId() {
         return id;
+    }
+
+    private void setId(long id) {
+        this.id = id;
     }
 
     public String getName() {
         return name;
     }
 
-    public byte[] getImage() {
-        return image;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public Application getApplication() {
@@ -63,14 +52,13 @@ public class Badge {
 
     public void setApplication(Application application) {
         this.application = application;
-        application.addBadge(this);
     }
 
-    public List<BadgeAward> getBadgeAwards() {
-        return badgeAwards;
+    public List<PointAward> getPointAwards() {
+        return pointAwards;
     }
 
-    public void addPointAward(BadgeAward badgeAward) {
-        badgeAwards.add(badgeAward);
+    public void addPointAward(PointAward pointAward) {
+        pointAwards.add(pointAward);
     }
 }
