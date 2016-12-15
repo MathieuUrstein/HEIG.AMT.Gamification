@@ -5,7 +5,7 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import javax.persistence.*;
 
 @Entity
-@Table(name="rule")
+@Table(name="rule", uniqueConstraints = @UniqueConstraint(columnNames =  {"name", "application_id"}))
 public class Rule {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -44,5 +44,6 @@ public class Rule {
 
     public void setApplication(Application application) {
         this.application = application;
+        application.addRules(this);
     }
 }

@@ -41,7 +41,7 @@ public class BadgesEndpoint {
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/{badgeId}")
-    public Badge getBadge(@RequestAttribute("application") Application app, @PathVariable Long badgeId) {
+    public Badge getBadge(@RequestAttribute("application") Application app, @PathVariable long badgeId) {
         return badgeRepository.
                 findByApplicationNameAndId(app.getName(), badgeId)
                 .orElseThrow(() -> new NotFoundException("badge", badgeId));
