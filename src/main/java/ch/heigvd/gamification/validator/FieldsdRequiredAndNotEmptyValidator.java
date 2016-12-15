@@ -27,13 +27,12 @@ public class FieldsdRequiredAndNotEmptyValidator implements Validator {
         try {
             for (PropertyDescriptor pd : Introspector.getBeanInfo(dtoClass).getPropertyDescriptors()) {
                 if (pd.getReadMethod() != null && !"class".equals(pd.getName())) {
-                    System.out.println(pd.getReadMethod().invoke(o));
-                    System.out.println(pd.getName());
 
                     if (pd.getReadMethod().invoke(o) == null) {
                         errors.rejectValue(pd.getName(), ErrorsCodes.FIELD_REQUIRED, ErrorsCodes.FIELD_REQUIRED_MESSAGE);
                     } else {
-                        ValidationUtils.rejectIfEmpty(errors, pd.getName(), ErrorsCodes.FIELD_EMPTY, ErrorsCodes.FIELD_EMPTY_MESSAGE);
+                        ValidationUtils.rejectIfEmpty(errors, pd.getName(), ErrorsCodes.FIELD_EMPTY,
+                                ErrorsCodes.FIELD_EMPTY_MESSAGE);
                     }
                 }
             }

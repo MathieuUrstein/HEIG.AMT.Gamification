@@ -1,75 +1,42 @@
-/*
+
 package ch.heigvd.gamification.web.api;
 
-import ch.heigvd.gamification.exception.ConflictException;
+import ch.heigvd.gamification.dao.UserRepository;
 import ch.heigvd.gamification.exception.NotFoundException;
+import ch.heigvd.gamification.model.Application;
 import ch.heigvd.gamification.model.User;
 import ch.heigvd.gamification.util.URIs;
-import ch.heigvd.gamification.validator.UserDTOValidator;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.WebDataBinder;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
 
-import javax.validation.Valid;
-import java.net.URI;
+import javax.servlet.ServletRequest;
 import java.util.Collection;
 
 @RestController
 @RequestMapping(URIs.USERS)
 public class UsersEndpoint {
 
-    private final EndUserRepository endUserRepository;
+    private final UserRepository userRepository;
 
     @Autowired
-    UsersEndpoint(EndUserRepository endUserRepository) {
-        this.endUserRepository = endUserRepository;
-    }
-
-    @InitBinder
-    public void initBinder(WebDataBinder binder) {
-        binder.setValidator(new UserDTOValidator());
+    UsersEndpoint(UserRepository userRepository) {
+        this.userRepository = userRepository;
     }
 
     @RequestMapping(method = RequestMethod.GET)
-    Collection<User> getUsers() {
-        return endUserRepository.findAll();
+    Collection<User> getUsers(ServletRequest request) {
+        return userRepository.findAllByApplicationName(((Application)request.getAttribute("application")).getName());
     }
 
-    @RequestMapping(method = RequestMethod.POST)
-    ResponseEntity createUser(@Valid @RequestBody UserDTO user) {
-        try {
-            User result = endUserRepository.save(new User(user.getUsername()));
 
-            URI location = ServletUriComponentsBuilder
-                    .fromCurrentRequest().path("/{id}")
-                    .buildAndExpand(result.getId()).toUri();
-
-            return ResponseEntity.created(location).build();
-        }
-        catch (DataIntegrityViolationException e) {
-            throw new ConflictException("user", user.getUsername());
-        }
-    }
-
-    @RequestMapping(method = RequestMethod.GET, value = "/{id}")
-    User getUser(@PathVariable Long id) {
-        return endUserRepository
-                .findById(id)
-                .orElseThrow(() -> new NotFoundException("user", id));
-    }
-
-    @RequestMapping(method = RequestMethod.DELETE, value = "/{userId}")
-    ResponseEntity deleteUser(@PathVariable Long userId) {
-        User user = endUserRepository
-                .findById(userId)
-                .orElseThrow(() -> new NotFoundException("userId", userId));
-
-        endUserRepository.delete(user);
-
-        return ResponseEntity.ok().build();
+    @RequestMapping(method = RequestMethod.GET, value = "/{username}")
+    User getUser(@PathVariable String username, ServletRequest request) {
+        return userRepository
+                .findByApplicationNameAndUsername(username, ((Application)request.getAttribute("application")).getName())
+                .orElseThrow(() -> new NotFoundException("user", username));
     }
 }
-*/
+

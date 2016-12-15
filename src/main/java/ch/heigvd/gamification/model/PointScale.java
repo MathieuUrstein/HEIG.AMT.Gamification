@@ -51,6 +51,7 @@ public class PointScale {
 
     public void setApplication(Application application) {
         this.application = application;
+        application.addPointScale(this);
     }
 
     public List<PointAward> getPointAwards() {

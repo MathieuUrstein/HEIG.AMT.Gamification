@@ -31,7 +31,6 @@ public class Application {
     @JsonManagedReference
     private List<PointScale> pointScales = new LinkedList<>();
 
-    // FIXME EAGER -> LAZY
     @OneToMany(targetEntity = Badge.class, fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "application")
     @JsonManagedReference
     private List<Badge> badges = new LinkedList<>();

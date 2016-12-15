@@ -9,6 +9,8 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
+
 @Service
 public class EventProcessor {
     private final UserRepository userRepository;
@@ -20,15 +22,18 @@ public class EventProcessor {
     @Async
     @Transactional
     public void processEvent(Application application, EventDTO eventDTO) {
-        User user = userRepository.findByApplicationNameAndUsername(application.getName(), eventDTO.getUsername());
+        Optional<User> opt = userRepository.findByApplicationNameAndUsername(application.getName(), eventDTO.getUsername());
 
-        if (user == null) {
-            System.out.println("null");
+        User user;
+        if (!opt.isPresent()) {
+            System.out.println("user doesn't exist");
 
             user = new User();
 
             user.setUsername(eventDTO.getUsername());
             user.setApplication(application);
+        } else {
+            user = opt.get();
         }
 
         Event event = new Event();
