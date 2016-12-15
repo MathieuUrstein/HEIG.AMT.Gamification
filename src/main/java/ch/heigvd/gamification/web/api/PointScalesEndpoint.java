@@ -39,18 +39,15 @@ public class PointScalesEndpoint {
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/{pointScaleId}")
-    public PointScale getPointScale(@PathVariable Long pointScaleId, ServletRequest request) {
-        Application app = (Application)request.getAttribute("application");
-
+    public PointScale getPointScale(@PathVariable Long pointScaleId, @RequestAttribute("application") Application app) {
         return pointScaleRepository
                 .findByApplicationNameAndId(app.getName(), pointScaleId)
                 .orElseThrow(() -> new NotFoundException("pointScale", pointScaleId));
     }
 
     @RequestMapping(method = RequestMethod.POST)
-    public ResponseEntity addBadge(@Valid @RequestBody PointScaleDTO badgeDTO, ServletRequest request) {
-        Application app = (Application)request.getAttribute("application");
-
+    public ResponseEntity addBadge(@Valid @RequestBody PointScaleDTO badgeDTO,
+                                   @RequestAttribute("application") Application app) {
         try {
             PointScale pointScale = new PointScale();
             pointScale.setName(badgeDTO.getName());
@@ -70,9 +67,7 @@ public class PointScalesEndpoint {
     }
 
     @RequestMapping(method = RequestMethod.DELETE, value = "/{pointScaleId}")
-    public ResponseEntity deleteBadge(@PathVariable Long pointScaleId, ServletRequest request) {
-        Application app = (Application)request.getAttribute("application");
-
+    public ResponseEntity deleteBadge(@PathVariable Long pointScaleId, @RequestAttribute("application") Application app) {
         PointScale pointScale = pointScaleRepository
                 .findByApplicationNameAndId(app.getName(), pointScaleId)
                 .orElseThrow(() -> new NotFoundException("pointScale", pointScaleId));

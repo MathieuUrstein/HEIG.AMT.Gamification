@@ -8,7 +8,6 @@ import ch.heigvd.gamification.model.Application;
 import ch.heigvd.gamification.model.Badge;
 import ch.heigvd.gamification.util.URIs;
 import ch.heigvd.gamification.validator.BadgeDTOValidator;
-import ch.heigvd.gamification.validator.FieldsRequiredAndNotEmptyValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.ResponseEntity;
@@ -43,9 +42,7 @@ public class BadgesEndpoint {
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/{badgeId}")
-    public Badge getBadge(@PathVariable Long badgeId, ServletRequest request) {
-        Application app = (Application)request.getAttribute("application");
-
+    public Badge getBadge(@PathVariable Long badgeId, @RequestAttribute("application") Application app) {
         return badgeRepository.
                 findByApplicationNameAndId(app.getName(), badgeId)
                 .orElseThrow(() -> new NotFoundException("badge", badgeId));
@@ -77,9 +74,7 @@ public class BadgesEndpoint {
     }
 
     @RequestMapping(method = RequestMethod.DELETE, value = "/{badgeId}")
-    public ResponseEntity deleteBadge(@PathVariable long badgeId, ServletRequest request) {
-        Application app = (Application)request.getAttribute("application");
-
+    public ResponseEntity deleteBadge(@PathVariable long badgeId, @RequestAttribute("application") Application app) {
         Badge badge = badgeRepository.
                 findByApplicationNameAndId(app.getName(), badgeId)
                 .orElseThrow(() -> new NotFoundException("badge", badgeId));

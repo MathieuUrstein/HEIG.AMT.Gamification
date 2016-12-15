@@ -7,12 +7,8 @@ import ch.heigvd.gamification.model.Application;
 import ch.heigvd.gamification.model.User;
 import ch.heigvd.gamification.util.URIs;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.ServletRequest;
 import java.util.Collection;
 
 @RestController
@@ -27,15 +23,15 @@ public class UsersEndpoint {
     }
 
     @RequestMapping(method = RequestMethod.GET)
-    Collection<User> getUsers(ServletRequest request) {
-        return userRepository.findAllByApplicationName(((Application)request.getAttribute("application")).getName());
+    Collection<User> getUsers(@RequestAttribute("application") Application app) {
+        return userRepository.findAllByApplicationName(app.getName());
     }
 
 
     @RequestMapping(method = RequestMethod.GET, value = "/{username}")
-    User getUser(@PathVariable String username, ServletRequest request) {
+    User getUser(@PathVariable String username, @RequestAttribute("application") Application app) {
         return userRepository
-                .findByApplicationNameAndUsername(((Application)request.getAttribute("application")).getName(), username)
+                .findByApplicationNameAndUsername(app.getName(), username)
                 .orElseThrow(() -> new NotFoundException("user", username));
     }
 }

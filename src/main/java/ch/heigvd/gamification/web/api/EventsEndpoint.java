@@ -31,9 +31,7 @@ public class EventsEndpoint {
     }
 
     @RequestMapping(method = RequestMethod.POST)
-    public ResponseEntity addEvent(@Valid @RequestBody EventDTO eventDTO, ServletRequest request) {
-        Application app = (Application) request.getAttribute("application");
-
+    public ResponseEntity addEvent(@Valid @RequestBody EventDTO eventDTO, @RequestAttribute("application") Application app) {
         try {
             eventProcessor.processEvent(app, eventDTO);
         }
