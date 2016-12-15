@@ -8,7 +8,6 @@ import javax.persistence.*;
 import java.util.LinkedList;
 import java.util.List;
 
-@Transactional
 @Entity
 @Table(name="badge")
 public class Badge {
