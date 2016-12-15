@@ -1,5 +1,6 @@
 package ch.heigvd.gamification.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import javax.persistence.*;
@@ -19,6 +20,7 @@ public class User {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "application_id", nullable = false)
+    @JsonBackReference
     private Application application;
 
     @OneToMany(targetEntity = Event.class, fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "user")

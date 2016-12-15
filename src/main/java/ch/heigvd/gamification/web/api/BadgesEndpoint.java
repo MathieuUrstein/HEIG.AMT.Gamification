@@ -15,7 +15,6 @@ import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import javax.servlet.ServletRequest;
 import javax.validation.Valid;
 import java.net.URI;
 
@@ -37,26 +36,20 @@ public class BadgesEndpoint {
     }
 
     @RequestMapping(method = RequestMethod.GET)
-    public Iterable<Badge> getBadges() {
-        return badgeRepository.findAll();
+    public Iterable<Badge> getBadges(@RequestAttribute("application") Application app) {
+        return badgeRepository.findByApplicationName(app.getName());
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/{badgeId}")
-    public Badge getBadge(@PathVariable Long badgeId, ServletRequest request) {
-        Application app = (Application)request.getAttribute("application");
-        System.out.println(app.getName());
-        System.out.println(app.getBadges().size());
-
-        return badgeRepository.findById(badgeId).orElseThrow(
-                () -> new NotFoundException("badge", badgeId)
-        );
+    public Badge getBadge(@RequestAttribute("application") Application app, @PathVariable Long badgeId) {
+        return badgeRepository.
+                findByApplicationNameAndId(app.getName(), badgeId)
+                .orElseThrow(() -> new NotFoundException("badge", badgeId));
     }
 
     @RequestMapping(method = RequestMethod.POST)
-    public ResponseEntity addBadge(@Valid @RequestBody BadgeDTO badgeDTO, ServletRequest request) {
+    public ResponseEntity addBadge(@Valid @RequestBody BadgeDTO badgeDTO, @RequestAttribute("application") Application app) {
         // TODO : image with a url
-
-        Application app = (Application)request.getAttribute("application");
 
         try {
             Badge badge = new Badge();
@@ -78,10 +71,10 @@ public class BadgesEndpoint {
     }
 
     @RequestMapping(method = RequestMethod.DELETE, value = "/{badgeId}")
-    public ResponseEntity deleteBadge(@PathVariable long badgeId) {
-        Badge badge = badgeRepository.findById(badgeId).orElseThrow(
-                () -> new NotFoundException("badge", badgeId)
-        );
+    public ResponseEntity deleteBadge(@RequestAttribute("application") Application app, @PathVariable long badgeId) {
+        Badge badge = badgeRepository.
+                findByApplicationNameAndId(app.getName(), badgeId)
+                .orElseThrow(() -> new NotFoundException("badge", badgeId));
 
         badgeRepository.delete(badge);
 

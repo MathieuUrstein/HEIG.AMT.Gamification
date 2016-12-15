@@ -4,19 +4,16 @@ import ch.heigvd.gamification.dto.EventDTO;
 import ch.heigvd.gamification.model.Application;
 import ch.heigvd.gamification.services.EventProcessor;
 import ch.heigvd.gamification.util.URIs;
-import ch.heigvd.gamification.validator.EventDTOValidator;
+import ch.heigvd.gamification.validator.FieldsRequiredAndNotEmptyValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.ServletRequest;
 import javax.validation.Valid;
 
-/**
- * Created by sebbos on 07.12.2016.
- */
+
 @RestController
 @RequestMapping(URIs.EVENTS)
 public class EventsEndpoint {
@@ -29,13 +26,11 @@ public class EventsEndpoint {
 
     @InitBinder
     public void initBinder(WebDataBinder binder) {
-        binder.setValidator(new EventDTOValidator());
+        binder.setValidator(new FieldsRequiredAndNotEmptyValidator(EventDTO.class));
     }
 
     @RequestMapping(method = RequestMethod.POST)
-    public ResponseEntity addEvent(@Valid @RequestBody EventDTO eventDTO, ServletRequest request) {
-        Application app = (Application) request.getAttribute("application");
-
+    public ResponseEntity addEvent(@Valid @RequestBody EventDTO eventDTO, @RequestAttribute("application") Application app) {
         try {
             eventProcessor.processEvent(app, eventDTO);
         }

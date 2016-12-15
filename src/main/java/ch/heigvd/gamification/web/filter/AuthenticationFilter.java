@@ -68,8 +68,6 @@ public class AuthenticationFilter implements Filter {
                 return;
             }
 
-            System.out.println("JWT OK!");
-
             servletRequest.setAttribute("application", app);
             chain.doFilter(servletRequest, servletResponse);
 
