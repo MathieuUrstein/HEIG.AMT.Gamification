@@ -8,9 +8,11 @@ import ch.heigvd.gamification.model.Application;
 import ch.heigvd.gamification.model.Badge;
 import ch.heigvd.gamification.util.URIs;
 import ch.heigvd.gamification.validator.BadgeDTOValidator;
+import org.hibernate.annotations.SourceType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -20,9 +22,6 @@ import javax.validation.Valid;
 import java.net.URI;
 import java.util.Collection;
 
-/**
- * Created by sebbos on 06.12.2016.
- */
 @RestController
 @RequestMapping(URIs.BADGES)
 public class BadgesEndpoint {
@@ -46,7 +45,11 @@ public class BadgesEndpoint {
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/{badgeId}")
-    public Badge getBadge(@PathVariable Long badgeId) {
+    public Badge getBadge(@PathVariable Long badgeId, ServletRequest request) {
+        Application app = (Application)request.getAttribute("application");
+        System.out.println(app.getName());
+        System.out.println(app.getBadges().size());
+
         return badgeRepository.findById(badgeId).orElseThrow(
                 () -> new NotFoundException("badge", badgeId)
         );
@@ -55,16 +58,20 @@ public class BadgesEndpoint {
     @RequestMapping(method = RequestMethod.POST)
     public ResponseEntity addBadge(@Valid @RequestBody BadgeDTO badgeDTO, ServletRequest request) {
         Application app = (Application)request.getAttribute("application");
-        System.out.println(app.getName());
 
         // TODO : image with a url
 
         try {
-            Badge result = badgeRepository.save(new Badge(badgeDTO.getName(), badgeDTO.getImage()));
+            Badge badge = new Badge();
+            badge.setName(badgeDTO.getName());
+            badge.setImage(badgeDTO.getImage());
+            badge.setApplication(app);
+
+            badgeRepository.save(badge);
 
             URI location = ServletUriComponentsBuilder
                     .fromCurrentRequest().path("/{id}")
-                    .buildAndExpand(result.getId()).toUri();
+                    .buildAndExpand(badge.getId()).toUri();
 
             return ResponseEntity.created(location).build();
         }

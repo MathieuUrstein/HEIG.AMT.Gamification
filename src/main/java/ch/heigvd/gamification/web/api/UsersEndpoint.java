@@ -4,7 +4,7 @@ import ch.heigvd.gamification.dao.EndUserRepository;
 import ch.heigvd.gamification.dto.UserDTO;
 import ch.heigvd.gamification.exception.ConflictException;
 import ch.heigvd.gamification.exception.NotFoundException;
-import ch.heigvd.gamification.model.EndUser;
+import ch.heigvd.gamification.model.User;
 import ch.heigvd.gamification.util.URIs;
 import ch.heigvd.gamification.validator.UserDTOValidator;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,14 +35,14 @@ public class UsersEndpoint {
     }
 
     @RequestMapping(method = RequestMethod.GET)
-    Collection<EndUser> getUsers() {
+    Collection<User> getUsers() {
         return endUserRepository.findAll();
     }
 
     @RequestMapping(method = RequestMethod.POST)
     ResponseEntity createUser(@Valid @RequestBody UserDTO user) {
         try {
-            EndUser result = endUserRepository.save(new EndUser(user.getUsername()));
+            User result = endUserRepository.save(new User(user.getUsername()));
 
             URI location = ServletUriComponentsBuilder
                     .fromCurrentRequest().path("/{id}")
@@ -56,7 +56,7 @@ public class UsersEndpoint {
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/{id}")
-    EndUser getUser(@PathVariable Long id) {
+    User getUser(@PathVariable Long id) {
         return endUserRepository
                 .findById(id)
                 .orElseThrow(() -> new NotFoundException("user", id));
@@ -64,7 +64,7 @@ public class UsersEndpoint {
 
     @RequestMapping(method = RequestMethod.DELETE, value = "/{userId}")
     ResponseEntity deleteUser(@PathVariable Long userId) {
-        EndUser user = endUserRepository
+        User user = endUserRepository
                 .findById(userId)
                 .orElseThrow(() -> new NotFoundException("userId", userId));
 

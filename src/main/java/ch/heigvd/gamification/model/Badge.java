@@ -1,10 +1,13 @@
 package ch.heigvd.gamification.model;
 
-import javax.persistence.*;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import org.springframework.transaction.annotation.Transactional;
 
-/**
- * Created by sebbos on 07.12.2016.
- */
+import javax.persistence.*;
+import java.util.LinkedList;
+import java.util.List;
+
 @Entity
 @Table(name="badge")
 public class Badge {
@@ -13,20 +16,23 @@ public class Badge {
     @Column(name="id")
     private Long id;
 
-    // TODO : improve that (unique)
-    @Column(name="name", unique = true, nullable = false, length = 60)
+    @Column(name="name", nullable = false, length = 60)
     private String name;
 
     @Column(name="image")
     private byte[] image;
 
-    public Badge() {
-    }
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "application_id", nullable = false)
+    @JsonBackReference
+    private Application application;
 
-    public Badge(String name, byte[] image) {
-        this.name = name;
-        this.image = image;
-    }
+    @OneToMany(targetEntity = BadgeAward.class, fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "badge")
+    @JsonManagedReference
+    private List<BadgeAward> badgeAwards = new LinkedList<>();
+
+
+    public Badge() {}
 
     private void setId(Long id) {
         this.id = id;
@@ -50,5 +56,22 @@ public class Badge {
 
     public byte[] getImage() {
         return image;
+    }
+
+    public Application getApplication() {
+        return application;
+    }
+
+    public void setApplication(Application application) {
+        this.application = application;
+        application.addBadge(this);
+    }
+
+    public List<BadgeAward> getBadgeAwards() {
+        return badgeAwards;
+    }
+
+    public void addPointAward(BadgeAward badgeAward) {
+        badgeAwards.add(badgeAward);
     }
 }

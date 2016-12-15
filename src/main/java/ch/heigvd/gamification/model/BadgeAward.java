@@ -3,23 +3,32 @@ package ch.heigvd.gamification.model;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
 import javax.persistence.*;
+import java.util.Date;
 
 @Entity
-public class Event {
+@Table(name = "badge_award")
+public class BadgeAward {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private long id;
 
-    @Column(name = "type", nullable = false)
-    private String type;
+    @Column(name = "date", columnDefinition="DATETIME", nullable = false)
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date date;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
     @JsonBackReference
     private User user;
 
-    public Event() {}
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "badge_id", nullable = false)
+    @JsonBackReference
+    private Badge badge;
+
+
+    public BadgeAward() {}
 
     public long getId() {
         return id;
@@ -29,12 +38,12 @@ public class Event {
         this.id = id;
     }
 
-    public String getType() {
-        return type;
+    public Date getDate() {
+        return date;
     }
 
-    public void setType(String type) {
-        this.type = type;
+    public void setDate(Date date) {
+        this.date = date;
     }
 
     public User getUser() {
@@ -43,5 +52,13 @@ public class Event {
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public Badge getBadge() {
+        return badge;
+    }
+
+    public void setBadge(Badge badge) {
+        this.badge = badge;
     }
 }
