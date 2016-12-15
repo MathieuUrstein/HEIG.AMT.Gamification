@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import javax.persistence.*;
 
 @Entity
+@Table(name="event")
 public class Event {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -43,5 +44,6 @@ public class Event {
 
     public void setUser(User user) {
         this.user = user;
+        user.addEvent(this);
     }
 }

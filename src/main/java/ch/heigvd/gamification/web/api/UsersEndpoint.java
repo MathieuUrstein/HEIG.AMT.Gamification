@@ -1,7 +1,6 @@
+/*
 package ch.heigvd.gamification.web.api;
 
-import ch.heigvd.gamification.dao.EndUserRepository;
-import ch.heigvd.gamification.dto.UserDTO;
 import ch.heigvd.gamification.exception.ConflictException;
 import ch.heigvd.gamification.exception.NotFoundException;
 import ch.heigvd.gamification.model.User;
@@ -73,3 +72,4 @@ public class UsersEndpoint {
         return ResponseEntity.ok().build();
     }
 }
+*/

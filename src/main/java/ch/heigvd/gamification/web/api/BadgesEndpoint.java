@@ -8,11 +8,9 @@ import ch.heigvd.gamification.model.Application;
 import ch.heigvd.gamification.model.Badge;
 import ch.heigvd.gamification.util.URIs;
 import ch.heigvd.gamification.validator.BadgeDTOValidator;
-import org.hibernate.annotations.SourceType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.ResponseEntity;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -20,7 +18,6 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import javax.servlet.ServletRequest;
 import javax.validation.Valid;
 import java.net.URI;
-import java.util.Collection;
 
 @RestController
 @RequestMapping(URIs.BADGES)
@@ -40,7 +37,7 @@ public class BadgesEndpoint {
     }
 
     @RequestMapping(method = RequestMethod.GET)
-    public Collection<Badge> getBadges() {
+    public Iterable<Badge> getBadges() {
         return badgeRepository.findAll();
     }
 
@@ -57,9 +54,9 @@ public class BadgesEndpoint {
 
     @RequestMapping(method = RequestMethod.POST)
     public ResponseEntity addBadge(@Valid @RequestBody BadgeDTO badgeDTO, ServletRequest request) {
-        Application app = (Application)request.getAttribute("application");
-
         // TODO : image with a url
+
+        Application app = (Application)request.getAttribute("application");
 
         try {
             Badge badge = new Badge();
@@ -81,7 +78,7 @@ public class BadgesEndpoint {
     }
 
     @RequestMapping(method = RequestMethod.DELETE, value = "/{badgeId}")
-    public ResponseEntity deleteBadge(@PathVariable Long badgeId) {
+    public ResponseEntity deleteBadge(@PathVariable long badgeId) {
         Badge badge = badgeRepository.findById(badgeId).orElseThrow(
                 () -> new NotFoundException("badge", badgeId)
         );

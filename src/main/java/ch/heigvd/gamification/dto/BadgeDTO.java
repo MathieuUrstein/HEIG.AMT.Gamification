@@ -10,11 +10,6 @@ public class BadgeDTO {
     public BadgeDTO() {
     }
 
-    public BadgeDTO(String name, byte[] image) {
-        this.name = name;
-        this.image = image;
-    }
-
     public void setName(String name) {
         this.name = name;
     }

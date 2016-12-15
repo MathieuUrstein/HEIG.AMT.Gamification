@@ -2,21 +2,20 @@ package ch.heigvd.gamification.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.*;
 import java.util.LinkedList;
 import java.util.List;
 
 @Entity
-@Table(name="badge")
+@Table(name="badge", uniqueConstraints = @UniqueConstraint(columnNames =  {"name", "application_id"}))
 public class Badge {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="id")
-    private Long id;
+    private long id;
 
-    @Column(name="name", nullable = false, length = 60)
+    @Column(name="name", nullable = false)
     private String name;
 
     @Column(name="image")
@@ -34,7 +33,7 @@ public class Badge {
 
     public Badge() {}
 
-    private void setId(Long id) {
+    private void setId(long id) {
         this.id = id;
     }
 
@@ -46,7 +45,7 @@ public class Badge {
         this.image = image;
     }
 
-    public Long getId() {
+    public long getId() {
         return id;
     }
 

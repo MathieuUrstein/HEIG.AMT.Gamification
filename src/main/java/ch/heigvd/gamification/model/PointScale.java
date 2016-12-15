@@ -27,7 +27,6 @@ public class PointScale {
     @JsonManagedReference
     private List<PointAward> pointAwards = new LinkedList<>();
 
-
     public PointScale() {}
 
     public long getId() {
