@@ -7,7 +7,7 @@ import ch.heigvd.gamification.exception.NotFoundException;
 import ch.heigvd.gamification.model.Application;
 import ch.heigvd.gamification.model.PointScale;
 import ch.heigvd.gamification.util.URIs;
-import ch.heigvd.gamification.validator.FieldsdRequiredAndNotEmptyValidator;
+import ch.heigvd.gamification.validator.FieldsRequiredAndNotEmptyValidator;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.WebDataBinder;
@@ -30,7 +30,7 @@ public class PointScalesEndpoint {
 
     @InitBinder
     public void initBinder(WebDataBinder binder) {
-        binder.setValidator(new FieldsdRequiredAndNotEmptyValidator(PointScaleDTO.class));
+        binder.setValidator(new FieldsRequiredAndNotEmptyValidator(PointScaleDTO.class));
     }
 
     @RequestMapping(method = RequestMethod.GET)

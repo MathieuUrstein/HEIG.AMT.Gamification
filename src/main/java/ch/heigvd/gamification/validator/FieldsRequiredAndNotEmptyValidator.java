@@ -10,10 +10,10 @@ import java.beans.Introspector;
 import java.beans.PropertyDescriptor;
 import java.lang.reflect.InvocationTargetException;
 
-public class FieldsdRequiredAndNotEmptyValidator implements Validator {
+public class FieldsRequiredAndNotEmptyValidator implements Validator {
     private final Class dtoClass;
 
-    public FieldsdRequiredAndNotEmptyValidator(Class dtoClass) {
+    public FieldsRequiredAndNotEmptyValidator(Class dtoClass) {
         this.dtoClass = dtoClass;
     }
 

@@ -6,8 +6,7 @@ import ch.heigvd.gamification.exception.ConflictException;
 import ch.heigvd.gamification.model.Application;
 import ch.heigvd.gamification.util.JWTUtils;
 import ch.heigvd.gamification.util.URIs;
-import ch.heigvd.gamification.validator.CredentialsDTOValidator;
-import ch.heigvd.gamification.validator.FieldsdRequiredAndNotEmptyValidator;
+import ch.heigvd.gamification.validator.FieldsRequiredAndNotEmptyValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -28,7 +27,7 @@ public class RegisterEndpoint {
 
     @InitBinder
     public void initBinder(WebDataBinder binder) {
-        binder.setValidator(new FieldsdRequiredAndNotEmptyValidator(CredentialsDTO.class));
+        binder.setValidator(new FieldsRequiredAndNotEmptyValidator(CredentialsDTO.class));
     }
 
     @RequestMapping(method = RequestMethod.POST)
