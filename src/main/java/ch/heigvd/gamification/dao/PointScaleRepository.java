@@ -6,6 +6,6 @@ import org.springframework.data.repository.CrudRepository;
 import java.util.Optional;
 
 public interface PointScaleRepository extends CrudRepository<PointScale, Long> {
-    Optional<PointScale> findById(long id);
+    Optional<PointScale> findByApplicationNameAndId(String applicationName, long id);
     Iterable<PointScale> findByApplicationName(String applicationName);
 }

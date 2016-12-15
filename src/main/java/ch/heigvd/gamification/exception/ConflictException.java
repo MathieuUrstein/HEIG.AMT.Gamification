@@ -6,6 +6,6 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 @ResponseStatus(HttpStatus.CONFLICT)
 public class ConflictException extends RuntimeException {
     public ConflictException(String element, String name) {
-        super(element + " with name '" + name + "' already exists");
+        super(String.format("%s with name %s already exists", element, name));
     }
 }
