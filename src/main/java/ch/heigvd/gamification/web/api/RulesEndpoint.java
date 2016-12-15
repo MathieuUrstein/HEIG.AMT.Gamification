@@ -24,8 +24,6 @@ import java.net.URI;
 @RestController
 @RequestMapping(URIs.RULES)
 public class RulesEndpoint {
-    // TODO : endpoint for images (badges)
-
     private final RuleRepository ruleRepository;
 
     @Autowired
