@@ -20,7 +20,6 @@ public class EventProcessor {
     @Async
     @Transactional
     public void processEvent(Application application, EventDTO eventDTO) {
-        // TODO : don't create two same users (same username) in the same application => exception NonUniqueResultException
         User user = userRepository.findByApplicationNameAndUsername(application.getName(), eventDTO.getUsername());
 
         if (user == null) {

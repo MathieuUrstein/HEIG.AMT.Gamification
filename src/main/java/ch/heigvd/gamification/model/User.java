@@ -7,7 +7,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 @Entity
-@Table(name="user")
+@Table(name="user", uniqueConstraints = @UniqueConstraint(columnNames =  {"username", "application_id"}))
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

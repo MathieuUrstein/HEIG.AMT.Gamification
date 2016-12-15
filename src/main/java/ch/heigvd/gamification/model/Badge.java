@@ -8,7 +8,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 @Entity
-@Table(name="badge")
+@Table(name="badge", uniqueConstraints = @UniqueConstraint(columnNames =  {"name", "application_id"}))
 public class Badge {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

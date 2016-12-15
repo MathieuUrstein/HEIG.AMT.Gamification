@@ -54,10 +54,9 @@ public class BadgesEndpoint {
 
     @RequestMapping(method = RequestMethod.POST)
     public ResponseEntity addBadge(@Valid @RequestBody BadgeDTO badgeDTO, ServletRequest request) {
-        Application app = (Application)request.getAttribute("application");
-
         // TODO : image with a url
-        // TODO : not two same badges (same name) in the same application
+
+        Application app = (Application)request.getAttribute("application");
 
         try {
             Badge badge = new Badge();
