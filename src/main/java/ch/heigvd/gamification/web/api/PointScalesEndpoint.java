@@ -34,8 +34,8 @@ public class PointScalesEndpoint {
     }
 
     @RequestMapping(method = RequestMethod.GET)
-    public Iterable<PointScale> getPointScales() {
-        return pointScaleRepository.findAll();
+    public Iterable<PointScale> getPointScales(@RequestAttribute("application") Application app) {
+        return pointScaleRepository.findByApplicationName(app.getName());
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/{pointScaleId}")

@@ -7,4 +7,6 @@ import java.util.Optional;
 
 public interface PointScaleRepository extends CrudRepository<PointScale, Long> {
     Optional<PointScale> findByApplicationNameAndId(String applicationName, long pointScaleId);
+
+    Iterable<PointScale> findByApplicationName(String applicationName);
 }

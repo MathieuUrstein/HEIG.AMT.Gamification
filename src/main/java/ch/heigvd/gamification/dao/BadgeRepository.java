@@ -8,4 +8,6 @@ import java.util.Optional;
 
 public interface BadgeRepository extends CrudRepository<Badge, Long> {
     Optional<Badge> findByApplicationNameAndId(String name, long badgeId);
+
+    Iterable<Badge> findByApplicationName(String name);
 }

@@ -15,7 +15,6 @@ import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import javax.servlet.ServletRequest;
 import javax.validation.Valid;
 import java.net.URI;
 
@@ -37,8 +36,8 @@ public class BadgesEndpoint {
     }
 
     @RequestMapping(method = RequestMethod.GET)
-    public Iterable<Badge> getBadges() {
-        return badgeRepository.findAll();
+    public Iterable<Badge> getBadges(@RequestAttribute("application") Application app) {
+        return badgeRepository.findByApplicationName(app.getName());
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/{badgeId}")
@@ -49,10 +48,8 @@ public class BadgesEndpoint {
     }
 
     @RequestMapping(method = RequestMethod.POST)
-    public ResponseEntity addBadge(@Valid @RequestBody BadgeDTO badgeDTO, ServletRequest request) {
+    public ResponseEntity addBadge(@Valid @RequestBody BadgeDTO badgeDTO, @RequestAttribute("application") Application app) {
         // TODO : image with a url
-
-        Application app = (Application)request.getAttribute("application");
 
         try {
             Badge badge = new Badge();
