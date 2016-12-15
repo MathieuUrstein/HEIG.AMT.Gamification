@@ -15,7 +15,7 @@ public class Badge {
     @Column(name="id")
     private long id;
 
-    @Column(name="name", nullable = false, length = 60)
+    @Column(name="name", nullable = false)
     private String name;
 
     @Column(name="image")

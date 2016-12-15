@@ -27,7 +27,6 @@ public class PointAward {
     @JsonBackReference
     private PointScale pointScale;
 
-
     public PointAward() {}
 
     public long getId() {

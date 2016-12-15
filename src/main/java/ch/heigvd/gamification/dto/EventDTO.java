@@ -10,11 +10,6 @@ public class EventDTO {
     public EventDTO() {
     }
 
-    public EventDTO(String type, String userName) {
-        this.type = type;
-        this.userName = userName;
-    }
-
     public void setType(String type) {
         this.type = type;
     }

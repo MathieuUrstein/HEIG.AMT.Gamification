@@ -18,10 +18,6 @@ public class ErrorBadRequest {
         errors = new LinkedList<>();
     }
 
-    public ErrorBadRequest(List<FieldError> errors) {
-        this.errors = errors;
-    }
-
     public void addError(FieldError error) {
         errors.add(error);
     }

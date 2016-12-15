@@ -26,11 +26,11 @@ public class EventDTOValidator implements Validator {
             ValidationUtils.rejectIfEmpty(errors, "type", ErrorsCodes.FIELD_EMPTY, ErrorsCodes.FIELD_EMPTY_MESSAGE);
         }
 
-        if (eventDTO.getId() == null) {
-            errors.rejectValue("id", ErrorsCodes.FIELD_REQUIRED, ErrorsCodes.FIELD_REQUIRED_MESSAGE);
+        if (eventDTO.getUserName() == null) {
+            errors.rejectValue("username", ErrorsCodes.FIELD_REQUIRED, ErrorsCodes.FIELD_REQUIRED_MESSAGE);
         }
         else {
-            ValidationUtils.rejectIfEmpty(errors, "id", ErrorsCodes.FIELD_EMPTY, ErrorsCodes.FIELD_EMPTY_MESSAGE);
+            ValidationUtils.rejectIfEmpty(errors, "username", ErrorsCodes.FIELD_EMPTY, ErrorsCodes.FIELD_EMPTY_MESSAGE);
         }
     }
 }

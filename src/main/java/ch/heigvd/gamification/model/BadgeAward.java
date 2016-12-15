@@ -27,7 +27,6 @@ public class BadgeAward {
     @JsonBackReference
     private Badge badge;
 
-
     public BadgeAward() {}
 
     public long getId() {

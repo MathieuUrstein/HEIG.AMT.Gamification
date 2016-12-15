@@ -20,14 +20,13 @@ public class Rule {
     @JsonBackReference
     private Application application;
 
-
     public Rule() {}
 
     public long getId() {
         return id;
     }
 
-    private void setId(Long id) {
+    private void setId(long id) {
         this.id = id;
     }
 
