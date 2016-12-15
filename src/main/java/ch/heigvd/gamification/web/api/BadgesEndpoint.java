@@ -57,6 +57,7 @@ public class BadgesEndpoint {
         Application app = (Application)request.getAttribute("application");
 
         // TODO : image with a url
+        // TODO : not two same badges (same name) in the same application
 
         try {
             Badge badge = new Badge();

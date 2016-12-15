@@ -1,6 +1,5 @@
 package ch.heigvd.gamification.web.api;
 
-import ch.heigvd.gamification.dao.ApplicationRepository;
 import ch.heigvd.gamification.dto.EventDTO;
 import ch.heigvd.gamification.model.Application;
 import ch.heigvd.gamification.services.EventProcessor;
@@ -20,13 +19,11 @@ import javax.validation.Valid;
 @RestController
 @RequestMapping(URIs.EVENTS)
 public class EventsEndpoint {
-    private final ApplicationRepository applicationRepository;
     private final EventProcessor eventProcessor;
 
 
     @Autowired
-    public EventsEndpoint(ApplicationRepository applicationRepository, EventProcessor eventProcessor) {
-        this.applicationRepository = applicationRepository;
+    public EventsEndpoint(EventProcessor eventProcessor) {
         this.eventProcessor = eventProcessor;
     }
 
@@ -41,6 +38,6 @@ public class EventsEndpoint {
 
         eventProcessor.processEvent(app, eventDTO);
 
-        return null;
+        return ResponseEntity.ok().build();
     }
 }

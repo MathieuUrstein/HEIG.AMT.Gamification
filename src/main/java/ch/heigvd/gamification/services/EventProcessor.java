@@ -3,6 +3,7 @@ package ch.heigvd.gamification.services;
 import ch.heigvd.gamification.dao.UserRepository;
 import ch.heigvd.gamification.dto.EventDTO;
 import ch.heigvd.gamification.model.Application;
+import ch.heigvd.gamification.model.Event;
 import ch.heigvd.gamification.model.User;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
@@ -18,22 +19,25 @@ public class EventProcessor {
 
     @Async
     @Transactional
-    public void processEvent(Application application, EventDTO event) {
-        // TODO : gestion concurrence => rejour requête
-
-        User user = userRepository.findByApplicationName(application.getName(), event.getUserName());
+    public void processEvent(Application application, EventDTO eventDTO) {
+        // TODO : don't create two same users (same username) in the same application => exception NonUniqueResultException
+        User user = userRepository.findByApplicationNameAndUsername(application.getName(), eventDTO.getUsername());
 
         if (user == null) {
+            System.out.println("null");
+
             user = new User();
-            /*targetUser.setApplication(application);
-            targetUser.setIdInGamifiedApplication(event.getUserId());
-            targetUser.setNumberOfEvents(1);
-            endUsersRepository.save(targetUser);*/
-        }
-        else {
-            //targetUser.setNumberOfEvents(targetUser.getNumberOfEvents()+1);
+
+            user.setUsername(eventDTO.getUsername());
+            user.setApplication(application);
         }
 
+        Event event = new Event();
+
+        event.setType(eventDTO.getType());
+        event.setUser(user);
+
+        userRepository.save(user);
     }
 
 }

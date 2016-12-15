@@ -5,7 +5,7 @@ package ch.heigvd.gamification.dto;
  */
 public class EventDTO {
     private String type;
-    private String userName;
+    private String username;
 
     public EventDTO() {
     }
@@ -14,15 +14,15 @@ public class EventDTO {
         this.type = type;
     }
 
-    public void setUserName(String userName) {
-        this.userName = userName;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public String getType() {
         return type;
     }
 
-    public String getUserName() {
-        return userName;
+    public String getUsername() {
+        return username;
     }
 }
