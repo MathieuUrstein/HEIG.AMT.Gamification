@@ -35,7 +35,7 @@ public class UsersEndpoint {
     @RequestMapping(method = RequestMethod.GET, value = "/{username}")
     User getUser(@PathVariable String username, ServletRequest request) {
         return userRepository
-                .findByApplicationNameAndUsername(username, ((Application)request.getAttribute("application")).getName())
+                .findByApplicationNameAndUsername(((Application)request.getAttribute("application")).getName(), username)
                 .orElseThrow(() -> new NotFoundException("user", username));
     }
 }

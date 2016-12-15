@@ -39,10 +39,11 @@ public class PointScalesEndpoint {
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/{pointScaleId}")
-    public PointScale getPointScale(@PathVariable Long pointScaleId) {
+    public PointScale getPointScale(@PathVariable Long pointScaleId, ServletRequest request) {
+        Application app = (Application)request.getAttribute("application");
 
         return pointScaleRepository
-                .findById(pointScaleId)
+                .findByApplicationNameAndId(app.getName(), pointScaleId)
                 .orElseThrow(() -> new NotFoundException("pointScale", pointScaleId));
     }
 
@@ -69,9 +70,11 @@ public class PointScalesEndpoint {
     }
 
     @RequestMapping(method = RequestMethod.DELETE, value = "/{pointScaleId}")
-    public ResponseEntity deleteBadge(@PathVariable Long pointScaleId) {
+    public ResponseEntity deleteBadge(@PathVariable Long pointScaleId, ServletRequest request) {
+        Application app = (Application)request.getAttribute("application");
+
         PointScale pointScale = pointScaleRepository
-                .findById(pointScaleId)
+                .findByApplicationNameAndId(app.getName(), pointScaleId)
                 .orElseThrow(() -> new NotFoundException("pointScale", pointScaleId));
 
         pointScaleRepository.delete(pointScale);

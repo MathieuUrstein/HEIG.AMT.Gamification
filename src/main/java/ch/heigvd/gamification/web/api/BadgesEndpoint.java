@@ -7,6 +7,7 @@ import ch.heigvd.gamification.exception.NotFoundException;
 import ch.heigvd.gamification.model.Application;
 import ch.heigvd.gamification.model.Badge;
 import ch.heigvd.gamification.util.URIs;
+import ch.heigvd.gamification.validator.BadgeDTOValidator;
 import ch.heigvd.gamification.validator.FieldsRequiredAndNotEmptyValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -33,7 +34,7 @@ public class BadgesEndpoint {
 
     @InitBinder
     public void initBinder(WebDataBinder binder) {
-        binder.setValidator(new FieldsRequiredAndNotEmptyValidator(BadgeDTO.class));
+        binder.setValidator(new BadgeDTOValidator());
     }
 
     @RequestMapping(method = RequestMethod.GET)
@@ -44,12 +45,10 @@ public class BadgesEndpoint {
     @RequestMapping(method = RequestMethod.GET, value = "/{badgeId}")
     public Badge getBadge(@PathVariable Long badgeId, ServletRequest request) {
         Application app = (Application)request.getAttribute("application");
-        System.out.println(app.getName());
-        System.out.println(app.getBadges().size());
 
-        return badgeRepository.findById(badgeId).orElseThrow(
-                () -> new NotFoundException("badge", badgeId)
-        );
+        return badgeRepository.
+                findByApplicationNameAndId(app.getName(), badgeId)
+                .orElseThrow(() -> new NotFoundException("badge", badgeId));
     }
 
     @RequestMapping(method = RequestMethod.POST)
@@ -78,10 +77,12 @@ public class BadgesEndpoint {
     }
 
     @RequestMapping(method = RequestMethod.DELETE, value = "/{badgeId}")
-    public ResponseEntity deleteBadge(@PathVariable long badgeId) {
-        Badge badge = badgeRepository.findById(badgeId).orElseThrow(
-                () -> new NotFoundException("badge", badgeId)
-        );
+    public ResponseEntity deleteBadge(@PathVariable long badgeId, ServletRequest request) {
+        Application app = (Application)request.getAttribute("application");
+
+        Badge badge = badgeRepository.
+                findByApplicationNameAndId(app.getName(), badgeId)
+                .orElseThrow(() -> new NotFoundException("badge", badgeId));
 
         badgeRepository.delete(badge);
 
