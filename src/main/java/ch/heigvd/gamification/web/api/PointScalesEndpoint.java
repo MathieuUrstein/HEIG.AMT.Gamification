@@ -16,7 +16,8 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.validation.Valid;
 import java.net.URI;
-
+import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping(URIs.POINT_SCALES)
@@ -33,15 +34,20 @@ public class PointScalesEndpoint {
     }
 
     @RequestMapping(method = RequestMethod.GET)
-    public Iterable<PointScale> getPointScales(@RequestAttribute("application") Application app) {
-        return pointScaleRepository.findByApplicationName(app.getName());
+    public List<PointScaleDTO> getPointScales(@RequestAttribute("application") Application app) {
+        return pointScaleRepository.findByApplicationName(app.getName())
+                .stream()
+                .map(this::toPointScaleDTO)
+                .collect(Collectors.toList());
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/{pointScaleId}")
-    public PointScale getPointScale(@RequestAttribute("application") Application app, @PathVariable long pointScaleId) {
-        return pointScaleRepository
+    public PointScaleDTO getPointScale(@RequestAttribute("application") Application app, @PathVariable long pointScaleId) {
+        PointScale pointScale = pointScaleRepository
                 .findByApplicationNameAndId(app.getName(), pointScaleId)
                 .orElseThrow(() -> new NotFoundException("pointScale", pointScaleId));
+
+        return toPointScaleDTO(pointScale);
     }
 
     @RequestMapping(method = RequestMethod.POST)
@@ -75,4 +81,9 @@ public class PointScalesEndpoint {
 
         return ResponseEntity.ok().build();
     }
+
+    private PointScaleDTO toPointScaleDTO(PointScale pointScale) {
+        return new PointScaleDTO(pointScale.getName());
+    }
+
 }

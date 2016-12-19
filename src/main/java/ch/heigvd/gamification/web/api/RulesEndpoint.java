@@ -17,10 +17,9 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.validation.Valid;
 import java.net.URI;
+import java.util.List;
+import java.util.stream.Collectors;
 
-/**
- * Created by sebbos on 07.12.2016.
- */
 @RestController
 @RequestMapping(URIs.RULES)
 public class RulesEndpoint {
@@ -37,15 +36,20 @@ public class RulesEndpoint {
     }
 
     @RequestMapping(method = RequestMethod.GET)
-    public Iterable<Rule> getRules(@RequestAttribute("application") Application app) {
-        return ruleRepository.findByApplicationName(app.getName());
+    public List<RuleDTO> getRules(@RequestAttribute("application") Application app) {
+        return ruleRepository.findByApplicationName(app.getName())
+                .stream()
+                .map(this::toRuleDTO)
+                .collect(Collectors.toList());
     }
 
-    @RequestMapping(method = RequestMethod.GET, value = "/{badgeId}")
-    public Rule getRule(@RequestAttribute("application") Application app, @PathVariable long ruleId) {
-        return ruleRepository.
-                findByApplicationNameAndId(app.getName(), ruleId)
+    @RequestMapping(method = RequestMethod.GET, value = "/{ruleId}")
+    public RuleDTO getRule(@RequestAttribute("application") Application app, @PathVariable long ruleId) {
+        Rule rule =  ruleRepository
+                .findByApplicationNameAndId(app.getName(), ruleId)
                 .orElseThrow(() -> new NotFoundException("rule", ruleId));
+
+        return toRuleDTO(rule);
     }
 
     @RequestMapping(method = RequestMethod.POST)
@@ -68,14 +72,18 @@ public class RulesEndpoint {
         }
     }
 
-    @RequestMapping(method = RequestMethod.DELETE, value = "/{badgeId}")
+    @RequestMapping(method = RequestMethod.DELETE, value = "/{ruleId}")
     public ResponseEntity deleteRule(@RequestAttribute("application") Application app, @PathVariable long ruleId) {
-        Rule rule = ruleRepository.
-                findByApplicationNameAndId(app.getName(), ruleId)
+        Rule rule = ruleRepository
+                .findByApplicationNameAndId(app.getName(), ruleId)
                 .orElseThrow(() -> new NotFoundException("rule", ruleId));
 
         ruleRepository.delete(rule);
 
         return ResponseEntity.ok().build();
+    }
+
+    private RuleDTO toRuleDTO(Rule rule) {
+        return new RuleDTO(rule.getName());
     }
 }

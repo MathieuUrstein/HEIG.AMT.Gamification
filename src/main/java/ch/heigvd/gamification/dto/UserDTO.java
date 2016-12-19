@@ -1,12 +1,14 @@
 package ch.heigvd.gamification.dto;
 
-public class PointScaleDTO {
+/**
+ * Created by sebbos on 19.12.2016.
+ */
+public class UserDTO {
+    // TODO : send links
+
     private String name;
 
-    public PointScaleDTO() {
-    }
-
-    public PointScaleDTO(String name) {
+    public UserDTO(String name) {
         this.name = name;
     }
 
@@ -17,5 +19,4 @@ public class PointScaleDTO {
     public String getName() {
         return name;
     }
-
 }

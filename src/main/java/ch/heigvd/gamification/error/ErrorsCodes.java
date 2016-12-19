@@ -1,8 +1,5 @@
 package ch.heigvd.gamification.error;
 
-/**
- * Created by sebbos on 12.12.2016.
- */
 public interface ErrorsCodes {
     // A field in the JSON payload is required
     // This field must not be null

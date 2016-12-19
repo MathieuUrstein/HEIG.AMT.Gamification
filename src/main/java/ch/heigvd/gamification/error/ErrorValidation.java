@@ -7,9 +7,6 @@ import org.springframework.validation.FieldError;
 import java.util.LinkedList;
 import java.util.List;
 
-/**
- * Created by sebbos on 12.12.2016.
- */
 @JsonSerialize(using = ErrorValidationSerializer.class)
 public class ErrorValidation {
     private List<FieldError> errors;

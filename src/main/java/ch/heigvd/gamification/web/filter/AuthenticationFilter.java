@@ -71,7 +71,8 @@ public class AuthenticationFilter implements Filter {
             servletRequest.setAttribute("application", app);
             chain.doFilter(servletRequest, servletResponse);
 
-        } catch (JWTDecodeException exception) {
+        }
+        catch (JWTDecodeException exception) {
             System.out.println("Invalid JWT format");
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
         }

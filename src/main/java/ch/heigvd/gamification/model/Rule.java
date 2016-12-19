@@ -1,7 +1,5 @@
 package ch.heigvd.gamification.model;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-
 import javax.persistence.*;
 
 @Entity
@@ -17,7 +15,6 @@ public class Rule {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "application_id", nullable = false)
-    @JsonBackReference
     private Application application;
 
     public Rule() {}
