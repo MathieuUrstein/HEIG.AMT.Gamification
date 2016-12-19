@@ -57,7 +57,6 @@ public class User {
 
     public void setApplication(Application application) {
         this.application = application;
-        application.addUser(this);
     }
 
     public List<Event> getEvents() {
