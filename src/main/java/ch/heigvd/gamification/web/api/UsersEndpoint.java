@@ -16,7 +16,6 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping(URIs.USERS)
 public class UsersEndpoint {
-
     private final UserRepository userRepository;
 
     @Autowired

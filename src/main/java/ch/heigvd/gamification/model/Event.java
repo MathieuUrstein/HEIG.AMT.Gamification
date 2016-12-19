@@ -41,6 +41,5 @@ public class Event {
 
     public void setUser(User user) {
         this.user = user;
-        user.addEvent(this);
     }
 }

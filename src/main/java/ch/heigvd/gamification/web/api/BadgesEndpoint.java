@@ -1,5 +1,6 @@
 package ch.heigvd.gamification.web.api;
 
+import ch.heigvd.gamification.dao.ApplicationRepository;
 import ch.heigvd.gamification.dao.BadgeRepository;
 import ch.heigvd.gamification.dto.BadgeDTO;
 import ch.heigvd.gamification.exception.ConflictException;
@@ -26,10 +27,12 @@ public class BadgesEndpoint {
     // TODO : endpoint for images (badges)
 
     private final BadgeRepository badgeRepository;
+    private final ApplicationRepository applicationRepository;
 
     @Autowired
-    public BadgesEndpoint(BadgeRepository badgeRepository) {
+    public BadgesEndpoint(BadgeRepository badgeRepository, ApplicationRepository applicationRepository) {
         this.badgeRepository = badgeRepository;
+        this.applicationRepository = applicationRepository;
     }
 
     @InitBinder
@@ -55,11 +58,13 @@ public class BadgesEndpoint {
     }
 
     @RequestMapping(method = RequestMethod.POST)
-    public ResponseEntity addBadge(@Valid @RequestBody BadgeDTO badgeDTO, @RequestAttribute("application") Application app) {
+    public ResponseEntity addBadge(@Valid @RequestBody BadgeDTO badgeDTO, @RequestAttribute("application") Application application) {
         // TODO : image with a url
 
         try {
+            Application app = applicationRepository.findByName(application.getName());
             Badge badge = new Badge();
+
             badge.setName(badgeDTO.getName());
             badge.setImage(badgeDTO.getImage());
             badge.setApplication(app);

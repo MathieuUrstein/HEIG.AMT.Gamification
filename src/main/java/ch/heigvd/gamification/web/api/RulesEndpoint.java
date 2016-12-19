@@ -1,5 +1,6 @@
 package ch.heigvd.gamification.web.api;
 
+import ch.heigvd.gamification.dao.ApplicationRepository;
 import ch.heigvd.gamification.dao.RuleRepository;
 import ch.heigvd.gamification.dto.RuleDTO;
 import ch.heigvd.gamification.exception.ConflictException;
@@ -24,10 +25,12 @@ import java.util.stream.Collectors;
 @RequestMapping(URIs.RULES)
 public class RulesEndpoint {
     private final RuleRepository ruleRepository;
+    private final ApplicationRepository applicationRepository;
 
     @Autowired
-    public RulesEndpoint(RuleRepository ruleRepository) {
+    public RulesEndpoint(RuleRepository ruleRepository, ApplicationRepository applicationRepository) {
         this.ruleRepository = ruleRepository;
+        this.applicationRepository = applicationRepository;
     }
 
     @InitBinder
@@ -53,11 +56,14 @@ public class RulesEndpoint {
     }
 
     @RequestMapping(method = RequestMethod.POST)
-    public ResponseEntity addRule(@Valid @RequestBody RuleDTO ruleDTO, @RequestAttribute("application") Application app) {
+    public ResponseEntity addRule(@Valid @RequestBody RuleDTO ruleDTO, @RequestAttribute("application") Application application) {
         try {
+            Application app = applicationRepository.findByName(application.getName());
             Rule rule = new Rule();
+
             rule.setName(ruleDTO.getName());
             rule.setApplication(app);
+            app.addRules(rule);
 
             ruleRepository.save(rule);
 

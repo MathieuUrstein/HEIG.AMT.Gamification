@@ -25,6 +25,7 @@ public class EventProcessor {
         Optional<User> opt = userRepository.findByApplicationNameAndUsername(application.getName(), eventDTO.getUsername());
 
         User user;
+
         if (!opt.isPresent()) {
             System.out.println("user doesn't exist");
 
@@ -32,7 +33,8 @@ public class EventProcessor {
 
             user.setUsername(eventDTO.getUsername());
             user.setApplication(application);
-        } else {
+        }
+        else {
             user = opt.get();
         }
 
@@ -40,6 +42,7 @@ public class EventProcessor {
 
         event.setType(eventDTO.getType());
         event.setUser(user);
+        user.addEvent(event);
 
         userRepository.save(user);
     }

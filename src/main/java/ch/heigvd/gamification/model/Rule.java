@@ -41,6 +41,5 @@ public class Rule {
 
     public void setApplication(Application application) {
         this.application = application;
-        application.addRules(this);
     }
 }
