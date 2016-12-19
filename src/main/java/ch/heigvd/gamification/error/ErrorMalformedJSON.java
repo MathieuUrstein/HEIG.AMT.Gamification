@@ -1,8 +1,5 @@
 package ch.heigvd.gamification.error;
 
-/**
- * Created by sebbos on 15.12.2016.
- */
 public class ErrorMalformedJSON {
     private String code;
     private String message;

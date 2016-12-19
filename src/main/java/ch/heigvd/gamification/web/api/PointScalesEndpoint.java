@@ -1,5 +1,6 @@
 package ch.heigvd.gamification.web.api;
 
+import ch.heigvd.gamification.dao.ApplicationRepository;
 import ch.heigvd.gamification.dao.PointScaleRepository;
 import ch.heigvd.gamification.dto.PointScaleDTO;
 import ch.heigvd.gamification.exception.ConflictException;
@@ -16,15 +17,18 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.validation.Valid;
 import java.net.URI;
-
+import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping(URIs.POINT_SCALES)
 public class PointScalesEndpoint {
     private final PointScaleRepository pointScaleRepository;
+    private final ApplicationRepository applicationRepository;
 
-    public PointScalesEndpoint(PointScaleRepository pointScaleRepository) {
+    public PointScalesEndpoint(PointScaleRepository pointScaleRepository, ApplicationRepository applicationRepository) {
         this.pointScaleRepository = pointScaleRepository;
+        this.applicationRepository = applicationRepository;
     }
 
     @InitBinder
@@ -33,24 +37,32 @@ public class PointScalesEndpoint {
     }
 
     @RequestMapping(method = RequestMethod.GET)
-    public Iterable<PointScale> getPointScales(@RequestAttribute("application") Application app) {
-        return pointScaleRepository.findByApplicationName(app.getName());
+    public List<PointScaleDTO> getPointScales(@RequestAttribute("application") Application app) {
+        return pointScaleRepository.findByApplicationName(app.getName())
+                .stream()
+                .map(this::toPointScaleDTO)
+                .collect(Collectors.toList());
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/{pointScaleId}")
-    public PointScale getPointScale(@RequestAttribute("application") Application app, @PathVariable long pointScaleId) {
-        return pointScaleRepository
+    public PointScaleDTO getPointScale(@RequestAttribute("application") Application app, @PathVariable long pointScaleId) {
+        PointScale pointScale = pointScaleRepository
                 .findByApplicationNameAndId(app.getName(), pointScaleId)
                 .orElseThrow(() -> new NotFoundException("pointScale", pointScaleId));
+
+        return toPointScaleDTO(pointScale);
     }
 
     @RequestMapping(method = RequestMethod.POST)
     public ResponseEntity addPointScale(@Valid @RequestBody PointScaleDTO badgeDTO,
-                                   @RequestAttribute("application") Application app) {
+                                   @RequestAttribute("application") Application application) {
         try {
+            Application app = applicationRepository.findByName(application.getName());
             PointScale pointScale = new PointScale();
+
             pointScale.setName(badgeDTO.getName());
             pointScale.setApplication(app);
+            app.addPointScale(pointScale);
 
             pointScaleRepository.save(pointScale);
 
@@ -75,4 +87,9 @@ public class PointScalesEndpoint {
 
         return ResponseEntity.ok().build();
     }
+
+    private PointScaleDTO toPointScaleDTO(PointScale pointScale) {
+        return new PointScaleDTO(pointScale.getName());
+    }
+
 }

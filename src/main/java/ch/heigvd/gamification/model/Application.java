@@ -1,7 +1,5 @@
 package ch.heigvd.gamification.model;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-
 import javax.persistence.*;
 import java.util.LinkedList;
 import java.util.List;
@@ -24,21 +22,16 @@ public class Application {
     private String salt;
 
     @OneToMany(targetEntity = User.class, fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "application")
-    @JsonManagedReference
     private List<User> users = new LinkedList<>();
 
     @OneToMany(targetEntity = PointScale.class, fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "application")
-    @JsonManagedReference
     private List<PointScale> pointScales = new LinkedList<>();
 
     @OneToMany(targetEntity = Badge.class, fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "application")
-    @JsonManagedReference
     private List<Badge> badges = new LinkedList<>();
 
     @OneToMany(targetEntity = Rule.class, fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "application")
-    @JsonManagedReference
     private List<Rule> rules = new LinkedList<>();
-
 
     public Application() {}
 

@@ -8,9 +8,6 @@ import org.springframework.validation.FieldError;
 
 import java.io.IOException;
 
-/**
- * Created by sebbos on 14.12.2016.
- */
 public class ErrorValidationSerializer extends StdSerializer<ErrorValidation> {
     public ErrorValidationSerializer() {
         this(null);

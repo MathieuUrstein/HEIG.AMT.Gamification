@@ -1,8 +1,5 @@
 package ch.heigvd.gamification.model;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-
 import javax.persistence.*;
 import java.util.LinkedList;
 import java.util.List;
@@ -23,13 +20,10 @@ public class Badge {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "application_id", nullable = false)
-    @JsonBackReference
     private Application application;
 
     @OneToMany(targetEntity = BadgeAward.class, fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "badge")
-    @JsonManagedReference
     private List<BadgeAward> badgeAwards = new LinkedList<>();
-
 
     public Badge() {}
 
@@ -63,7 +57,6 @@ public class Badge {
 
     public void setApplication(Application application) {
         this.application = application;
-        application.addBadge(this);
     }
 
     public List<BadgeAward> getBadgeAwards() {

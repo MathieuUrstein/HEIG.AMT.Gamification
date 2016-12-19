@@ -1,5 +1,6 @@
 package ch.heigvd.gamification.web.api;
 
+import ch.heigvd.gamification.dao.ApplicationRepository;
 import ch.heigvd.gamification.dao.BadgeRepository;
 import ch.heigvd.gamification.dto.BadgeDTO;
 import ch.heigvd.gamification.exception.ConflictException;
@@ -17,6 +18,8 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.validation.Valid;
 import java.net.URI;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping(URIs.BADGES)
@@ -24,10 +27,12 @@ public class BadgesEndpoint {
     // TODO : endpoint for images (badges)
 
     private final BadgeRepository badgeRepository;
+    private final ApplicationRepository applicationRepository;
 
     @Autowired
-    public BadgesEndpoint(BadgeRepository badgeRepository) {
+    public BadgesEndpoint(BadgeRepository badgeRepository, ApplicationRepository applicationRepository) {
         this.badgeRepository = badgeRepository;
+        this.applicationRepository = applicationRepository;
     }
 
     @InitBinder
@@ -36,26 +41,34 @@ public class BadgesEndpoint {
     }
 
     @RequestMapping(method = RequestMethod.GET)
-    public Iterable<Badge> getBadges(@RequestAttribute("application") Application app) {
-        return badgeRepository.findByApplicationName(app.getName());
+    public List<BadgeDTO> getBadges(@RequestAttribute("application") Application app) {
+        return badgeRepository.findByApplicationName(app.getName())
+                .stream()
+                .map(this::toBadgeDTO)
+                .collect(Collectors.toList());
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/{badgeId}")
-    public Badge getBadge(@RequestAttribute("application") Application app, @PathVariable long badgeId) {
-        return badgeRepository.
-                findByApplicationNameAndId(app.getName(), badgeId)
+    public BadgeDTO getBadge(@RequestAttribute("application") Application app, @PathVariable long badgeId) {
+        Badge badge = badgeRepository
+                .findByApplicationNameAndId(app.getName(), badgeId)
                 .orElseThrow(() -> new NotFoundException("badge", badgeId));
+
+        return toBadgeDTO(badge);
     }
 
     @RequestMapping(method = RequestMethod.POST)
-    public ResponseEntity addBadge(@Valid @RequestBody BadgeDTO badgeDTO, @RequestAttribute("application") Application app) {
+    public ResponseEntity addBadge(@Valid @RequestBody BadgeDTO badgeDTO, @RequestAttribute("application") Application application) {
         // TODO : image with a url
 
         try {
+            Application app = applicationRepository.findByName(application.getName());
             Badge badge = new Badge();
+
             badge.setName(badgeDTO.getName());
             badge.setImage(badgeDTO.getImage());
             badge.setApplication(app);
+            app.addBadge(badge);
 
             badgeRepository.save(badge);
 
@@ -72,12 +85,16 @@ public class BadgesEndpoint {
 
     @RequestMapping(method = RequestMethod.DELETE, value = "/{badgeId}")
     public ResponseEntity deleteBadge(@RequestAttribute("application") Application app, @PathVariable long badgeId) {
-        Badge badge = badgeRepository.
-                findByApplicationNameAndId(app.getName(), badgeId)
+        Badge badge = badgeRepository
+                .findByApplicationNameAndId(app.getName(), badgeId)
                 .orElseThrow(() -> new NotFoundException("badge", badgeId));
 
         badgeRepository.delete(badge);
 
         return ResponseEntity.ok().build();
+    }
+
+    private BadgeDTO toBadgeDTO(Badge badge) {
+        return new BadgeDTO(badge.getName(), badge.getImage());
     }
 }

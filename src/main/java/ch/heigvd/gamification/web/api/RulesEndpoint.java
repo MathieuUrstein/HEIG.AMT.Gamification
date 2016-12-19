@@ -1,5 +1,6 @@
 package ch.heigvd.gamification.web.api;
 
+import ch.heigvd.gamification.dao.ApplicationRepository;
 import ch.heigvd.gamification.dao.RuleRepository;
 import ch.heigvd.gamification.dto.RuleDTO;
 import ch.heigvd.gamification.exception.ConflictException;
@@ -17,18 +18,19 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.validation.Valid;
 import java.net.URI;
+import java.util.List;
+import java.util.stream.Collectors;
 
-/**
- * Created by sebbos on 07.12.2016.
- */
 @RestController
 @RequestMapping(URIs.RULES)
 public class RulesEndpoint {
     private final RuleRepository ruleRepository;
+    private final ApplicationRepository applicationRepository;
 
     @Autowired
-    public RulesEndpoint(RuleRepository ruleRepository) {
+    public RulesEndpoint(RuleRepository ruleRepository, ApplicationRepository applicationRepository) {
         this.ruleRepository = ruleRepository;
+        this.applicationRepository = applicationRepository;
     }
 
     @InitBinder
@@ -37,23 +39,31 @@ public class RulesEndpoint {
     }
 
     @RequestMapping(method = RequestMethod.GET)
-    public Iterable<Rule> getRules(@RequestAttribute("application") Application app) {
-        return ruleRepository.findByApplicationName(app.getName());
+    public List<RuleDTO> getRules(@RequestAttribute("application") Application app) {
+        return ruleRepository.findByApplicationName(app.getName())
+                .stream()
+                .map(this::toRuleDTO)
+                .collect(Collectors.toList());
     }
 
-    @RequestMapping(method = RequestMethod.GET, value = "/{badgeId}")
-    public Rule getRule(@RequestAttribute("application") Application app, @PathVariable long ruleId) {
-        return ruleRepository.
-                findByApplicationNameAndId(app.getName(), ruleId)
+    @RequestMapping(method = RequestMethod.GET, value = "/{ruleId}")
+    public RuleDTO getRule(@RequestAttribute("application") Application app, @PathVariable long ruleId) {
+        Rule rule =  ruleRepository
+                .findByApplicationNameAndId(app.getName(), ruleId)
                 .orElseThrow(() -> new NotFoundException("rule", ruleId));
+
+        return toRuleDTO(rule);
     }
 
     @RequestMapping(method = RequestMethod.POST)
-    public ResponseEntity addRule(@Valid @RequestBody RuleDTO ruleDTO, @RequestAttribute("application") Application app) {
+    public ResponseEntity addRule(@Valid @RequestBody RuleDTO ruleDTO, @RequestAttribute("application") Application application) {
         try {
+            Application app = applicationRepository.findByName(application.getName());
             Rule rule = new Rule();
+
             rule.setName(ruleDTO.getName());
             rule.setApplication(app);
+            app.addRules(rule);
 
             ruleRepository.save(rule);
 
@@ -68,14 +78,18 @@ public class RulesEndpoint {
         }
     }
 
-    @RequestMapping(method = RequestMethod.DELETE, value = "/{badgeId}")
+    @RequestMapping(method = RequestMethod.DELETE, value = "/{ruleId}")
     public ResponseEntity deleteRule(@RequestAttribute("application") Application app, @PathVariable long ruleId) {
-        Rule rule = ruleRepository.
-                findByApplicationNameAndId(app.getName(), ruleId)
+        Rule rule = ruleRepository
+                .findByApplicationNameAndId(app.getName(), ruleId)
                 .orElseThrow(() -> new NotFoundException("rule", ruleId));
 
         ruleRepository.delete(rule);
 
         return ResponseEntity.ok().build();
+    }
+
+    private RuleDTO toRuleDTO(Rule rule) {
+        return new RuleDTO(rule.getName());
     }
 }
