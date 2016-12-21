@@ -89,18 +89,6 @@
                             <workingDirectory>.</workingDirectory>
                         </configuration>
                     </execution>
-
-                    <execution>
-                        <id>verify</id>
-                        <phase>verify</phase>
-                        <goals>
-                            <goal>exec</goal>
-                        </goals>
-                        <configuration>
-                            <executable>tests/scripts/check_results.sh</executable>
-                            <workingDirectory>.</workingDirectory>
-                        </configuration>
-                    </execution>
                 </executions>
             </plugin>
         </plugins>
