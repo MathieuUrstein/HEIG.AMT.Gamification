@@ -1,0 +1,39 @@
+language: java
+
+jdk:
+  - oraclejdk8
+
+addons:
+  apt:
+    sources:
+      - deadsnakes
+
+    packages:
+      - python3.5-complete
+
+services:
+  - mysql
+
+
+env:
+  PATH=${PATH}:~/bin/
+  GAMIFICATION_DATABASE_USER=travis
+
+
+before_install:
+  - mysql -e "DROP SCHEMA IF EXISTS gamification;"
+  - mysql -e "CREATE SCHEMA gamification DEFAULT CHARACTER SET utf8;"
+
+
+install:
+  - python3.5 -m ensurepip --user
+  - pip3.5 install -r tests/requirements.pip --user
+  - mkdir -p ~/bin
+  - ln -s /usr/bin/python3.5 ~/bin/python3
+
+
+before_script:
+  - mvn integration-test -Dspring.profiles.active="travis"
+
+script:
+  - ./tests/scripts/check_results.sh

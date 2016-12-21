@@ -5,3 +5,7 @@ target
 *.jar
 
 application-default.properties
+
+# python tests
+*.pyc
+__pycache__
