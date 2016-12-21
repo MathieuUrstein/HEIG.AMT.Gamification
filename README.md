@@ -23,9 +23,10 @@ if you don't run docker directly on your system (for example on a vm), the host 
 
 If for any reason you prefer to do it manually instead of running the script, you can do the following:
 
-1. `$ mvn package`
-2. `$ cp target/gamification-0.0.1-SNAPSHOT.jar images/open-jdk/gamification.jar`
-3. `$ docker-compose up --build`
+1. `$ mkdir -p images/maven/gamification`
+2. `$ cp -r src/ images/maven/gamification/`
+3. `$ cp pom.xml images/maven/gamification/`
+4. `$ docker-compose up --build`
 
 # Development
 
