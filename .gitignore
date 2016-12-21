@@ -11,3 +11,5 @@ application-default.properties
 __pycache__
 venv
 *.conf
+
+/images/maven/gamification/
