@@ -9,5 +9,8 @@ application-default.properties
 # python tests
 *.pyc
 __pycache__
+
 venv
 *.conf
+
+/images/maven/gamification/

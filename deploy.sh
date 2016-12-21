@@ -2,9 +2,8 @@
 
 set -e
 
-# build
-mvn package
+mkdir -p images/maven/gamification
+cp -r src/ images/maven/gamification/
+cp pom.xml images/maven/gamification/
 
-# deploy
-cp target/gamification-0.0.1-SNAPSHOT.jar images/open-jdk/gamification.jar
 docker-compose up --build

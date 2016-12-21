@@ -6,9 +6,9 @@ services:
      - MYSQL_ROOT_PASSWORD=root
     ports:
      - "3306:3306"
-  open-jdk:
-    build: ./images/open-jdk
-    ports:
-     - "9090:8080"
+  maven:
+    build: ./images/maven
     links:
      - mysql:db
+    ports:
+     - "9090:8080"
