@@ -1,6 +1,8 @@
 import sys
 from configparser import ConfigParser
 from itertools import chain, repeat
+from json import JSONDecodeError
+from pprint import pformat
 
 import os
 import requests
@@ -21,7 +23,6 @@ USER = "user"
 PASSWORD = "password"
 PROTOCOL = "protocol"
 URL = "url"
-
 
 DEFAULT_CONF_PATH = os.path.join(HOME_DIR, "test_defaults.conf")
 CONF_PATH = os.path.join(HOME_DIR, "test.conf")
@@ -50,7 +51,6 @@ RECOGNIZED_ENV_VARIABLES = {
     )
 }
 
-
 CONFIG = ConfigParser()
 CONFIG.read([DEFAULT_CONF_PATH, CONF_PATH])
 
@@ -59,7 +59,6 @@ for section, option in RECOGNIZED_ENV_VARIABLES.keys():
 
     if env_var is not None:
         CONFIG[section][option] = env_var
-
 
 API_ERROR_MESSAGES = dict()
 
@@ -93,30 +92,32 @@ def print_customization_and_exit():
     exit(1)
 
 
+if CONFIG.get(DATABASE_SECTION, PASSWORD) is not None:
+    user = "{}:{}".format(
+        CONFIG.get(DATABASE_SECTION, USER),
+        CONFIG.get(DATABASE_SECTION, PASSWORD)
+    )
+else:
+    user = CONFIG.get(DATABASE_SECTION, USER)
+
+
+DATABASE_CONNECTION_URL = "{protocol}://{user}@{host}/{name}".format(
+    protocol=CONFIG.get(DATABASE_SECTION, PROTOCOL),
+    user=user,
+    host=CONFIG.get(DATABASE_SECTION, HOST),
+    name=CONFIG.get(DATABASE_SECTION, NAME)
+)
+
+
 class DatabaseAccessMixin:
     database_connection = None
     database_engine = None
     database_meta = None
 
-    if CONFIG.get(DATABASE_SECTION, PASSWORD) is not None:
-        user = "{}:{}".format(
-            CONFIG.get(DATABASE_SECTION, USER),
-            CONFIG.get(DATABASE_SECTION, PASSWORD)
-        )
-    else:
-        user = CONFIG.get(DATABASE_SECTION, USER)
-
-    database_connection_url = "{protocol}://{user}@{host}/{name}".format(
-        protocol=CONFIG.get(DATABASE_SECTION, PROTOCOL),
-        user=user,
-        host=CONFIG.get(DATABASE_SECTION, HOST),
-        name=CONFIG.get(DATABASE_SECTION, NAME)
-    )
-
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
-        cls.database_engine = create_engine(cls.database_connection_url)
+        cls.database_engine = create_engine(DATABASE_CONNECTION_URL)
         cls.database_meta = MetaData()
 
         try:
@@ -194,3 +195,15 @@ class RestAPITestUtilities:
             self.required_fields,
             msg="A field was marked as required by the response, but test is not requiring it"
         )
+
+    @staticmethod
+    def prepare_message(base_message, response=None):
+        if response is None:
+            return base_message
+
+        try:
+            result = pformat(response.json(), indent=4).replace("{", "{\n ").replace("}", "\n}").replace("[", "[\n ").replace("]", "\n]")
+        except JSONDecodeError:
+            result = response.text
+
+        return "{}\n\nStatus code: {}\nResponse:\n{}\n".format(base_message, response.status_code, result)
