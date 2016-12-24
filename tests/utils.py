@@ -1,15 +1,8 @@
 import sys
 from configparser import ConfigParser
 from itertools import chain, repeat
-from json import JSONDecodeError
-from pprint import pformat
 
 import os
-import requests
-import sqlalchemy
-from abc import abstractmethod
-from sqlalchemy import MetaData
-from sqlalchemy import create_engine
 
 HOME_DIR = os.path.dirname(os.path.dirname(__file__))
 ENV_VARIABLES_PREFIX = "gamification"
@@ -29,27 +22,27 @@ CONF_PATH = os.path.join(HOME_DIR, "test.conf")
 
 RECOGNIZED_ENV_VARIABLES = {
     (section, option): explanation for section, option, explanation in chain(
-        zip(
-            repeat(DATABASE_SECTION),
-            [NAME, USER, PASSWORD, PROTOCOL, HOST],
-            [
-                "the name database used for the run",
-                "the user owning the database",
-                "the password of the user owning the database",
-                "the protocol used for connection to the database",
-                "the address to which to contact the database",
-            ]
-        ),
-        zip(
-            repeat(API_SECTION),
-            [URL, HOST],
-            [
-                "the url used to access the application's api",
-                "the host url on which to access the application",
-            ]
-        )
+    zip(
+        repeat(DATABASE_SECTION),
+        [NAME, USER, PASSWORD, PROTOCOL, HOST],
+        [
+            "the name database used for the run",
+            "the user owning the database",
+            "the password of the user owning the database",
+            "the protocol used for connection to the database",
+            "the address to which to contact the database",
+        ]
+    ),
+    zip(
+        repeat(API_SECTION),
+        [URL, HOST],
+        [
+            "the url used to access the application's api",
+            "the host url on which to access the application",
+        ]
     )
-}
+)
+    }
 
 CONFIG = ConfigParser()
 CONFIG.read([DEFAULT_CONF_PATH, CONF_PATH])
@@ -100,110 +93,9 @@ if CONFIG.get(DATABASE_SECTION, PASSWORD) is not None:
 else:
     user = CONFIG.get(DATABASE_SECTION, USER)
 
-
 DATABASE_CONNECTION_URL = "{protocol}://{user}@{host}/{name}".format(
     protocol=CONFIG.get(DATABASE_SECTION, PROTOCOL),
     user=user,
     host=CONFIG.get(DATABASE_SECTION, HOST),
     name=CONFIG.get(DATABASE_SECTION, NAME)
 )
-
-
-class DatabaseAccessMixin:
-    database_connection = None
-    database_engine = None
-    database_meta = None
-
-    @classmethod
-    def setUpClass(cls):
-        super().setUpClass()
-        cls.database_engine = create_engine(DATABASE_CONNECTION_URL)
-        cls.database_meta = MetaData()
-
-        try:
-            cls.database_meta.reflect(bind=cls.database_engine)
-            cls.database_connection = cls.database_engine.connect()
-        except sqlalchemy.exc.OperationalError as e:
-            print("Error establishing database connection :", e.orig, file=sys.stderr)
-            print_customization_and_exit()
-
-        try:
-            requests.get(BASE_URL)
-        except requests.exceptions.ConnectionError:
-            print("Error connection to {}".format(BASE_URL), file=sys.stderr)
-            print("Is the app up and running and the url correct ?", file=sys.stderr)
-            print_customization_and_exit()
-
-    @classmethod
-    def tearDownClass(cls):
-        super().tearDownClass()
-        cls.database_connection.close()
-        cls.database_engine.dispose()
-
-
-class DatabaseWiperTestMixin(DatabaseAccessMixin):
-    def tearDown(self):
-        super().tearDown()
-
-        for table in reversed(self.database_meta.sorted_tables):
-            self.database_connection.execute(table.delete())
-
-
-class RestAPITestUtilities:
-    @property
-    @abstractmethod
-    def required_fields(self):
-        """List of all required fields the request must give."""
-
-    @property
-    @abstractmethod
-    def invalid_methods(self):
-        """List of all methods that are not valid by the endpoint."""
-
-    @property
-    @abstractmethod
-    def url(self):
-        """URL to which to make the requests"""
-
-    def check_message(self, entry):
-        if API_ERROR_MESSAGES.get(entry["code"]) is None:
-            # first time we get the message, we add it to the global list
-            API_ERROR_MESSAGES[entry["code"]] = entry["message"]
-        else:
-            # we already got the same code, let's check that the same message it received
-            self.assertEqual(API_ERROR_MESSAGES[entry["code"]], entry["message"])
-
-    def check_field_required(self, field_name, response):
-        self.assertEqual(response.status_code, requests.codes.bad_request)
-        self.assertIn(field_name, response.json().keys())
-        self.check_message(response.json()[field_name])
-
-    def test_invalid_methods(self):
-        for method in self.invalid_methods:
-            with self.subTest(method=method):
-                self.assertEqual(requests.request(method, self.url).status_code, requests.codes.not_allowed)
-
-    def test_required_fields(self):
-        request = requests.post(self.url, json=dict())
-
-        for field in self.required_fields:
-            with self.subTest(field=field):
-                self.check_field_required("name", request)
-
-        self.assertEqual(
-            set(request.json().keys()),
-            self.required_fields,
-            msg="A field was marked as required by the response, but test is not requiring it"
-        )
-
-    @staticmethod
-    def prepare_message(base_message, response=None):
-        if response is None:
-            return base_message
-
-        try:
-            result = pformat(response.json(), indent=4).replace("{", "{\n ").replace("}", "\n}").replace("[", "[\n ").replace("]", "\n]")
-        except JSONDecodeError:
-            result = response.text
-
-        return "{}\n\nStatus code: {}\nResponse:\n{}\n".format(base_message, response.status_code, result)
