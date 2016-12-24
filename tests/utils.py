@@ -22,27 +22,27 @@ CONF_PATH = os.path.join(HOME_DIR, "test.conf")
 
 RECOGNIZED_ENV_VARIABLES = {
     (section, option): explanation for section, option, explanation in chain(
-    zip(
-        repeat(DATABASE_SECTION),
-        [NAME, USER, PASSWORD, PROTOCOL, HOST],
-        [
-            "the name database used for the run",
-            "the user owning the database",
-            "the password of the user owning the database",
-            "the protocol used for connection to the database",
-            "the address to which to contact the database",
-        ]
-    ),
-    zip(
-        repeat(API_SECTION),
-        [URL, HOST],
-        [
-            "the url used to access the application's api",
-            "the host url on which to access the application",
-        ]
+        zip(
+            repeat(DATABASE_SECTION),
+            [NAME, USER, PASSWORD, PROTOCOL, HOST],
+            [
+                "the name database used for the run",
+                "the user owning the database",
+                "the password of the user owning the database",
+                "the protocol used for connection to the database",
+                "the address to which to contact the database",
+            ]
+        ),
+        zip(
+            repeat(API_SECTION),
+            [URL, HOST],
+            [
+                "the url used to access the application's api",
+                "the host url on which to access the application",
+            ]
+        )
     )
-)
-    }
+}
 
 CONFIG = ConfigParser()
 CONFIG.read([DEFAULT_CONF_PATH, CONF_PATH])
