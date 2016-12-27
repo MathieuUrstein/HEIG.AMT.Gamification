@@ -14,11 +14,11 @@ To deploy our app, you will need the following:
 - Docker version 1.12.3 and docker-compose
 - Apache Maven 3.3.9
 
-*Warning: Before anything, you may need to stop any service running on port 3306 and 9090.*
+*Warning: Before anything, you may need to stop any service running on port 3306 and 8080.*
 
 1. Clone the repo and cd into it.
 2. `$ ./deploy.sh`
-3. That's it, the app should be listening at [http://localhost:9090/](http://localhost:9090/). Of course, 
+3. That's it, the app should be listening at [http://localhost:8080/](http://localhost:8080/). Of course, 
 if you don't run docker directly on your system (for example on a vm), the host should be the adress of the docker host and not `localhost`.
 
 If for any reason you prefer to do it manually instead of running the script, you can do the following:
