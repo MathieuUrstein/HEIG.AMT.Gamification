@@ -60,8 +60,8 @@ Requirements:
 
 1. Create a test.conf file in the root of the project. You can copy-paste the test_default.conf.
 2. Edit it and specify the correct values:
-- For the mysql DB, the host, port and the password used (if you use the one coming with the docker-compose, set `password = root`).
-- For the gamification app, the host and port used.
+  * For the mysql DB, the host, port and the password used (if you use the one coming with the docker-compose, set `password = root`).
+  * For the gamification app, the host and port used.
 3. At the root of the project, run `python -m unittest discover tests`.
 4. The result of the unit tests are displayed.
 
