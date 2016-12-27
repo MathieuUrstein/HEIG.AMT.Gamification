@@ -49,6 +49,23 @@ adding the `spring.jpa.hibernate.ddl-auto` parameter in your `application-defaul
 to wanted behavior (check the [Hibernate documentation](https://docs.jboss.org/hibernate/orm/5.2/userguide/html_single/Hibernate_User_Guide.html#configurations-hbmddl) 
 to see the possible values).
 
+
+# Tests
+
+Unit tests are available to test the application and are run by travis. If you want to run them yourself, here are the steps needed to do it.
+Requirements: 
+- Python 3
+- libmysqlclient-dev (on linux)
+- You may also want to setup a virtual environment based on python 3 (else, be careful if you have multiple python versions to not use the wrong python or pip).
+
+1. Create a test.conf file in the root of the project. You can copy-paste the test_default.conf.
+2. Edit it and specify the correct values:
+- For the mysql DB, the host, port and the password used (if you use the one coming with the docker-compose, set `password = root`).
+- For the gamification app, the host and port used.
+3. At the root of the project, run `python -m unittest discover tests`.
+4. The result of the unit tests are displayed.
+
+
 # Authors
 
 Made by [Sébastien Boson](https://github.com/sebastie-boson), 
