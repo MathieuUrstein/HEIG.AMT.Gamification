@@ -3,9 +3,10 @@ import unittest
 import requests
 from sqlalchemy import select
 
-from tests.mixins import DatabaseWiperTestMixin, RestAPITestMixin
-from tests.models import Application
 from tests.utils import HTTP_METHODS, BASE_URL
+from tests.utils.mixins.database import DatabaseWiperTestMixin
+from tests.utils.mixins.api import RestAPITestMixin
+from tests.utils.models import Application
 
 
 class TestRegistration(DatabaseWiperTestMixin, RestAPITestMixin, unittest.TestCase):
