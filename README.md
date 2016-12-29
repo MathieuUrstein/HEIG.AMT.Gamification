@@ -14,11 +14,11 @@ To deploy our app, you will need the following:
 - Docker version 1.12.3 and docker-compose
 - Apache Maven 3.3.9
 
-*Warning: Before anything, you may need to stop any service running on port 3306 and 9090.*
+*Warning: Before anything, you may need to stop any service running on port 3306 and 8080.*
 
 1. Clone the repo and cd into it.
 2. `$ ./deploy.sh`
-3. That's it, the app should be listening at [http://localhost:9090/](http://localhost:9090/). Of course, 
+3. That's it, the app should be listening at [http://localhost:8080/](http://localhost:8080/). Of course, 
 if you don't run docker directly on your system (for example on a vm), the host should be the adress of the docker host and not `localhost`.
 
 If for any reason you prefer to do it manually instead of running the script, you can do the following:
@@ -48,6 +48,26 @@ Note: the basic behavior of the server is to keep the values registered in the D
 adding the `spring.jpa.hibernate.ddl-auto` parameter in your `application-default.properties` and set it
 to wanted behavior (check the [Hibernate documentation](https://docs.jboss.org/hibernate/orm/5.2/userguide/html_single/Hibernate_User_Guide.html#configurations-hbmddl) 
 to see the possible values).
+
+
+# Tests
+
+Unit tests are available to test the application and are run by travis. If you want to run them yourself, here are the steps needed to do it.
+Requirements: 
+- Python 3.5
+- MySQL python client 1.3.9: 
+  * libmysqlclient-dev (on linux)
+  * [mysqlclient](http://www.lfd.uci.edu/~gohlke/pythonlibs/#mysqlclient) on windows (run `pip install <the downloaded whl>` to install it). Be sure to take `mysqlclient‑1.3.9‑cp35‑cp35m‑*.whl` (win32 or win_amd64 according to your python version)
+- You may also want to setup a virtual environment based on python 3 (else, be careful if you have multiple python versions to not use the wrong python or pip).
+
+1. Create a `test.conf` file in the root of the project. You can copy the content of `test_default.conf`.
+2. Edit it and specify the correct values:
+  * For the mysql DB, the host, port and the password used (if you use the one coming with the docker-compose, set `password = root`).
+  * For the gamification app, the host used (by default, `host = localhost`).
+3. At the root of the project, run `pip install -r tests/requirements.pip`.
+4. Still at the root of the project, run `python -m unittest discover tests`.
+5. The results of the unit tests are displayed.
+
 
 # Authors
 
