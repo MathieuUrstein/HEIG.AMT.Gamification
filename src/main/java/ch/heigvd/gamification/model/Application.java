@@ -1,5 +1,7 @@
 package ch.heigvd.gamification.model;
 
+import ch.heigvd.gamification.util.PasswordUtils;
+
 import javax.persistence.*;
 import java.util.LinkedList;
 import java.util.List;
@@ -15,11 +17,13 @@ public class Application {
     @Column(name = "name", unique = true, nullable = false)
     private String name;
 
+    @Lob
     @Column(name = "password", nullable = false)
-    private String password;
+    private byte[] password;
 
+    @Lob
     @Column(name = "salt", nullable = false)
-    private String salt;
+    private byte[] salt;
 
     @OneToMany(targetEntity = User.class, fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "application")
     private List<User> users = new LinkedList<>();
@@ -51,21 +55,20 @@ public class Application {
         this.name = name;
     }
 
-    public String getPassword() {
+    public byte[] getPassword() {
         return password;
     }
 
     public void setPassword(String password) {
-        // FIXME hash + salt
-        this.password = password;
-        this.salt = "TODO"; // FIXME
+        this.salt = PasswordUtils.generateSalt();
+        this.password = PasswordUtils.hashPassword(password, salt);
     }
 
-    private String getSalt() {
+    public byte[] getSalt() {
         return salt;
     }
 
-    private void setSalt(String salt) {
+    private void setSalt(byte[] salt) {
         this.salt = salt;
     }
 
