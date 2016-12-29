@@ -54,10 +54,10 @@ to see the possible values).
 
 Unit tests are available to test the application and are run by travis. If you want to run them yourself, here are the steps needed to do it.
 Requirements: 
-- Python 3
+- Python 3.5
 - MySQL python client 1.3.9: 
   * libmysqlclient-dev (on linux)
-  * [mysqlclient-python](http://www.lfd.uci.edu/~gohlke/pythonlibs/#mysqlclient) on windows (run `pip install <the downloaded whl>` to install it).
+  * [mysqlclient](http://www.lfd.uci.edu/~gohlke/pythonlibs/#mysqlclient) on windows (run `pip install <the downloaded whl>` to install it). Be sure to take `mysqlclient‑1.3.9‑cp35‑cp35m‑*.whl` (win32 or win_amd64 according to your python version)
 - You may also want to setup a virtual environment based on python 3 (else, be careful if you have multiple python versions to not use the wrong python or pip).
 
 1. Create a `test.conf` file in the root of the project. You can copy the content of `test_default.conf`.
@@ -66,7 +66,7 @@ Requirements:
   * For the gamification app, the host used (by default, `host = localhost`).
 3. At the root of the project, run `pip install -r tests/requirements.pip`.
 4. Still at the root of the project, run `python -m unittest discover tests`.
-5. The result of the unit tests is displayed.
+5. The results of the unit tests are displayed.
 
 
 # Authors
