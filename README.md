@@ -60,13 +60,13 @@ Requirements:
   * [mysqlclient-python](http://www.lfd.uci.edu/~gohlke/pythonlibs/#mysqlclient) on windows (run `pip install <the downloaded whl>` to install it).
 - You may also want to setup a virtual environment based on python 3 (else, be careful if you have multiple python versions to not use the wrong python or pip).
 
-1. Create a test.conf file in the root of the project. You can copy the content of `test_default.conf`.
+1. Create a `test.conf` file in the root of the project. You can copy the content of `test_default.conf`.
 2. Edit it and specify the correct values:
   * For the mysql DB, the host, port and the password used (if you use the one coming with the docker-compose, set `password = root`).
   * For the gamification app, the host used (by default, `host = localhost`).
 3. At the root of the project, run `pip install -r tests/requirements.pip`.
 4. Still at the root of the project, run `python -m unittest discover tests`.
-5. The result of the unit tests are displayed.
+5. The result of the unit tests is displayed.
 
 
 # Authors
