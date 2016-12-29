@@ -29,7 +29,8 @@ class TestRegistration(DatabaseWiperTestMixin, RestAPITestMixin, unittest.TestCa
             r.json().get("name"),
             msg=self.prepare_message("No error message on field name, when there is a duplicate.", r)
         )
-        self.assertListEqual(list(r.json()["name"].keys()), ["message", "code"])
+        print(r.json())
+        self.assertCountEqual(list(r.json()["name"].keys()), ["code", "message"])
 
     def test_password_is_hashed(self):
         r = requests.post(self.url, json=self.application)
