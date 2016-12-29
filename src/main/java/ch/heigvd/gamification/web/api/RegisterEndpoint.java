@@ -35,7 +35,8 @@ public class RegisterEndpoint {
         Application app = applicationRepository.findByName(credentials.getName());
 
         if (app != null) {
-            throw new ConflictException("application", app.getName());
+            // The name of a gamified application must be unique.
+            throw new ConflictException("name");
         }
 
         app = new Application();

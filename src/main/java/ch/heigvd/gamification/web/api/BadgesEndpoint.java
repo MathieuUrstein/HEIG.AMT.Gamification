@@ -52,7 +52,7 @@ public class BadgesEndpoint {
     public BadgeDTO getBadge(@RequestAttribute("application") Application app, @PathVariable long badgeId) {
         Badge badge = badgeRepository
                 .findByApplicationNameAndId(app.getName(), badgeId)
-                .orElseThrow(() -> new NotFoundException("badge", badgeId));
+                .orElseThrow(NotFoundException::new);
 
         return toBadgeDTO(badge);
     }
@@ -79,7 +79,8 @@ public class BadgesEndpoint {
             return ResponseEntity.created(location).build();
         }
         catch (DataIntegrityViolationException e) {
-            throw new ConflictException("badge", badgeDTO.getName());
+            // The name of a badge must be unique in a gamified application.
+            throw new ConflictException("name");
         }
     }
 
@@ -87,7 +88,7 @@ public class BadgesEndpoint {
     public ResponseEntity deleteBadge(@RequestAttribute("application") Application app, @PathVariable long badgeId) {
         Badge badge = badgeRepository
                 .findByApplicationNameAndId(app.getName(), badgeId)
-                .orElseThrow(() -> new NotFoundException("badge", badgeId));
+                .orElseThrow(NotFoundException::new);
 
         badgeRepository.delete(badge);
 

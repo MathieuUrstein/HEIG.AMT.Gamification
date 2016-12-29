@@ -123,13 +123,13 @@ class DatabaseAccessMixin:
             cls.database_meta.reflect(bind=cls.database_engine)
             cls.database_connection = cls.database_engine.connect()
         except sqlalchemy.exc.OperationalError as e:
-            print("Error establishing database connection :", e.orig, file=sys.stderr)
+            print("ErrorJSONFieldsContent establishing database connection :", e.orig, file=sys.stderr)
             print_customization_and_exit()
 
         try:
             requests.get(BASE_URL)
         except requests.exceptions.ConnectionError:
-            print("Error connection to {}".format(BASE_URL), file=sys.stderr)
+            print("ErrorJSONFieldsContent connection to {}".format(BASE_URL), file=sys.stderr)
             print("Is the app up and running and the url correct ?", file=sys.stderr)
             print_customization_and_exit()
 

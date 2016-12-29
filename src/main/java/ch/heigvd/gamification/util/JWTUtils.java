@@ -23,7 +23,8 @@ public class JWTUtils {
                 verifier = JWT.require(Algorithm.HMAC256(SECRET_KEY))
                         .withIssuer(ISSUER)
                         .build();
-            } catch (UnsupportedEncodingException e) {
+            }
+            catch (UnsupportedEncodingException e) {
                 System.err.println("Could not create JWTVerifier instance.");
                 e.printStackTrace();
             }
@@ -44,7 +45,8 @@ public class JWTUtils {
                     .withIssuer(ISSUER)
                     .withSubject(subject)
                     .sign(Algorithm.HMAC256(SECRET_KEY));
-        } catch (JWTCreationException | UnsupportedEncodingException e) {
+        }
+        catch (JWTCreationException | UnsupportedEncodingException e) {
             e.printStackTrace();
             return null;
         }
@@ -54,7 +56,8 @@ public class JWTUtils {
         createJWTVerifierIfNotExisting();
         try {
             return verifier.verify(token);
-        } catch (JWTVerificationException exception){
+        }
+        catch (JWTVerificationException exception){
             return null;
         }
     }
