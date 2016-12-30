@@ -143,17 +143,26 @@ class AuthenticatedRestAPIMixin(RestAPITestMixin, metaclass=ABCMeta):
 
     def setUp(self):
         super().setUp()
-
-        response = requests.post(BASE_URL + "/register", json=self.default_application)
-
-        if response.status_code != requests.codes.created:
-            raise Exception("Could not register application, aborting test")
-
-        self.token = response.headers["Authorization"]
+        self.token = self.register_application(**self.default_application)
 
     def tearDown(self):
         super().tearDown()
         self.token = None
+
+    def register_application(self, name, password="default"):
+        """
+        Register a new application with the given name and password
+
+        :param name: name of the application to register
+        :param password: password of the application
+        :return: an authentication token for registering
+        """
+        response = requests.post(BASE_URL + "/register", json=dict(name=name, password=password))
+
+        if response.status_code != requests.codes.created:
+            raise Exception("Could not register application, aborting test")
+
+        return response.headers["Authorization"]
 
     def request(self, method, url, json=None, headers=None):
         """Extend `RestAPITestMixin.request` to add the authentication header."""
