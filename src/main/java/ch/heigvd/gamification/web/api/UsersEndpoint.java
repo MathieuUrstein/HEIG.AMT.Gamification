@@ -35,7 +35,7 @@ public class UsersEndpoint {
     public UserDTO getUser(@PathVariable String username, @RequestAttribute("application") Application app) {
         User user =  userRepository
                 .findByApplicationNameAndUsername(app.getName(), username)
-                .orElseThrow(() -> new NotFoundException("user", username));
+                .orElseThrow(NotFoundException::new);
 
         return toUserDTO(user);
     }

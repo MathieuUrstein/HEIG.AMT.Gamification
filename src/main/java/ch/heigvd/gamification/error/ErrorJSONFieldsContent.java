@@ -1,17 +1,17 @@
 package ch.heigvd.gamification.error;
 
-import ch.heigvd.gamification.serializer.ErrorValidationSerializer;
+import ch.heigvd.gamification.serializer.ErrorJSONFieldsContentSerializer;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import org.springframework.validation.FieldError;
 
 import java.util.LinkedList;
 import java.util.List;
 
-@JsonSerialize(using = ErrorValidationSerializer.class)
-public class ErrorValidation {
+@JsonSerialize(using = ErrorJSONFieldsContentSerializer.class)
+public class ErrorJSONFieldsContent {
     private List<FieldError> errors;
 
-    public ErrorValidation() {
+    public ErrorJSONFieldsContent() {
         errors = new LinkedList<>();
     }
 

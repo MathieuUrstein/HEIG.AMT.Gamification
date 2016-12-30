@@ -48,7 +48,7 @@ public class PointScalesEndpoint {
     public PointScaleDTO getPointScale(@RequestAttribute("application") Application app, @PathVariable long pointScaleId) {
         PointScale pointScale = pointScaleRepository
                 .findByApplicationNameAndId(app.getName(), pointScaleId)
-                .orElseThrow(() -> new NotFoundException("pointScale", pointScaleId));
+                .orElseThrow(NotFoundException::new);
 
         return toPointScaleDTO(pointScale);
     }
@@ -73,7 +73,8 @@ public class PointScalesEndpoint {
             return ResponseEntity.created(location).build();
         }
         catch (DataIntegrityViolationException e) {
-            throw new ConflictException("pointScale", badgeDTO.getName());
+            // The name of a point scales must be unique in a gamified application.
+            throw new ConflictException("name");
         }
     }
 
@@ -81,7 +82,7 @@ public class PointScalesEndpoint {
     public ResponseEntity deletePointScale(@RequestAttribute("application") Application app, @PathVariable long pointScaleId) {
         PointScale pointScale = pointScaleRepository
                 .findByApplicationNameAndId(app.getName(), pointScaleId)
-                .orElseThrow(() -> new NotFoundException("pointScale", pointScaleId));
+                .orElseThrow(NotFoundException::new);
 
         pointScaleRepository.delete(pointScale);
 

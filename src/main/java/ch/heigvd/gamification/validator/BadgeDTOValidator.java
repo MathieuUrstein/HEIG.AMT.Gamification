@@ -20,7 +20,8 @@ public class BadgeDTOValidator implements Validator {
 
         if (dto.getName() == null) {
             errors.rejectValue("name", ErrorsCodes.FIELD_REQUIRED, ErrorsCodes.FIELD_REQUIRED_MESSAGE);
-        } else {
+        }
+        else {
             ValidationUtils.rejectIfEmpty(errors, "name", ErrorsCodes.FIELD_EMPTY, ErrorsCodes.FIELD_EMPTY_MESSAGE);
         }
     }

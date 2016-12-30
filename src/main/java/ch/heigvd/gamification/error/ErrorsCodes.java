@@ -13,4 +13,9 @@ public interface ErrorsCodes {
     // The JSON payload is malformed
     String MALFORMED_JSON = "2";
     String MALFORMED_JSON_MESSAGE = "malformed JSON";
+
+    // A field is unique in the JSON payload
+    // You can't post two JSON payloads with the same value for this unique field
+    String FIELD_UNIQUE = "3";
+    String FIELD_UNIQUE_MESSAGE = "this field must be unique";
 }

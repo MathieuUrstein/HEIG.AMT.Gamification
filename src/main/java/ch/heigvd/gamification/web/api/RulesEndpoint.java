@@ -50,7 +50,7 @@ public class RulesEndpoint {
     public RuleDTO getRule(@RequestAttribute("application") Application app, @PathVariable long ruleId) {
         Rule rule =  ruleRepository
                 .findByApplicationNameAndId(app.getName(), ruleId)
-                .orElseThrow(() -> new NotFoundException("rule", ruleId));
+                .orElseThrow(NotFoundException::new);
 
         return toRuleDTO(rule);
     }
@@ -74,7 +74,8 @@ public class RulesEndpoint {
             return ResponseEntity.created(location).build();
         }
         catch (DataIntegrityViolationException e) {
-            throw new ConflictException("rule", ruleDTO.getName());
+            // The name of a rule must be unique in a gamified application.
+            throw new ConflictException("name");
         }
     }
 
@@ -82,7 +83,7 @@ public class RulesEndpoint {
     public ResponseEntity deleteRule(@RequestAttribute("application") Application app, @PathVariable long ruleId) {
         Rule rule = ruleRepository
                 .findByApplicationNameAndId(app.getName(), ruleId)
-                .orElseThrow(() -> new NotFoundException("rule", ruleId));
+                .orElseThrow(NotFoundException::new);
 
         ruleRepository.delete(rule);
 

@@ -30,13 +30,15 @@ public class FieldsRequiredAndNotEmptyValidator implements Validator {
 
                     if (pd.getReadMethod().invoke(o) == null) {
                         errors.rejectValue(pd.getName(), ErrorsCodes.FIELD_REQUIRED, ErrorsCodes.FIELD_REQUIRED_MESSAGE);
-                    } else {
+                    }
+                    else {
                         ValidationUtils.rejectIfEmpty(errors, pd.getName(), ErrorsCodes.FIELD_EMPTY,
                                 ErrorsCodes.FIELD_EMPTY_MESSAGE);
                     }
                 }
             }
-        } catch (IllegalAccessException | InvocationTargetException | IntrospectionException e) {
+        }
+        catch (IllegalAccessException | InvocationTargetException | IntrospectionException e) {
             e.printStackTrace();
         }
     }
