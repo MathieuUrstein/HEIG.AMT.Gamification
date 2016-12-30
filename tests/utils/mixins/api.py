@@ -34,11 +34,25 @@ class RestAPITestMixin:
             return base_message
 
         try:
-            result = pformat(response.json(), indent=4)\
+            res = pformat(response.json())\
                 .replace("{", "{\n ")\
                 .replace("}", "\n}")\
                 .replace("[", "[\n ")\
-                .replace("]", "\n]")
+                .replace("]", "\n]")\
+                .split("\n")
+
+            count_tabs = 0
+            for index, entry in enumerate(res):
+                if entry.startswith("}") or entry.startswith("]"):
+                    count_tabs -= 1
+
+                res[index] = "\t" * count_tabs + entry.strip()
+
+                if entry.endswith("{") or entry.endswith("["):
+                    count_tabs += 1
+
+            result = "\n".join(res)
+
         except JSONDecodeError:
             result = response.text
 
@@ -79,6 +93,7 @@ class RestAPITestMixin:
         This is to make sure that we don't mix up error codes and send twice the same for two different errors.
 
         :param entry: entry containing the error code and message
+        :param msg: message to show when the assert fails
         """
         if API_ERROR_MESSAGES.get(entry["code"]) is None:
             # first time we get the message, we add it to the global list
@@ -93,17 +108,31 @@ class RestAPITestMixin:
                 self.assertEqual(self.request(method, self.url).status_code, requests.codes.not_allowed)
 
     def test_required_fields(self):
+        # FIXME skip if "post" is not acceptable
         response = self.request("post", self.url, json=dict())
+        response_keys = set(response.json().keys())
+
+        self.assertEqual(
+            response.status_code,
+            requests.codes.bad_request,
+            msg=self.prepare_message(
+                "A call with an empty json didn't return a bad request, while some fields are required", response
+            )
+        )
 
         for field in self.required_fields:
             with self.subTest(field=field):
-                self.assertEqual(response.status_code, requests.codes.bad_request)
-                self.assertIn(field, response.json().keys())
+                self.assertIn(field, response_keys, self.prepare_message(
+                    "Expected an error on field {} as this field is required, but didn't got any".format(field),
+                    response
+                ))
                 self.check_message(response.json()[field])
+
+        tested_fields = self.required_fields & response_keys
 
         self.assertEqual(
             set(response.json().keys()),
-            self.required_fields,
+            tested_fields,
             msg="A field was marked as required by the response, but test is not requiring it"
         )
 
@@ -130,6 +159,6 @@ class AuthenticatedRestAPIMixin(RestAPITestMixin, metaclass=ABCMeta):
         """Extend `RestAPITestMixin.request` to add the authentication header."""
         if headers is None:
             headers = dict()
-        headers["Authorization"] = self.token
+        headers["Authorization"] = "Bearer {}".format(self.token)
 
         return super().request(method, url, json=json, headers=headers)
