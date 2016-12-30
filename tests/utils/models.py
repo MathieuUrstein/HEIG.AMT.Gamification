@@ -11,3 +11,4 @@ engine = create_engine(DATABASE_CONNECTION_URL)
 Base.prepare(engine, reflect=True)
 
 Application = Base.classes.application
+Badge = Base.classes.badge

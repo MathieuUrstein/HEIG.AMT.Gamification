@@ -4,7 +4,7 @@ from itertools import chain, repeat
 
 import os
 
-HOME_DIR = os.path.dirname(os.path.dirname(__file__))
+HOME_DIR = os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
 ENV_VARIABLES_PREFIX = "gamification"
 
 DATABASE_SECTION = "database"
