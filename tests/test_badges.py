@@ -35,7 +35,7 @@ class TestBadges(DatabaseWiperTestMixin, AuthenticatedRestAPIMixin, unittest.Tes
             r.json().keys(),
             msg=self.prepare_message("No error on the name, which threw a conflict", r)
         )
-        self.check_message(r.json().keys()["name"])
+        self.check_message(r.json()["name"])
 
     def test_two_applications_can_have_same_badge_name(self):
         self.assertEqual(self.request("post", self.url, json=self.badge).status_code, requests.codes.created)
