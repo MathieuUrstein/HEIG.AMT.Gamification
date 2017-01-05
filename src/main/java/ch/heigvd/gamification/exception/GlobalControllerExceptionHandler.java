@@ -1,7 +1,7 @@
 package ch.heigvd.gamification.exception;
 
 import ch.heigvd.gamification.error.ErrorJSONFieldsContent;
-import ch.heigvd.gamification.error.ErrorMalformedJSON;
+import ch.heigvd.gamification.error.ErrorDescription;
 import ch.heigvd.gamification.error.ErrorsCodes;
 import org.springframework.boot.autoconfigure.web.DefaultErrorAttributes;
 import org.springframework.boot.autoconfigure.web.ErrorAttributes;
@@ -39,8 +39,23 @@ public class GlobalControllerExceptionHandler {
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(HttpMessageNotReadableException.class)
-    @ResponseBody ErrorMalformedJSON handleBadRequest(HttpMessageNotReadableException e) {
-        return new ErrorMalformedJSON(ErrorsCodes.MALFORMED_JSON, ErrorsCodes.MALFORMED_JSON_MESSAGE);
+    @ResponseBody
+    ErrorDescription handleBadRequest(HttpMessageNotReadableException e) {
+        return new ErrorDescription(ErrorsCodes.MALFORMED_JSON, ErrorsCodes.MALFORMED_JSON_MESSAGE);
+    }
+
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    @ExceptionHandler(ApplicationDoesNotExistException.class)
+    @ResponseBody
+    ErrorDescription handleUnauthorized(ApplicationDoesNotExistException e) {
+        return new ErrorDescription(ErrorsCodes.APPLICATION_DOES_NOT_EXIST, ErrorsCodes.APPLICATION_DOES_NOT_EXIST_MESSAGE);
+    }
+
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    @ExceptionHandler(AuthenticationFailedException.class)
+    @ResponseBody
+    ErrorDescription handleUnauthorized(AuthenticationFailedException e) {
+        return new ErrorDescription(ErrorsCodes.APPLICATION_DOES_NOT_EXIST, ErrorsCodes.APPLICATION_DOES_NOT_EXIST_MESSAGE);
     }
 
     @ResponseStatus(HttpStatus.CONFLICT)
