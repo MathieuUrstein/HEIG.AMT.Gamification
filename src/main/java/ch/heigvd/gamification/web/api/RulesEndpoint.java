@@ -1,7 +1,8 @@
 package ch.heigvd.gamification.web.api;
 
 import ch.heigvd.gamification.dao.ApplicationRepository;
-import ch.heigvd.gamification.dao.RuleRepository;
+import ch.heigvd.gamification.dao.EventRuleRepository;
+import ch.heigvd.gamification.dao.TriggerRuleRepository;
 import ch.heigvd.gamification.dto.RuleDTO;
 import ch.heigvd.gamification.exception.ConflictException;
 import ch.heigvd.gamification.exception.NotFoundException;
@@ -24,12 +25,15 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping(URIs.RULES)
 public class RulesEndpoint {
-    private final RuleRepository ruleRepository;
+    private final EventRuleRepository eventRuleRepository;
+    private final TriggerRuleRepository triggerRuleRepository;
     private final ApplicationRepository applicationRepository;
 
     @Autowired
-    public RulesEndpoint(RuleRepository ruleRepository, ApplicationRepository applicationRepository) {
-        this.ruleRepository = ruleRepository;
+    public RulesEndpoint(EventRuleRepository eventRuleRepository, TriggerRuleRepository triggerRuleRepository,
+                         ApplicationRepository applicationRepository) {
+        this.eventRuleRepository = eventRuleRepository;
+        this.triggerRuleRepository = triggerRuleRepository;
         this.applicationRepository = applicationRepository;
     }
 
@@ -40,7 +44,7 @@ public class RulesEndpoint {
 
     @RequestMapping(method = RequestMethod.GET)
     public List<RuleDTO> getRules(@RequestAttribute("application") Application app) {
-        return ruleRepository.findByApplicationName(app.getName())
+        return triggerRuleRepository.findByApplicationName(app.getName())
                 .stream()
                 .map(this::toRuleDTO)
                 .collect(Collectors.toList());
@@ -48,24 +52,26 @@ public class RulesEndpoint {
 
     @RequestMapping(method = RequestMethod.GET, value = "/{ruleId}")
     public RuleDTO getRule(@RequestAttribute("application") Application app, @PathVariable long ruleId) {
-        Rule rule =  ruleRepository
+        Rule rule =  triggerRuleRepository
                 .findByApplicationNameAndId(app.getName(), ruleId)
                 .orElseThrow(NotFoundException::new);
 
         return toRuleDTO(rule);
     }
 
+    // FIXME do we still can validate using DTOs or only manually (check rule type, ...) ?
     @RequestMapping(method = RequestMethod.POST)
     public ResponseEntity addRule(@Valid @RequestBody RuleDTO ruleDTO, @RequestAttribute("application") Application application) {
         try {
             Application app = applicationRepository.findByName(application.getName());
+
+            // FIXME check rule type here and create correct one
             Rule rule = new Rule();
 
             rule.setName(ruleDTO.getName());
             rule.setApplication(app);
             app.addRules(rule);
-
-            ruleRepository.save(rule);
+            triggerRuleRepository.save(rule);
 
             URI location = ServletUriComponentsBuilder
                     .fromCurrentRequest().path("/{id}")
@@ -81,11 +87,11 @@ public class RulesEndpoint {
 
     @RequestMapping(method = RequestMethod.DELETE, value = "/{ruleId}")
     public ResponseEntity deleteRule(@RequestAttribute("application") Application app, @PathVariable long ruleId) {
-        Rule rule = ruleRepository
+        Rule rule = triggerRuleRepository
                 .findByApplicationNameAndId(app.getName(), ruleId)
                 .orElseThrow(NotFoundException::new);
 
-        ruleRepository.delete(rule);
+        triggerRuleRepository.delete(rule);
 
         return ResponseEntity.ok().build();
     }
