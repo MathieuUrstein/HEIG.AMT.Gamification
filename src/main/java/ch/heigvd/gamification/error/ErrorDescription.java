@@ -4,9 +4,6 @@ public class ErrorDescription {
     private String code;
     private String message;
 
-    public ErrorDescription() {
-    }
-
     public ErrorDescription(String code, String message) {
         this.code = code;
         this.message = message;

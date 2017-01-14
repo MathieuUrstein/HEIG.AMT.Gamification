@@ -54,7 +54,7 @@ public class GlobalControllerExceptionHandler {
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
     @ExceptionHandler(AuthenticationFailedException.class)
     @ResponseBody
-    ErrorDescription handleAuthenticationFailed(AuthenticationFailedException e) {
+    ErrorDescription handleUnauthorized(AuthenticationFailedException e) {
         return new ErrorDescription(ErrorsCodes.AUTHENTICATION_FAILED, ErrorsCodes.AUTHENTICATION_FAILED_MESSAGE);
     }
 
