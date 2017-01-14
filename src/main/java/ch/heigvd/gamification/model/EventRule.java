@@ -5,10 +5,15 @@ import javax.persistence.*;
 @Entity
 @Table(name="event_rule", uniqueConstraints = @UniqueConstraint(columnNames =  {"name", "application_id"}))
 public class EventRule extends Rule {
-    // TODO annotations
+    @Column(name="event", nullable = false)
     private String event;
-    private PointScale pointScale;
+
+    @Column(name="points_given", nullable = false)
     private int pointsGiven;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "point_scale_id", nullable = false)
+    private PointScale pointScale;
 
     public EventRule() {}
 
@@ -20,19 +25,19 @@ public class EventRule extends Rule {
         this.event = event;
     }
 
-    public PointScale getPointScale() {
-        return pointScale;
-    }
-
-    public void setPointScale(PointScale pointScale) {
-        this.pointScale = pointScale;
-    }
-
     public int getPointsGiven() {
         return pointsGiven;
     }
 
     public void setPointsGiven(int pointsGiven) {
         this.pointsGiven = pointsGiven;
+    }
+
+    public PointScale getPointScale() {
+        return pointScale;
+    }
+
+    public void setPointScale(PointScale pointScale) {
+        this.pointScale = pointScale;
     }
 }

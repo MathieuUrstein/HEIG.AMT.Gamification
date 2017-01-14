@@ -5,29 +5,21 @@ import javax.persistence.*;
 @Entity
 @Table(name="trigger_rule", uniqueConstraints = @UniqueConstraint(columnNames =  {"name", "application_id"}))
 public class TriggerRule extends Rule {
-    // TODO annotations
-    private Badge badgeAwarded;
-    private PointScale pointScale;
+    @Column(name="limit", nullable = false)
     private int limit;
+
+    @Column(name="above_limit", nullable = false)
     private boolean aboveLimit = true;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "badge_awarded_id", nullable = false)
+    private Badge badgeAwarded;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "point_scale_id", nullable = false)
+    private PointScale pointScale;
+
     public TriggerRule() {}
-
-    public Badge getBadgeAwarded() {
-        return badgeAwarded;
-    }
-
-    public PointScale getPointScale() {
-        return pointScale;
-    }
-
-    public void setPointScale(PointScale pointScale) {
-        this.pointScale = pointScale;
-    }
-
-    public void setBadgeAwarded(Badge badgeAwarded) {
-        this.badgeAwarded = badgeAwarded;
-    }
 
     public int getLimit() {
         return limit;
@@ -43,5 +35,21 @@ public class TriggerRule extends Rule {
 
     public void setAboveLimit(boolean aboveLimit) {
         this.aboveLimit = aboveLimit;
+    }
+
+    public Badge getBadgeAwarded() {
+        return badgeAwarded;
+    }
+
+    public PointScale getPointScale() {
+        return pointScale;
+    }
+
+    public void setPointScale(PointScale pointScale) {
+        this.pointScale = pointScale;
+    }
+
+    public void setBadgeAwarded(Badge badgeAwarded) {
+        this.badgeAwarded = badgeAwarded;
     }
 }
