@@ -23,7 +23,7 @@ public interface ErrorsCodes {
     String APPLICATION_DOES_NOT_EXIST = "4";
     String APPLICATION_DOES_NOT_EXIST_MESSAGE = "application doesn't exist";
 
-    // Application does not exist
+    // Authentication failed
     String AUTHENTICATION_FAILED = "5";
     String AUTHENTICATION_FAILED_MESSAGE = "authentication failed";
 }
