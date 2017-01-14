@@ -2,6 +2,8 @@ package ch.heigvd.gamification.web.api;
 
 import ch.heigvd.gamification.dao.ApplicationRepository;
 import ch.heigvd.gamification.dto.CredentialsDTO;
+import ch.heigvd.gamification.exception.ApplicationDoesNotExistException;
+import ch.heigvd.gamification.exception.AuthenticationFailedException;
 import ch.heigvd.gamification.model.Application;
 import ch.heigvd.gamification.util.PasswordUtils;
 import ch.heigvd.gamification.util.JWTUtils;
@@ -34,10 +36,12 @@ public class AuthenticationEndpoint {
     public ResponseEntity login(@Valid @RequestBody CredentialsDTO credentials) {
         Application app = applicationRepository.findByName(credentials.getName());
 
-        if (app == null || !PasswordUtils.isPasswordValid(credentials.getPassword(), app.getPassword(), app.getSalt())) {
-            return ResponseEntity
-                    .status(HttpStatus.UNAUTHORIZED)
-                    .build();
+        if (app == null) {
+            throw new ApplicationDoesNotExistException();
+        }
+
+        if (!PasswordUtils.isPasswordValid(credentials.getPassword(), app.getPassword(), app.getSalt())) {
+            throw new AuthenticationFailedException();
         }
 
         return ResponseEntity

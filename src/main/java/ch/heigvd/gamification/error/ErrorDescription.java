@@ -1,13 +1,10 @@
 package ch.heigvd.gamification.error;
 
-public class ErrorMalformedJSON {
+public class ErrorDescription {
     private String code;
     private String message;
 
-    public ErrorMalformedJSON() {
-    }
-
-    public ErrorMalformedJSON(String code, String message) {
+    public ErrorDescription(String code, String message) {
         this.code = code;
         this.message = message;
     }

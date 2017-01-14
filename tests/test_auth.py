@@ -22,12 +22,12 @@ class TestAuth(DatabaseWiperTestMixin, AuthenticatedRestAPIMixin, unittest.TestC
         self.assertNotIn("Authorization", r.headers.keys(), msg="Got an authorization token with a bad authorization")
 
         for key in ["name", "password"]:
-            self.assertNotIn(r.json().keys(), key, msg=self.prepare_message(
+            self.assertNotIn(key, r.json().keys(), msg=self.prepare_message(
                 "Error message should not give information on what is wrong for authentication", r
             ))
 
         self.assertEqual(len(r.json().keys()), 1, msg=self.prepare_message("No error message", r))
-        self.assertIn(r.json().keys(), "error", msg=self.prepare_message("No error key in response", r))
+        self.assertIn("error", r.json().keys(), msg=self.prepare_message("No error key in response", r))
         self.check_message(r.json()["error"])
 
     def test_can_authenticate(self):
