@@ -1,8 +1,5 @@
 package ch.heigvd.gamification.dto;
 
-/**
- * Created by sebbos on 19.12.2016.
- */
 public class UserDTO {
     // TODO : send links
 

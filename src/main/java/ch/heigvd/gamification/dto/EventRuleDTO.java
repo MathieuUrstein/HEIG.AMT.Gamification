@@ -1,16 +1,12 @@
-package ch.heigvd.gamification.model;
+package ch.heigvd.gamification.dto;
 
-import javax.persistence.*;
-
-@Entity
-@Table(name="event_rule", uniqueConstraints = @UniqueConstraint(columnNames =  {"name", "application_id"}))
-public class EventRule extends Rule {
-    // TODO annotations
+public class EventRuleDTO extends RuleDTO {
     private String event;
-    private PointScale pointScale;
+    private String pointScale;
     private int pointsGiven;
 
-    public EventRule() {}
+    public EventRuleDTO() {
+    }
 
     public String getEvent() {
         return event;
@@ -20,11 +16,11 @@ public class EventRule extends Rule {
         this.event = event;
     }
 
-    public PointScale getPointScale() {
+    public String getPointScale() {
         return pointScale;
     }
 
-    public void setPointScale(PointScale pointScale) {
+    public void setPointScale(String pointScale) {
         this.pointScale = pointScale;
     }
 

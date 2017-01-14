@@ -8,5 +8,6 @@ import java.util.Optional;
 
 public interface EventRuleRepository extends CrudRepository<EventRule, Long> {
     Optional<EventRule> findByApplicationNameAndId(String applicationName, long ruleId);
+    Optional<EventRule> findByApplicationNameAndName(String applicationName, String name);
     List<EventRule> findByApplicationName(String applicationName);
 }

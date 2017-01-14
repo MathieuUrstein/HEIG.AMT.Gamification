@@ -8,18 +8,27 @@ import javax.persistence.*;
 @Table(name="trigger_rule", uniqueConstraints = @UniqueConstraint(columnNames =  {"name", "application_id"}))
 public class TriggerRule extends Rule {
     // TODO annotations
-    private Badge awards;
+    private Badge badgeAwarded;
+    private PointScale pointScale;
     private int limit;
     private AwardLimitContext context = AwardLimitContext.ABOVE;
 
     public TriggerRule() {}
 
-    public Badge getAwards() {
-        return awards;
+    public Badge getBadgeAwarded() {
+        return badgeAwarded;
     }
 
-    public void setAwards(Badge awards) {
-        this.awards = awards;
+    public PointScale getPointScale() {
+        return pointScale;
+    }
+
+    public void setPointScale(PointScale pointScale) {
+        this.pointScale = pointScale;
+    }
+
+    public void setBadgeAwarded(Badge badgeAwarded) {
+        this.badgeAwarded = badgeAwarded;
     }
 
     public int getLimit() {
