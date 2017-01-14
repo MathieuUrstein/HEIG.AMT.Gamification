@@ -126,7 +126,7 @@ public class RulesEndpoint {
             rule.setBadgeAwarded(optBadge.get());
             rule.setPointScale(optPS.get());
             rule.setLimit(ruleDTO.getLimit());
-            rule.setContext(ruleDTO.getContext());
+            rule.setAboveLimit(ruleDTO.getAboveLimit());
 
             app.addRules(rule);
 

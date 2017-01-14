@@ -15,6 +15,9 @@ public class PointAward {
     @Temporal(TemporalType.TIMESTAMP)
     private Date date;
 
+    @Column(name = "points")
+    private int points;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
@@ -39,6 +42,14 @@ public class PointAward {
 
     public void setDate(Date date) {
         this.date = date;
+    }
+
+    public int getPoints() {
+        return points;
+    }
+
+    public void setPoints(int points) {
+        this.points = points;
     }
 
     public User getUser() {

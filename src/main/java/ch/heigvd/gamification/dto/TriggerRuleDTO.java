@@ -1,12 +1,10 @@
 package ch.heigvd.gamification.dto;
 
-import ch.heigvd.gamification.util.AwardLimitContext;
-
 public class TriggerRuleDTO extends RuleDTO {
     private String badgeAwarded;
     private String pointScale;
     private int limit;
-    private AwardLimitContext context;
+    private boolean aboveLimit;
 
     public TriggerRuleDTO() {
     }
@@ -35,11 +33,11 @@ public class TriggerRuleDTO extends RuleDTO {
         this.limit = limit;
     }
 
-    public AwardLimitContext getContext() {
-        return context;
+    public boolean getAboveLimit() {
+        return aboveLimit;
     }
 
-    public void setContext(AwardLimitContext context) {
-        this.context = context;
+    public void setAboveLimit(boolean aboveLimit) {
+        this.aboveLimit = aboveLimit;
     }
 }

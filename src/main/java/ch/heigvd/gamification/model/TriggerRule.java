@@ -1,7 +1,5 @@
 package ch.heigvd.gamification.model;
 
-import ch.heigvd.gamification.util.AwardLimitContext;
-
 import javax.persistence.*;
 
 @Entity
@@ -11,7 +9,7 @@ public class TriggerRule extends Rule {
     private Badge badgeAwarded;
     private PointScale pointScale;
     private int limit;
-    private AwardLimitContext context = AwardLimitContext.ABOVE;
+    private boolean aboveLimit = true;
 
     public TriggerRule() {}
 
@@ -39,11 +37,11 @@ public class TriggerRule extends Rule {
         this.limit = limit;
     }
 
-    public AwardLimitContext getContext() {
-        return context;
+    public boolean getAboveLimit() {
+        return aboveLimit;
     }
 
-    public void setContext(AwardLimitContext context) {
-        this.context = context;
+    public void setAboveLimit(boolean aboveLimit) {
+        this.aboveLimit = aboveLimit;
     }
 }
