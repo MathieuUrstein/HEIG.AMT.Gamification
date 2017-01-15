@@ -23,19 +23,17 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping(URIs.RULES)
-public class RulesEndpoint {
-    private final EventRuleRepository eventRuleRepository;
+@RequestMapping(URIs.TRIGGER_RULES)
+public class TriggerRulesEndpoint {
     private final TriggerRuleRepository triggerRuleRepository;
     private final ApplicationRepository applicationRepository;
     private final PointScaleRepository pointScaleRepository;
     private final BadgeRepository badgeRepository;
 
     @Autowired
-    public RulesEndpoint(EventRuleRepository eventRuleRepository, TriggerRuleRepository triggerRuleRepository,
-                         ApplicationRepository applicationRepository, PointScaleRepository pointScaleRepository,
-                         BadgeRepository badgeRepository) {
-        this.eventRuleRepository = eventRuleRepository;
+    public TriggerRulesEndpoint(TriggerRuleRepository triggerRuleRepository,
+                                ApplicationRepository applicationRepository, PointScaleRepository pointScaleRepository,
+                                BadgeRepository badgeRepository) {
         this.triggerRuleRepository = triggerRuleRepository;
         this.applicationRepository = applicationRepository;
         this.pointScaleRepository = pointScaleRepository;
@@ -64,43 +62,7 @@ public class RulesEndpoint {
         return toRuleDTO(rule);
     }
 
-    @RequestMapping(path = URIs.EVENT_RULES, method = RequestMethod.POST)
-    public ResponseEntity addEventRule(@Valid @RequestBody EventRuleDTO ruleDTO,
-                                       @RequestAttribute("application") Application application) {
-        try {
-            Application app = applicationRepository.findByName(application.getName());
-            Optional<PointScale> opt = pointScaleRepository
-                    .findByApplicationNameAndName(application.getName(), ruleDTO.getName());
-
-            if (!opt.isPresent()) {
-                throw new NotFoundException();
-            }
-
-            EventRule rule = new EventRule();
-
-            rule.setName(ruleDTO.getName());
-            rule.setApplication(app);
-            rule.setEvent(ruleDTO.getEvent());
-            rule.setPointScale(opt.get());
-            rule.setPointsGiven(ruleDTO.getPointsGiven());
-            app.addRules(rule);
-
-            eventRuleRepository.save(rule);
-
-            URI location = ServletUriComponentsBuilder
-                    .fromCurrentRequest().path("/{id}")
-                    .buildAndExpand(rule.getId()).toUri();
-
-            return ResponseEntity.created(location).build();
-        }
-
-        catch (DataIntegrityViolationException e) {
-            // The name of a rule must be unique in a gamified application.
-            throw new ConflictException("name");
-        }
-    }
-
-    @RequestMapping(path = URIs.TRIGGER_RULES, method = RequestMethod.POST)
+    @RequestMapping(method = RequestMethod.POST)
     public ResponseEntity addTriggerRule(@Valid @RequestBody TriggerRuleDTO ruleDTO,
                                          @RequestAttribute("application") Application application) {
         try {
@@ -144,19 +106,7 @@ public class RulesEndpoint {
         }
     }
 
-    @RequestMapping(path = URIs.TRIGGER_RULES, method = RequestMethod.DELETE, value = "/{ruleName}")
-    public ResponseEntity deleteEventRule(@RequestAttribute("application") Application app,
-                                          @PathVariable String ruleName) {
-        EventRule rule = eventRuleRepository
-                .findByApplicationNameAndName(app.getName(), ruleName)
-                .orElseThrow(NotFoundException::new);
-
-        eventRuleRepository.delete(rule);
-
-        return ResponseEntity.ok().build();
-    }
-
-    @RequestMapping(path = URIs.TRIGGER_RULES, method = RequestMethod.DELETE, value = "/{ruleName}")
+    @RequestMapping(method = RequestMethod.DELETE, value = "/{ruleName}")
     public ResponseEntity deleteTriggerRule(@RequestAttribute("application") Application app,
                                             @PathVariable String ruleName) {
         TriggerRule rule = triggerRuleRepository
