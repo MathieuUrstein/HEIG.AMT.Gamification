@@ -3,7 +3,6 @@ package ch.heigvd.gamification.model;
 import javax.persistence.*;
 
 @Entity
-@Table(name="trigger_rule", uniqueConstraints = @UniqueConstraint(columnNames =  {"name", "application_id"}))
 public class TriggerRule extends Rule {
     @Column(name="limit", nullable = false)
     private int limit;

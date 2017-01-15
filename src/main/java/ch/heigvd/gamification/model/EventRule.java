@@ -3,7 +3,6 @@ package ch.heigvd.gamification.model;
 import javax.persistence.*;
 
 @Entity
-@Table(name="event_rule", uniqueConstraints = @UniqueConstraint(columnNames =  {"name", "application_id"}))
 public class EventRule extends Rule {
     @Column(name="event", nullable = false)
     private String event;
