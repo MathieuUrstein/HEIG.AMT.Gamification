@@ -290,10 +290,10 @@ paths:
   
   /rules/events/:
     get:
-      summary: "todo"
+      summary: "Retrieves all event rules for the current application."
       responses:
         200:
-          description: ""
+          description: "Successful operation."
           schema:
             type: array
             items:
@@ -302,48 +302,52 @@ paths:
         - JWT: []
   
     post:
-      summary: "todo"
+      summary: "Creates a new event rule."
       parameters:
         - name: body
           in: body
-          description: "todo"
+          description: "The info needed to create a new event rule."
           schema:
             $ref: "#/definitions/EventRule"
       responses:
         201:
-          description: "Successful operation"
+          description: "Successful operation."
+          headers:
+            Location:
+              description: "URI of newly created object."
+              type: string
       security:
         - JWT: []
     
   /rules/events/{id}/:
     get:
-      summary: "todo"
+      summary: "Retrieves a given event rule."
       parameters:
         - name: id
           in: path
-          description: "todo"
+          description: "The id of the event rule."
           required: true
           type: number
       responses:
         200:
-          description: "todo"
+          description: "Successful operation."
           schema:
             $ref: "#/definitions/EventRuleWithId"
       security:
         - JWT: []
         
     put:
-      summary: "todo"
+      summary: "Updates the given event rule."
       parameters:
         - name: id
           in: path
-          description: "todo"
+          description: "The id of the given event rule."
           required: true
           type: number
           
         - name: body
           in: body
-          description: "todo"
+          description: "The modified event rule."
           schema:
             $ref: "#/definitions/EventRule"
       responses:
@@ -353,17 +357,18 @@ paths:
         - JWT: []
           
     patch:
-      summary: "todo"
+      summary: "Partially updates the given event rule."
       parameters:
         - name: id
           in: path
-          description: "todo"
+          description: "The id of the given event rule."
           required: true
           type: number
           
         - name: body
           in: body
-          description: "todo"
+          description: "The modified fields of the event rule."
+          required: false
           schema:
             $ref: "#/definitions/EventRule"
       responses:
@@ -373,11 +378,11 @@ paths:
         - JWT: []
           
     delete:
-      summary: "todo"
+      summary: "Deletes the given event rule."
       parameters:
         - name: id
           in: path
-          description: "todo"
+          description: "The id of the given event rule."
           required: true
           type: number
       responses:
@@ -388,7 +393,7 @@ paths:
   
   /rules/triggers/:
     get:
-      summary: "todo"
+      summary: "Retrieves all trigger rules for the current application."
       responses:
         200:
           description: "Successful operation."
@@ -400,26 +405,30 @@ paths:
         - JWT: []
   
     post:
-      summary: "todo"
+      summary: "Creates a new trigger rule."
       parameters:
         - name: body
           in: body
-          description: "Successful operation."
+          description: "The info needed to create a new trigger rule."
           schema:
-            $ref: "#/definitions/TriggerRule"  
+            $ref: "#/definitions/TriggerRule"
       responses:
         201:
           description: "Successful operation."
+          headers:
+            Location:
+              description: "URI of newly created object."
+              type: string
       security:
         - JWT: []
-        
+    
   /rules/triggers/{id}/:
     get:
-      summary: "todo"
+      summary: "Retrieves a given trigger rule."
       parameters:
         - name: id
           in: path
-          description: "todo"
+          description: "The id of the trigger rule."
           required: true
           type: number
       responses:
@@ -429,39 +438,40 @@ paths:
             $ref: "#/definitions/TriggerRuleWithId"
       security:
         - JWT: []
-    
+        
     put:
-      summary: "todo"
+      summary: "Updates the given trigger rule."
       parameters:
         - name: id
           in: path
-          description: "todo"
+          description: "The id of the given trigger rule."
           required: true
           type: number
           
         - name: body
           in: body
-          description: "Successful operation."
+          description: "The modified trigger rule."
           schema:
             $ref: "#/definitions/TriggerRule"
       responses:
         200:
-          description: "todo"
+          description: "Successful operation."
       security:
         - JWT: []
           
     patch:
-      summary: "todo"
+      summary: "Partially updates the given trigger rule."
       parameters:
         - name: id
           in: path
-          description: "todo"
+          description: "The id of the given trigger rule."
           required: true
           type: number
           
         - name: body
           in: body
-          description: "todo"
+          description: "The modified fields of the trigger rule."
+          required: false
           schema:
             $ref: "#/definitions/TriggerRule"
       responses:
@@ -471,11 +481,11 @@ paths:
         - JWT: []
           
     delete:
-      summary: "todo"
+      summary: "Deletes the given trigger rule."
       parameters:
         - name: id
           in: path
-          description: "todo"
+          description: "The id of the given trigger rule."
           required: true
           type: number
       responses:
@@ -551,6 +561,7 @@ definitions:
         description: "The name of the badge."
         
   BadgeWithId:
+    description: "A badge with his id."
     allOf:
       - $ref: "#/definitions/Badge"
       - properties:
@@ -559,7 +570,7 @@ definitions:
             type: number
             
   PointScale:
-    description: "Info to create or update a point scale in an application."
+    description: "A point scale in an application."
     type: object
     properties:
       name:
@@ -567,7 +578,7 @@ definitions:
         type: string
         
   PointScaleWithId:
-    description: "Info returned when retrieving a point scale."
+    description: "A point scale with its id."
     allOf:
       - $ref: "#/definitions/Badge"
       - properties:
@@ -594,6 +605,7 @@ definitions:
         
             
   EventRuleWithId:
+    description: "An event rule with its id."
     allOf:
       - $ref: "#/definitions/EventRule"
       - properties:
@@ -622,6 +634,7 @@ definitions:
         description: "whether the badge is given above or below point limit"
         
   TriggerRuleWithId:
+    description: "A trigger rule with its id."
     allOf:
       - $ref: "#/definitions/TriggerRule"
       - properties:
