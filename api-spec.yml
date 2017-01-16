@@ -5,7 +5,7 @@ info:
   title: "AMT - gamification"
   description:
     "The API specification for the AMT - gamification project. All endpoints are implicitely prefixed by __/api__ for the sake of readability."
-    
+
 consumes:
   - application/json
 produces:
@@ -14,7 +14,7 @@ produces:
 paths:
   /register/:
     post:
-      description: "todo"
+      summary: "Registers a gamified application."
       parameters:
         - name: body
           in: body
@@ -28,7 +28,7 @@ paths:
 
   /auth/:
     post:
-      description: "Logs an application in."
+      summary: "Logs an application in."
       parameters:
         - name: body
           in: body
@@ -46,7 +46,7 @@ paths:
           
   /badges/:
     get:
-      description: "Retrieves the info all the badges for the current application."
+      summary: "Retrieves all badges for the current application."
       responses:
         200:
           description: "Successful operation."
@@ -54,9 +54,11 @@ paths:
             type: array
             items:
               $ref: "#/definitions/Badge"
+      security:
+          - JWT: []
     
     post:
-      description: "Creates a new badge."
+      summary: "Creates a new badge."
       parameters:
         - name: body
           in: body
@@ -65,14 +67,18 @@ paths:
           schema:
             $ref: "#/definitions/Badge"
       responses:
-        200:
+        201:
           description: "Successful operation."
-        401:
-          description: "Authentication required."
+          headers:
+            Location:
+              description: "URI of newly created object."
+              type: string
+      security:
+        - JWT: []
           
   /badges/{id}/:
     get:
-      description: "Retrieves info related to a given badge."
+      summary: "Retrieves a given badge."
       parameters:
         - name: id
           in: path
@@ -84,9 +90,11 @@ paths:
           description: "Successful operation."
           schema:
             $ref: "#/definitions/Badge"
+      security:
+        - JWT: []
             
     put:
-      description: "Updates a given badge."
+      summary: "Updates a given badge."
       parameters:
         - name: id
           in: path
@@ -102,9 +110,11 @@ paths:
       responses:
         200:
           description: "Successful operation."
+      security:
+        - JWT: []
           
     patch:
-      description: "Partially updates a given badge."
+      summary: "Partially updates a given badge."
       parameters:
         - name: id
           in: path
@@ -121,36 +131,44 @@ paths:
       responses:
         200:
           description: "Successful operation."
+      security:
+        - JWT: []
           
     delete:
-      description: "todo"
+      summary: "Deletes a given badge."
       parameters:
         - name: id
           in: path
-          description: "todo"
+          description: "The id of the badge."
           required: true
           type: number
       responses:
         200:
           description: "Successful operation."
+      security:
+        - JWT: []
   
   /events/:
      post:
-       description: "todo"
+       summary: "todo"
        responses:
         200:
           description: ""
+       security:
+        - JWT: []
 
   /users/:
     get:
-      description: "todo"
+      summary: "todo"
       responses:
         200:
           description: "Successful operation. todo"
+      security:
+        - JWT: []
           
   /users/{id}/:
     get:
-      description: "todo"
+      summary: "todo"
       parameters:
         - name: id
           in: path
@@ -160,17 +178,21 @@ paths:
       responses:
         200:
           description: "todo"
+      security:
+        - JWT: []
           
   /pointScales/:
      post:
-       description: "todo"
+       summary: "todo"
        responses:
-        200:
-          description: ""
+         200:
+           description: ""
+       security:
+        - JWT: []
   
   /pointScales/{id}/:
     get:
-      description: "todo"
+      summary: "todo"
       parameters:
         - name: id
           in: path
@@ -180,9 +202,11 @@ paths:
       responses:
         200:
           description: "todo"
+      security:
+        - JWT: []
           
     put:
-      description: "todo"
+      summary: "todo"
       parameters:
         - name: id
           in: path
@@ -192,9 +216,11 @@ paths:
       responses:
         200:
           description: "todo"
+      security:
+        - JWT: []
           
     patch:
-      description: "todo"
+      summary: "todo"
       parameters:
         - name: id
           in: path
@@ -204,9 +230,11 @@ paths:
       responses:
         200:
           description: "todo"
+      security:
+        - JWT: []
           
     delete:
-      description: "todo"
+      summary: "todo"
       parameters:
         - name: id
           in: path
@@ -216,10 +244,12 @@ paths:
       responses:
         200:
           description: "todo"
+      security:
+        - JWT: []
   
   /rules/events/:
     post:
-      description: "todo"
+      summary: "todo"
       parameters:
         - name: body
           in: body
@@ -229,10 +259,12 @@ paths:
       responses:
         200:
           description: ""
+      security:
+        - JWT: []
     
   /rules/events/{id}/:
     put:
-      description: "todo"
+      summary: "todo"
       parameters:
         - name: id
           in: path
@@ -248,9 +280,11 @@ paths:
       responses:
         200:
           description: "todo"
+      security:
+        - JWT: []
           
     patch:
-      description: "todo"
+      summary: "todo"
       parameters:
         - name: id
           in: path
@@ -266,9 +300,11 @@ paths:
       responses:
         200:
           description: "todo"
+      security:
+        - JWT: []
           
     delete:
-      description: "todo"
+      summary: "todo"
       parameters:
         - name: id
           in: path
@@ -278,10 +314,12 @@ paths:
       responses:
         200:
           description: "todo"
+      security:
+        - JWT: []
   
   /rules/triggers/:
     post:
-      description: "todo"
+      summary: "todo"
       parameters:
         - name: body
           in: body
@@ -291,10 +329,12 @@ paths:
       responses:
         200:
           description: ""
+      security:
+        - JWT: []
         
   /rules/triggers/{id}/:
     put:
-      description: "todo"
+      summary: "todo"
       parameters:
         - name: id
           in: path
@@ -310,9 +350,11 @@ paths:
       responses:
         200:
           description: "todo"
+      security:
+        - JWT: []
           
     patch:
-      description: "todo"
+      summary: "todo"
       parameters:
         - name: id
           in: path
@@ -328,9 +370,11 @@ paths:
       responses:
         200:
           description: "todo"
+      security:
+        - JWT: []
           
     delete:
-      description: "todo"
+      summary: "todo"
       parameters:
         - name: id
           in: path
@@ -340,6 +384,14 @@ paths:
       responses:
         200:
           description: "todo"
+      security:
+        - JWT: []
+
+securityDefinitions:
+  JWT:
+    type: apiKey
+    name: Authorization
+    in: header
 
 definitions:
   Credentials:
