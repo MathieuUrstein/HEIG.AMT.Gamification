@@ -2,9 +2,9 @@ swagger: '2.0'
 
 info:
   version: "1.0.0"
-  title: ""
+  title: "AMT - gamification"
   description:
-    "The swapp API specification. All endpoints are implicitely prefixed by __/api__ for the sake of readability."
+    "The API specification for the AMT - gamification project. All endpoints are implicitely prefixed by __/api__ for the sake of readability."
     
 consumes:
   - application/json
@@ -15,8 +15,16 @@ paths:
   /register/:
     post:
       description: "todo"
+      parameters:
+        - name: body
+          in: body
+          description: "The credentials of the application."
+          required: true
+          schema:
+            $ref: "#/definitions/Credentials"
+              
       responses:
-        200:
+        201:
           description: "Successful operation."
 
   /auth/:
@@ -28,17 +36,12 @@ paths:
           description: "The credentials of the application."
           required: true
           schema:
-            type: object
-            properties:
-              username:
-                type: string
-              password:
-                type: string
+            $ref: "#/definitions/Credentials"
       responses:
         200:
           description: "Successful operation."
         401:
-          description: "todo"
+          description: "- Error code 4: The application does not exist. \n- Error code 5: Authentication failed."
           
   /badges/:
     post:
@@ -255,6 +258,16 @@ paths:
           description: "todo"
 
 definitions:
+  Credentials:
+    type: object
+    properties:
+      username:
+        type: string
+        description: "the username of the application"
+      password:
+        type: string
+        description: "the password of the application"
+
   EventRule:
     type: object
     properties:
