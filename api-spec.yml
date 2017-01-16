@@ -43,7 +43,55 @@ paths:
           description: "Error code todo: Application already authenticated."
         401:
           description: "- Error code 4: The application does not exist.\n- Error code 5: Authentication failed. \n- Error code todo: JWT invalid.\n- Error code todo: Invalid JWT format."
+  
+  /events/:
+    post:
+      summary: "Creates an event."
+      description: "Creates an event triggered by an action made by an user of the application. If the user does not exist in the platform, he will be created."
+      parameters:
+        - name: body
+          in: body
+          description: "The new info of the badge."
+          required: false
+          schema:
+            $ref: "#/definitions/Event"
+      responses:
+        201:
+          description: "Successful operation."
+      security:
+        - JWT: []
+
+  /users/:
+    get:
+      summary: "Retrieves all the users of the current application."
+      description: "Get all the users of the current application with their bagdes and points awarded."
+      responses:
+        200:
+          description: "Successful operation."
+          schema:
+            type: array
+            items:
+              $ref: "#/definitions/User"
+      security:
+        - JWT: []
           
+  /users/{id}/:
+    get:
+      summary: "Retrieves an user."
+      parameters:
+        - name: id
+          in: path
+          description: "The id of the user."
+          required: true
+          type: number
+      responses:
+        200:
+          description: "Successful operation"
+          schema:
+            $ref: "#/definitions/User"
+      security:
+        - JWT: []
+        
   /badges/:
     get:
       summary: "Retrieves all badges for the current application."
@@ -55,7 +103,7 @@ paths:
             items:
               $ref: "#/definitions/Badge"
       security:
-          - JWT: []
+        - JWT: []
     
     post:
       summary: "Creates a new badge."
@@ -89,7 +137,7 @@ paths:
         200:
           description: "Successful operation."
           schema:
-            $ref: "#/definitions/Badge"
+            $ref: "#/definitions/BadgeWithId"
       security:
         - JWT: []
             
@@ -147,133 +195,241 @@ paths:
           description: "Successful operation."
       security:
         - JWT: []
+          
+  /pointScales/:
+    get:
+      summary: "Retrieves all the point scales of the current application."
+      responses:
+        200:
+          description: "Successful operation."
+          schema:
+            type: array
+            items:
+              $ref: "#/definitions/PointScaleWithId"
+      security:
+        - JWT: []
   
-  /events/:
     post:
-      summary: "Creates an event."
-      description: "Creates an event triggered by an action made by an user of the application. If the user does not exist in the platform, he will be created."
+      summary: "Creates a point scale."
       parameters:
         - name: body
           in: body
-          description: "The new info of the badge."
-          required: false
+          description: "The info needed to create a point scale."
           schema:
-            $ref: "#/definitions/Event"
+            $ref: "#/definitions/PointScale"
+      responses:
+        201:
+          description: "Successful operation."
+          headers:
+            Location:
+              description: "URI of newly created object."
+              type: string
+      security:
+        - JWT: []
+  
+  /pointScales/{id}/:
+    get:
+      summary: "Retrieves the given point scale."
+      parameters:
+        - name: id
+          in: path
+          description: "The id of the point scale."
+          required: true
+          type: number
+      responses:
+        200:
+          description: "Successful operation."
+          schema:
+            type: array
+            items:
+              $ref: "#/definitions/PointScaleWithId"
+      security:
+        - JWT: []
+          
+    put:
+      summary: "Updates the given point scale."
+      parameters:
+        - name: id
+          in: path
+          description: "The id of the point scale."
+          required: true
+          type: number
+      responses:
+        200:
+          description: "Successful operation."
+      security:
+        - JWT: []
+          
+    patch:
+      summary: "Partially updates the given point scale."
+      parameters:
+        - name: id
+          in: path
+          description: "The id of the point scale."
+          required: true
+          type: number
+      responses:
+        200:
+          description: "Successful operation."
+      security:
+        - JWT: []
+          
+    delete:
+      summary: "Deletes the given point scale."
+      parameters:
+        - name: id
+          in: path
+          description: "The id of the point scale."
+          required: true
+          type: number
+      responses:
+        200:
+          description: "Successful operation."
+      security:
+        - JWT: []
+  
+  /rules/events/:
+    get:
+      summary: "todo"
+      responses:
+        200:
+          description: ""
+          schema:
+            type: array
+            items:
+              $ref: "#/definitions/EventRuleWithId"
+      security:
+        - JWT: []
+  
+    post:
+      summary: "todo"
+      parameters:
+        - name: body
+          in: body
+          description: "todo"
+          schema:
+            $ref: "#/definitions/EventRule"
+      responses:
+        201:
+          description: "Successful operation"
+      security:
+        - JWT: []
+    
+  /rules/events/{id}/:
+    get:
+      summary: "todo"
+      parameters:
+        - name: id
+          in: path
+          description: "todo"
+          required: true
+          type: number
+      responses:
+        200:
+          description: "todo"
+          schema:
+            $ref: "#/definitions/EventRuleWithId"
+      security:
+        - JWT: []
+        
+    put:
+      summary: "todo"
+      parameters:
+        - name: id
+          in: path
+          description: "todo"
+          required: true
+          type: number
+          
+        - name: body
+          in: body
+          description: "todo"
+          schema:
+            $ref: "#/definitions/EventRule"
+      responses:
+        200:
+          description: "Successful operation."
+      security:
+        - JWT: []
+          
+    patch:
+      summary: "todo"
+      parameters:
+        - name: id
+          in: path
+          description: "todo"
+          required: true
+          type: number
+          
+        - name: body
+          in: body
+          description: "todo"
+          schema:
+            $ref: "#/definitions/EventRule"
+      responses:
+        200:
+          description: "Successful operation."
+      security:
+        - JWT: []
+          
+    delete:
+      summary: "todo"
+      parameters:
+        - name: id
+          in: path
+          description: "todo"
+          required: true
+          type: number
+      responses:
+        200:
+          description: "Successful operation."
+      security:
+        - JWT: []
+  
+  /rules/triggers/:
+    get:
+      summary: "todo"
+      responses:
+        200:
+          description: "Successful operation."
+          schema:
+            type: array
+            items:
+              $ref: "#/definitions/TriggerRuleWithId"
+      security:
+        - JWT: []
+  
+    post:
+      summary: "todo"
+      parameters:
+        - name: body
+          in: body
+          description: "Successful operation."
+          schema:
+            $ref: "#/definitions/TriggerRule"  
       responses:
         201:
           description: "Successful operation."
       security:
         - JWT: []
-
-  /users/:
+        
+  /rules/triggers/{id}/:
     get:
-      summary: "Gets the awards of all the users."
-      description: "Get all the users of the current application with their bagdes and points awarded."
+      summary: "todo"
+      parameters:
+        - name: id
+          in: path
+          description: "todo"
+          required: true
+          type: number
       responses:
         200:
           description: "Successful operation."
           schema:
-            $ref: "#/definitions/User"
-      security:
-        - JWT: []
-          
-  /users/{id}/:
-    get:
-      summary: "todo"
-      parameters:
-        - name: id
-          in: path
-          description: "todo"
-          required: true
-          type: number
-      responses:
-        200:
-          description: "todo"
-      security:
-        - JWT: []
-          
-  /pointScales/:
-     post:
-       summary: "todo"
-       responses:
-         200:
-           description: ""
-       security:
-        - JWT: []
-  
-  /pointScales/{id}/:
-    get:
-      summary: "todo"
-      parameters:
-        - name: id
-          in: path
-          description: "todo"
-          required: true
-          type: number
-      responses:
-        200:
-          description: "todo"
-      security:
-        - JWT: []
-          
-    put:
-      summary: "todo"
-      parameters:
-        - name: id
-          in: path
-          description: "todo"
-          required: true
-          type: number
-      responses:
-        200:
-          description: "todo"
-      security:
-        - JWT: []
-          
-    patch:
-      summary: "todo"
-      parameters:
-        - name: id
-          in: path
-          description: "todo"
-          required: true
-          type: number
-      responses:
-        200:
-          description: "todo"
-      security:
-        - JWT: []
-          
-    delete:
-      summary: "todo"
-      parameters:
-        - name: id
-          in: path
-          description: "todo"
-          required: true
-          type: number
-      responses:
-        200:
-          description: "todo"
-      security:
-        - JWT: []
-  
-  /rules/events/:
-    post:
-      summary: "todo"
-      parameters:
-        - name: body
-          in: body
-          description: "todo"
-          schema:
-            $ref: "#/definitions/EventRule"
-      responses:
-        200:
-          description: ""
+            $ref: "#/definitions/TriggerRuleWithId"
       security:
         - JWT: []
     
-  /rules/events/{id}/:
     put:
       summary: "todo"
       parameters:
@@ -285,77 +441,7 @@ paths:
           
         - name: body
           in: body
-          description: "todo"
-          schema:
-            $ref: "#/definitions/EventRule"
-      responses:
-        200:
-          description: "todo"
-      security:
-        - JWT: []
-          
-    patch:
-      summary: "todo"
-      parameters:
-        - name: id
-          in: path
-          description: "todo"
-          required: true
-          type: number
-          
-        - name: body
-          in: body
-          description: "todo"
-          schema:
-            $ref: "#/definitions/EventRule"
-      responses:
-        200:
-          description: "todo"
-      security:
-        - JWT: []
-          
-    delete:
-      summary: "todo"
-      parameters:
-        - name: id
-          in: path
-          description: "todo"
-          required: true
-          type: number
-      responses:
-        200:
-          description: "todo"
-      security:
-        - JWT: []
-  
-  /rules/triggers/:
-    post:
-      summary: "todo"
-      parameters:
-        - name: body
-          in: body
-          description: "todo"
-          schema:
-            $ref: "#/definitions/TriggerRule"  
-      responses:
-        200:
-          description: ""
-      security:
-        - JWT: []
-        
-  /rules/triggers/{id}/:
-    put:
-      summary: "todo"
-      parameters:
-        - name: id
-          in: path
-          description: "todo"
-          required: true
-          type: number
-          
-        - name: body
-          in: body
-          description: "todo"
+          description: "Successful operation."
           schema:
             $ref: "#/definitions/TriggerRule"
       responses:
@@ -380,7 +466,7 @@ paths:
             $ref: "#/definitions/TriggerRule"
       responses:
         200:
-          description: "todo"
+          description: "Successful operation."
       security:
         - JWT: []
           
@@ -394,7 +480,7 @@ paths:
           type: number
       responses:
         200:
-          description: "todo"
+          description: "Successful operation."
       security:
         - JWT: []
 
@@ -416,20 +502,12 @@ definitions:
         type: string
         description: "The password of the application."
         
-  Badge:
-    description: "A badge in an application."
-    type: object
-    properties:
-      name:
-        type: string
-        description: "The name of the badge."
-        
   PointsOnPointScale:
     description: "How many points an user has on a given point scale."
     type: object
     properties:
-      pointScale:
-        type: string
+      pointScaleId:
+        type: number
         description: "The point scale."
       points:
         type: number
@@ -463,6 +541,39 @@ definitions:
         type: array
         items:
           $ref: "#/definitions/PointsOnPointScale"
+          
+  Badge:
+    description: "A badge in an application."
+    type: object
+    properties:
+      name:
+        type: string
+        description: "The name of the badge."
+        
+  BadgeWithId:
+    allOf:
+      - $ref: "#/definitions/Badge"
+      - properties:
+          id:
+            description: "The id of badge."
+            type: number
+            
+  PointScale:
+    description: "Info to create or update a point scale in an application."
+    type: object
+    properties:
+      name:
+        description: "The name of the point scale."
+        type: string
+        
+  PointScaleWithId:
+    description: "Info returned when retrieving a point scale."
+    allOf:
+      - $ref: "#/definitions/Badge"
+      - properties:
+          id:
+            description: "The id of badge."
+            type: number
 
   EventRule:
     description: "A rule applied on event creation."
@@ -480,6 +591,15 @@ definitions:
       pointsGiven:
         type: number
         description: "how many points are given on the point scale"
+        
+            
+  EventRuleWithId:
+    allOf:
+      - $ref: "#/definitions/EventRule"
+      - properties:
+          id:
+            description: "The id of the event rule."
+            type: number
 
   TriggerRule:
     description: "A rule applied on point scale change."
@@ -500,4 +620,12 @@ definitions:
       aboveLimit:
         type: boolean
         description: "whether the badge is given above or below point limit"
+        
+  TriggerRuleWithId:
+    allOf:
+      - $ref: "#/definitions/TriggerRule"
+      - properties:
+          id:
+            description: "The id of the trigger rule."
+            type: number
       
