@@ -18,11 +18,10 @@ paths:
       parameters:
         - name: body
           in: body
-          description: "The credentials of the application."
+          description: "The info needed to create the credentials of the application."
           required: true
           schema:
             $ref: "#/definitions/Credentials"
-              
       responses:
         201:
           description: "Successful operation."
@@ -40,15 +39,100 @@ paths:
       responses:
         200:
           description: "Successful operation."
+        400:
+          description: "Error code todo: Application already authenticated."
         401:
-          description: "- Error code 4: The application does not exist. \n- Error code 5: Authentication failed."
+          description: "- Error code 4: The application does not exist.\n- Error code 5: Authentication failed. \n- Error code todo: JWT invalid.\n- Error code todo: Invalid JWT format."
           
   /badges/:
+    get:
+      description: "Retrieves the info all the badges for the current application."
+      responses:
+        200:
+          description: "Successful operation."
+          schema:
+            type: array
+            items:
+              $ref: "#/definitions/Badge"
+    
     post:
-     description: "todo"
-     responses:
-      200:
-        description: ""
+      description: "Creates a new badge."
+      parameters:
+        - name: body
+          in: body
+          description: "The info needed to create the badge."
+          required: true
+          schema:
+            $ref: "#/definitions/Badge"
+      responses:
+        200:
+          description: "Successful operation."
+        401:
+          description: "Authentication required."
+          
+  /badges/{id}/:
+    get:
+      description: "Retrieves info related to a given badge."
+      parameters:
+        - name: id
+          in: path
+          description: "The id of the badge."
+          required: true
+          type: number
+      responses:
+        200:
+          description: "Successful operation."
+          schema:
+            $ref: "#/definitions/Badge"
+            
+    put:
+      description: "Updates a given badge."
+      parameters:
+        - name: id
+          in: path
+          description: "The id of the badge."
+          required: true
+          type: number
+          
+        - name: body
+          in: body
+          description: "The new info of the badge."
+          schema:
+            $ref: "#/definitions/Badge"
+      responses:
+        200:
+          description: "Successful operation."
+          
+    patch:
+      description: "Partially updates a given badge."
+      parameters:
+        - name: id
+          in: path
+          description: "The id of the badge."
+          required: true
+          type: number
+          
+        - name: body
+          in: body
+          description: "The new info of the badge."
+          required: false
+          schema:
+            $ref: "#/definitions/Badge"
+      responses:
+        200:
+          description: "Successful operation."
+          
+    delete:
+      description: "todo"
+      parameters:
+        - name: id
+          in: path
+          description: "todo"
+          required: true
+          type: number
+      responses:
+        200:
+          description: "Successful operation."
   
   /events/:
      post:
@@ -267,6 +351,12 @@ definitions:
       password:
         type: string
         description: "the password of the application"
+        
+  Badge:
+    type: object
+    properties:
+      name:
+        type: string
 
   EventRule:
     type: object
