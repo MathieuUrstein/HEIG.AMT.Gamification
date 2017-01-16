@@ -1,0 +1,219 @@
+swagger: '2.0'
+
+info:
+  version: "1.0.0"
+  title: ""
+  description:
+    "The swapp API specification. All endpoints are implicitely prefixed by __/api__ for the sake of readability."
+    
+consumes:
+  - application/json
+produces:
+  - application/json
+
+paths:
+  /register/:
+    post:
+      description: "todo"
+      responses:
+        200:
+          description: "Successful operation."
+
+  /auth/:
+    post:
+      description: "Logs an application in."
+      parameters:
+        - name: body
+          in: body
+          description: "The credentials of the application."
+          required: true
+          schema:
+            type: object
+            properties:
+              username:
+                type: string
+              password:
+                type: string
+      responses:
+        200:
+          description: "Successful operation."
+        401:
+          description: "todo"
+          
+  /badges/:
+    post:
+     description: "todo"
+     responses:
+      200:
+        description: ""
+  
+  /events/:
+     post:
+       description: "todo"
+       responses:
+        200:
+          description: ""
+
+  /users/:
+    get:
+      description: "todo"
+      responses:
+        200:
+          description: "Successful operation. todo"
+          
+  /users/{id}/:
+    get:
+      description: "todo"
+      parameters:
+        - name: id
+          in: path
+          description: "todo"
+          required: true
+          type: number
+      responses:
+        200:
+          description: "todo"
+          
+  /pointScales/:
+     post:
+       description: "todo"
+       responses:
+        200:
+          description: ""
+  
+  /pointScales/{id}/:
+    get:
+      description: "todo"
+      parameters:
+        - name: id
+          in: path
+          description: "todo"
+          required: true
+          type: number
+      responses:
+        200:
+          description: "todo"
+          
+    put:
+      description: "todo"
+      parameters:
+        - name: id
+          in: path
+          description: "todo"
+          required: true
+          type: number
+      responses:
+        200:
+          description: "todo"
+          
+    patch:
+      description: "todo"
+      parameters:
+        - name: id
+          in: path
+          description: "todo"
+          required: true
+          type: number
+      responses:
+        200:
+          description: "todo"
+          
+    delete:
+      description: "todo"
+      parameters:
+        - name: id
+          in: path
+          description: "todo"
+          required: true
+          type: number
+      responses:
+        200:
+          description: "todo"
+  
+  /rules/events/:
+    post:
+     description: "todo"
+     responses:
+      200:
+        description: ""
+    
+  /rules/events/{id}/:
+    put:
+      description: "todo"
+      parameters:
+        - name: id
+          in: path
+          description: "todo"
+          required: true
+          type: number
+      responses:
+        200:
+          description: "todo"
+          
+    patch:
+      description: "todo"
+      parameters:
+        - name: id
+          in: path
+          description: "todo"
+          required: true
+          type: number
+      responses:
+        200:
+          description: "todo"
+          
+    delete:
+      description: "todo"
+      parameters:
+        - name: id
+          in: path
+          description: "todo"
+          required: true
+          type: number
+      responses:
+        200:
+          description: "todo"
+  
+  /rules/triggers/:
+    post:
+     description: "todo"
+     responses:
+      200:
+        description: ""
+        
+  /rules/triggers/{id}/:
+    put:
+      description: "todo"
+      parameters:
+        - name: id
+          in: path
+          description: "todo"
+          required: true
+          type: number
+      responses:
+        200:
+          description: "todo"
+          
+    patch:
+      description: "todo"
+      parameters:
+        - name: id
+          in: path
+          description: "todo"
+          required: true
+          type: number
+      responses:
+        200:
+          description: "todo"
+          
+    delete:
+      description: "todo"
+      parameters:
+        - name: id
+          in: path
+          description: "todo"
+          required: true
+          type: number
+      responses:
+        200:
+          description: "todo"
