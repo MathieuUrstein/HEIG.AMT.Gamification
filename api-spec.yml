@@ -132,10 +132,16 @@ paths:
   
   /rules/events/:
     post:
-     description: "todo"
-     responses:
-      200:
-        description: ""
+      description: "todo"
+      parameters:
+        - name: body
+          in: body
+          description: "todo"
+          schema:
+            $ref: "#/definitions/EventRule"
+      responses:
+        200:
+          description: ""
     
   /rules/events/{id}/:
     put:
@@ -146,6 +152,12 @@ paths:
           description: "todo"
           required: true
           type: number
+          
+        - name: body
+          in: body
+          description: "todo"
+          schema:
+            $ref: "#/definitions/EventRule"
       responses:
         200:
           description: "todo"
@@ -158,6 +170,12 @@ paths:
           description: "todo"
           required: true
           type: number
+          
+        - name: body
+          in: body
+          description: "todo"
+          schema:
+            $ref: "#/definitions/EventRule"
       responses:
         200:
           description: "todo"
@@ -176,10 +194,16 @@ paths:
   
   /rules/triggers/:
     post:
-     description: "todo"
-     responses:
-      200:
-        description: ""
+      description: "todo"
+      parameters:
+        - name: body
+          in: body
+          description: "todo"
+          schema:
+            $ref: "#/definitions/TriggerRule"  
+      responses:
+        200:
+          description: ""
         
   /rules/triggers/{id}/:
     put:
@@ -190,6 +214,12 @@ paths:
           description: "todo"
           required: true
           type: number
+          
+        - name: body
+          in: body
+          description: "todo"
+          schema:
+            $ref: "#/definitions/TriggerRule"
       responses:
         200:
           description: "todo"
@@ -202,6 +232,12 @@ paths:
           description: "todo"
           required: true
           type: number
+          
+        - name: body
+          in: body
+          description: "todo"
+          schema:
+            $ref: "#/definitions/TriggerRule"
       responses:
         200:
           description: "todo"
@@ -217,3 +253,31 @@ paths:
       responses:
         200:
           description: "todo"
+
+definitions:
+  EventRule:
+    type: object
+    properties:
+      name:
+        type: string
+      event:
+        type: string
+      pointScale:
+        type: string
+      pointsGiven:
+        type: number
+
+  TriggerRule:
+    type: object
+    properties:
+      name:
+        type: string
+      badgeAwarded:
+        type: string
+      pointScale:
+        type: string
+      limit:
+        type: number
+      aboveLimit:
+        type: boolean
+      
