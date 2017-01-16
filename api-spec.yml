@@ -149,20 +149,31 @@ paths:
         - JWT: []
   
   /events/:
-     post:
-       summary: "todo"
-       responses:
-        200:
-          description: ""
-       security:
+    post:
+      summary: "Creates an event."
+      description: "Creates an event triggered by an action made by an user of the application. If the user does not exist in the platform, he will be created."
+      parameters:
+        - name: body
+          in: body
+          description: "The new info of the badge."
+          required: false
+          schema:
+            $ref: "#/definitions/Event"
+      responses:
+        201:
+          description: "Successful operation."
+      security:
         - JWT: []
 
   /users/:
     get:
-      summary: "todo"
+      summary: "Gets the awards of all the users."
+      description: "Get all the users of the current application with their bagdes and points awarded."
       responses:
         200:
-          description: "Successful operation. todo"
+          description: "Successful operation."
+          schema:
+            $ref: "#/definitions/User"
       security:
         - JWT: []
           
@@ -395,44 +406,98 @@ securityDefinitions:
 
 definitions:
   Credentials:
+    description: "The credentials of an application."
     type: object
     properties:
       username:
         type: string
-        description: "the username of the application"
+        description: "The username of the application."
       password:
         type: string
-        description: "the password of the application"
+        description: "The password of the application."
         
   Badge:
+    description: "A badge in an application."
     type: object
     properties:
       name:
         type: string
+        description: "The name of the badge."
+        
+  PointsOnPointScale:
+    description: "How many points an user has on a given point scale."
+    type: object
+    properties:
+      pointScale:
+        type: string
+        description: "The point scale."
+      points:
+        type: number
+        description: "How many points are on the point scale."
+  
+  Event:
+    description: "An event created when an user does something on the application."
+    type: object
+    properties:
+      type: 
+        type: string
+        description: "The type of the event."
+      username: 
+        type: string
+        description: "The username of the user."
+        
+  User:
+    description: "An user doing various actions in an application."
+    type: object
+    properties:
+      username:
+        type: string
+        description: "The username of the user."
+      badges:
+        description: "The badges awarded to the user."
+        type: array
+        items:
+          $ref: "#/definitions/Badge"
+      points:
+        description: "The points received by the user."
+        type: array
+        items:
+          $ref: "#/definitions/PointsOnPointScale"
 
   EventRule:
+    description: "A rule applied on event creation."
     type: object
     properties:
       name:
         type: string
+        description: "the name of the rule"
       event:
         type: string
+        description: "the event on which the rule is applied"
       pointScale:
         type: string
+        description: "the the point scale on which the rule is applied"
       pointsGiven:
         type: number
+        description: "how many points are given on the point scale"
 
   TriggerRule:
+    description: "A rule applied on point scale change."
     type: object
     properties:
       name:
         type: string
+        description: "the name of the rule"
       badgeAwarded:
         type: string
+        description: "the badge awarded when rule condition matched"
       pointScale:
         type: string
+        description: "the the point scale on which the rule is applied"
       limit:
         type: number
+        description: "the point limit to award the badge"
       aboveLimit:
         type: boolean
+        description: "whether the badge is given above or below point limit"
       
