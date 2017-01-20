@@ -36,6 +36,11 @@ public interface AuthenticationApi {
                                     "- Error code todo: JWT invalid.\n" +
                                     "- Error code todo: Invalid JWT format.",
                     response = Void.class
+            ),
+            @ApiResponse(
+                    code = 409,
+                    message = "Application already exists.",
+                    response = Void.class
             )
     })
     @RequestMapping(

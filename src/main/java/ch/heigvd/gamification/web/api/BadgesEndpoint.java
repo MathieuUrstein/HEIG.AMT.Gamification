@@ -23,7 +23,7 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping(URIs.BADGES)
-public class BadgesEndpoint {
+public class BadgesEndpoint implements BadgesApi {
     // TODO : endpoint for images (badges)
 
     private final BadgeRepository badgeRepository;
@@ -48,17 +48,18 @@ public class BadgesEndpoint {
                 .collect(Collectors.toList());
     }
 
-    @RequestMapping(method = RequestMethod.GET, value = "/{badgeId}")
-    public BadgeDTO getBadge(@RequestAttribute("application") Application app, @PathVariable long badgeId) {
+    @RequestMapping(method = RequestMethod.GET, value = "/{id}")
+    public BadgeDTO getBadge(@RequestAttribute("application") Application app, @PathVariable long id) {
         Badge badge = badgeRepository
-                .findByApplicationNameAndId(app.getName(), badgeId)
+                .findByApplicationNameAndId(app.getName(), id)
                 .orElseThrow(NotFoundException::new);
 
         return toBadgeDTO(badge);
     }
 
     @RequestMapping(method = RequestMethod.POST)
-    public ResponseEntity addBadge(@Valid @RequestBody BadgeDTO badgeDTO, @RequestAttribute("application") Application application) {
+    public ResponseEntity createBadge(@RequestAttribute("application") Application application,
+                                      @Valid @RequestBody BadgeDTO badgeDTO) {
         // TODO : image with a url
 
         try {
@@ -84,10 +85,10 @@ public class BadgesEndpoint {
         }
     }
 
-    @RequestMapping(method = RequestMethod.DELETE, value = "/{badgeId}")
-    public ResponseEntity deleteBadge(@RequestAttribute("application") Application app, @PathVariable long badgeId) {
+    @RequestMapping(method = RequestMethod.DELETE, value = "/{id}")
+    public ResponseEntity deleteBadge(@RequestAttribute("application") Application app, @PathVariable long id) {
         Badge badge = badgeRepository
-                .findByApplicationNameAndId(app.getName(), badgeId)
+                .findByApplicationNameAndId(app.getName(), id)
                 .orElseThrow(NotFoundException::new);
 
         badgeRepository.delete(badge);
