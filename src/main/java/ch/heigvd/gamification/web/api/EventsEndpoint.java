@@ -34,7 +34,7 @@ public class EventsEndpoint {
             eventProcessor.processEvent(app, eventDTO);
         }
         catch (DataIntegrityViolationException e) {
-            // We relaunch the request when it fails
+            // We relaunch the request when it fails.
             eventProcessor.processEvent(app, eventDTO);
         }
 

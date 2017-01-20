@@ -58,7 +58,7 @@ public class AuthenticationFilter implements Filter {
                     chain.doFilter(request, response);
                     return;
                 }
-                sendError(response, HttpServletResponse.SC_FORBIDDEN, "Invalid JWT token");
+                sendError(response, HttpServletResponse.SC_UNAUTHORIZED, "Invalid JWT");
                 return;
             }
 
