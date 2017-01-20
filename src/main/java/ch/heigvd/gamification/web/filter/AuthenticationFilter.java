@@ -85,7 +85,6 @@ public class AuthenticationFilter implements Filter {
             LOG.log(Level.WARNING, "Invalid JWT format");
             sendError(response, HttpServletResponse.SC_UNAUTHORIZED, "Invalid JWT format");
         }
-        chain.doFilter(servletRequest, servletResponse);
     }
 
     private void sendError(HttpServletResponse response, int status, String message) throws IOException {
