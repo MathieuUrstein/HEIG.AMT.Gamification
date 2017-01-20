@@ -18,13 +18,19 @@ paths:
       parameters:
         - name: body
           in: body
-          description: "The info needed to create the credentials of the application."
+          description: "The info needed to create a gamified application."
           required: true
           schema:
-            $ref: "#/definitions/Credentials"
+            $ref: "#/definitions/GamifiedApplication"
       responses:
         201:
           description: "Successful operation."
+          headers:
+            Authorization:
+              description: "The JWT token."
+              type: string
+        409:
+          description: "Error code 3: Application name must be unique."
 
   /auth/:
     post:
@@ -39,10 +45,14 @@ paths:
       responses:
         200:
           description: "Successful operation."
+          headers:
+            Authorization:
+              description: "The JWT token."
+              type: string
         400:
           description: "Error code todo: Application already authenticated."
         401:
-          description: "- Error code 4: The application does not exist.\n- Error code 5: Authentication failed. \n- Error code todo: JWT invalid.\n- Error code todo: Invalid JWT format."
+          description: "- Error code 4: The application does not exist.\n- Error code 5: Authentication failed. \n- Error code todo: Invalid JWT.\n- Error code todo: Invalid JWT format."
   
   /events/:
     post:
@@ -51,8 +61,8 @@ paths:
       parameters:
         - name: body
           in: body
-          description: "The new info of the badge."
-          required: false
+          description: "The info of the event."
+          required: true
           schema:
             $ref: "#/definitions/Event"
       responses:
@@ -64,7 +74,7 @@ paths:
   /users/:
     get:
       summary: "Retrieves all the users of the current application."
-      description: "Get all the users of the current application with their bagdes and points awarded."
+      description: "Get all the users of the current application with their badges and points awarded."
       responses:
         200:
           description: "Successful operation."
@@ -77,7 +87,7 @@ paths:
           
   /users/{id}/:
     get:
-      summary: "Retrieves an user."
+      summary: "Retrieves a specified user."
       parameters:
         - name: id
           in: path
@@ -89,6 +99,8 @@ paths:
           description: "Successful operation"
           schema:
             $ref: "#/definitions/User"
+        404:
+          description: "User not found."
       security:
         - JWT: []
         
@@ -121,6 +133,8 @@ paths:
             Location:
               description: "URI of newly created object."
               type: string
+        409:
+          description: "Error code 3: Badge name must be unique in the current application."
       security:
         - JWT: []
           
@@ -138,6 +152,8 @@ paths:
           description: "Successful operation."
           schema:
             $ref: "#/definitions/BadgeWithId"
+        404:
+          description: "Badge not found."
       security:
         - JWT: []
             
@@ -153,11 +169,16 @@ paths:
         - name: body
           in: body
           description: "The new info of the badge."
+          required: true
           schema:
             $ref: "#/definitions/Badge"
       responses:
         200:
           description: "Successful operation."
+        404:
+          description: "Badge not found."
+        409:
+          description: "Error code 3: Badge name must be unique in the current application."
       security:
         - JWT: []
           
@@ -179,6 +200,10 @@ paths:
       responses:
         200:
           description: "Successful operation."
+        404:
+          description: "Badge not found."
+        409:
+          description: "Error code 3: Badge name must be unique in the current application."
       security:
         - JWT: []
           
@@ -193,6 +218,8 @@ paths:
       responses:
         200:
           description: "Successful operation."
+        404:
+          description: "Badge not found."
       security:
         - JWT: []
           
@@ -215,6 +242,7 @@ paths:
         - name: body
           in: body
           description: "The info needed to create a point scale."
+          required: true
           schema:
             $ref: "#/definitions/PointScale"
       responses:
@@ -224,6 +252,8 @@ paths:
             Location:
               description: "URI of newly created object."
               type: string
+        409:
+          description: "Error code 3: Point scale name must be unique in the current application."
       security:
         - JWT: []
   
@@ -243,6 +273,8 @@ paths:
             type: array
             items:
               $ref: "#/definitions/PointScaleWithId"
+        404:
+          description: "Point scale not found."
       security:
         - JWT: []
           
@@ -254,9 +286,20 @@ paths:
           description: "The id of the point scale."
           required: true
           type: number
+          
+        - name: body
+          in: body
+          description: "The new info of the point scale."
+          required: true
+          schema:
+            $ref: "#/definitions/PointScale"
       responses:
         200:
           description: "Successful operation."
+        404:
+          description: "Point scale not found."
+        409:
+          description: "Error code 3: Point scale name must be unique in the current application."
       security:
         - JWT: []
           
@@ -268,9 +311,20 @@ paths:
           description: "The id of the point scale."
           required: true
           type: number
+          
+        - name: body
+          in: body
+          description: "The new info of the point scale."
+          required: false
+          schema:
+            $ref: "#/definitions/PointScale"
       responses:
         200:
           description: "Successful operation."
+        404:
+          description: "Point scale not found."
+        409:
+          description: "Error code 3: Point scale name must be unique in the current application."
       security:
         - JWT: []
           
@@ -285,6 +339,8 @@ paths:
       responses:
         200:
           description: "Successful operation."
+        404:
+          description: "Point scale not found."
       security:
         - JWT: []
   
@@ -307,6 +363,7 @@ paths:
         - name: body
           in: body
           description: "The info needed to create a new event rule."
+          required: true
           schema:
             $ref: "#/definitions/EventRule"
       responses:
@@ -316,6 +373,8 @@ paths:
             Location:
               description: "URI of newly created object."
               type: string
+        409:
+          description: "Error code 3: Event rule name must be unique in the current application."
       security:
         - JWT: []
     
@@ -333,6 +392,8 @@ paths:
           description: "Successful operation."
           schema:
             $ref: "#/definitions/EventRuleWithId"
+        404:
+          description: "Event rule not found."
       security:
         - JWT: []
         
@@ -348,11 +409,16 @@ paths:
         - name: body
           in: body
           description: "The modified event rule."
+          required: true
           schema:
             $ref: "#/definitions/EventRule"
       responses:
         200:
           description: "Successful operation."
+        404:
+          description: "Event rule not found."
+        409:
+          description: "Error code 3: Event rule name must be unique in the current application."
       security:
         - JWT: []
           
@@ -374,6 +440,10 @@ paths:
       responses:
         200:
           description: "Successful operation."
+        404:
+          description: "Event rule not found."
+        409:
+          description: "Error code 3: Event rule name must be unique in the current application."
       security:
         - JWT: []
           
@@ -388,6 +458,8 @@ paths:
       responses:
         200:
           description: "Successful operation."
+        404:
+          description: "Event rule not found."
       security:
         - JWT: []
   
@@ -410,6 +482,7 @@ paths:
         - name: body
           in: body
           description: "The info needed to create a new trigger rule."
+          required: true
           schema:
             $ref: "#/definitions/TriggerRule"
       responses:
@@ -419,6 +492,8 @@ paths:
             Location:
               description: "URI of newly created object."
               type: string
+        409:
+          description: "Error code 3: Trigger rule name must be unique in the current application."
       security:
         - JWT: []
     
@@ -436,6 +511,8 @@ paths:
           description: "Successful operation."
           schema:
             $ref: "#/definitions/TriggerRuleWithId"
+        404:
+          description: "Trigger rule not found."
       security:
         - JWT: []
         
@@ -451,11 +528,16 @@ paths:
         - name: body
           in: body
           description: "The modified trigger rule."
+          required: true
           schema:
             $ref: "#/definitions/TriggerRule"
       responses:
         200:
           description: "Successful operation."
+        404:
+          description: "Trigger rule not found."
+        409:
+          description: "Error code 3: Trigger rule name must be unique in the current application."
       security:
         - JWT: []
           
@@ -477,6 +559,10 @@ paths:
       responses:
         200:
           description: "Successful operation."
+        404:
+          description: "Trigger rule not found."
+        409:
+          description: "Error code 3: Trigger rule name must be unique in the current application."
       security:
         - JWT: []
           
@@ -491,6 +577,8 @@ paths:
       responses:
         200:
           description: "Successful operation."
+        404:
+          description: "Trigger rule not found."
       security:
         - JWT: []
 
@@ -501,6 +589,18 @@ securityDefinitions:
     in: header
 
 definitions:
+  GamifiedApplication:
+    description: "The info of a gamified application."
+    type: object
+    properties:
+      name:
+        type: string
+        description: "The unique name of the gamified application."
+      password:
+        type: string
+        description: "The password of the gamified application."
+
+
   Credentials:
     description: "The credentials of an application."
     type: object
@@ -562,6 +662,7 @@ definitions:
         
   BadgeWithId:
     description: "A badge with his id."
+    type: object
     allOf:
       - $ref: "#/definitions/Badge"
       - properties:
@@ -579,8 +680,9 @@ definitions:
         
   PointScaleWithId:
     description: "A point scale with its id."
+    type: object
     allOf:
-      - $ref: "#/definitions/Badge"
+      - $ref: "#/definitions/PointScale"
       - properties:
           id:
             description: "The id of badge."
@@ -592,20 +694,21 @@ definitions:
     properties:
       name:
         type: string
-        description: "the name of the rule"
+        description: "The name of the rule."
       event:
         type: string
-        description: "the event on which the rule is applied"
+        description: "The event on which the rule is applied."
       pointScale:
         type: string
-        description: "the the point scale on which the rule is applied"
+        description: "The point scale on which the rule is applied."
       pointsGiven:
         type: number
-        description: "how many points are given on the point scale"
+        description: "How many points are given on the point scale."
         
             
   EventRuleWithId:
     description: "An event rule with its id."
+    type: object
     allOf:
       - $ref: "#/definitions/EventRule"
       - properties:
@@ -619,22 +722,23 @@ definitions:
     properties:
       name:
         type: string
-        description: "the name of the rule"
+        description: "The name of the rule."
       badgeAwarded:
         type: string
-        description: "the badge awarded when rule condition matched"
+        description: "The badge awarded when rule condition matched."
       pointScale:
         type: string
-        description: "the the point scale on which the rule is applied"
+        description: "The point scale on which the rule is applied."
       limit:
         type: number
-        description: "the point limit to award the badge"
+        description: "The point limit to award the badge."
       aboveLimit:
         type: boolean
-        description: "whether the badge is given above or below point limit"
+        description: "Whether the badge is given above or below point limit."
         
   TriggerRuleWithId:
     description: "A trigger rule with its id."
+    type: object
     allOf:
       - $ref: "#/definitions/TriggerRule"
       - properties:
