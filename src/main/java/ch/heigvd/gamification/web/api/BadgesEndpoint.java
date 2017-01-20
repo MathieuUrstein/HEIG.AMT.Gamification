@@ -15,6 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+import springfox.documentation.annotations.ApiIgnore;
 
 import javax.validation.Valid;
 import java.net.URI;
@@ -41,7 +42,7 @@ public class BadgesEndpoint implements BadgesApi {
     }
 
     @RequestMapping(method = RequestMethod.GET)
-    public List<BadgeDTO> getBadges(@RequestAttribute("application") Application app) {
+    public List<BadgeDTO> getBadges(@ApiIgnore @RequestAttribute("application") Application app) {
         return badgeRepository.findByApplicationName(app.getName())
                 .stream()
                 .map(this::toBadgeDTO)
@@ -49,7 +50,7 @@ public class BadgesEndpoint implements BadgesApi {
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/{id}")
-    public BadgeDTO getBadge(@RequestAttribute("application") Application app, @PathVariable long id) {
+    public BadgeDTO getBadge(@ApiIgnore @RequestAttribute("application") Application app, @PathVariable long id) {
         Badge badge = badgeRepository
                 .findByApplicationNameAndId(app.getName(), id)
                 .orElseThrow(NotFoundException::new);
@@ -58,7 +59,7 @@ public class BadgesEndpoint implements BadgesApi {
     }
 
     @RequestMapping(method = RequestMethod.POST)
-    public ResponseEntity createBadge(@RequestAttribute("application") Application application,
+    public ResponseEntity createBadge(@ApiIgnore @RequestAttribute("application") Application application,
                                       @Valid @RequestBody BadgeDTO badgeDTO) {
         // TODO : image with a url
 
@@ -86,7 +87,8 @@ public class BadgesEndpoint implements BadgesApi {
     }
 
     @RequestMapping(method = RequestMethod.DELETE, value = "/{id}")
-    public ResponseEntity deleteBadge(@RequestAttribute("application") Application app, @PathVariable long id) {
+    public ResponseEntity deleteBadge(@ApiIgnore @RequestAttribute("application") Application app,
+                                      @PathVariable long id) {
         Badge badge = badgeRepository
                 .findByApplicationNameAndId(app.getName(), id)
                 .orElseThrow(NotFoundException::new);

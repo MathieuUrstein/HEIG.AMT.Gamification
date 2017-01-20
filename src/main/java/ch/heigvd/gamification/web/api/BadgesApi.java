@@ -6,6 +6,7 @@ import ch.heigvd.gamification.model.Application;
 import io.swagger.annotations.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import springfox.documentation.annotations.ApiIgnore;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -33,7 +34,7 @@ public interface BadgesApi {
             produces = {"application/json"},
             method = RequestMethod.GET
     )
-    List<BadgeDTO> getBadges(@RequestAttribute("application") Application app);
+    List<BadgeDTO> getBadges(@ApiIgnore @RequestAttribute("application") Application app);
 
     @ApiOperation(
             value = "Retrieves a given badge.",
@@ -60,7 +61,7 @@ public interface BadgesApi {
             produces = {"application/json"},
             method = RequestMethod.GET
     )
-    BadgeDTO getBadge(@RequestAttribute("application") Application app,
+    BadgeDTO getBadge(@ApiIgnore @RequestAttribute("application") Application app,
                       @ApiParam(value = "The id of the badge.", required = true) @PathVariable("id") long id);
 
     @ApiOperation(
@@ -87,7 +88,7 @@ public interface BadgesApi {
             produces = {"application/json"},
             consumes = {"application/json"},
             method = RequestMethod.POST)
-    ResponseEntity createBadge(@RequestAttribute("application") Application application,
+    ResponseEntity createBadge(@ApiIgnore @RequestAttribute("application") Application application,
                                @ApiParam(value = "The info needed to create the badge.", required = true)
                                @Valid @RequestBody BadgeDTO badgeDTO);
 
@@ -147,7 +148,7 @@ public interface BadgesApi {
             consumes = {"application/json"},
             method = RequestMethod.DELETE
     )
-    ResponseEntity deleteBadge(@RequestAttribute("application") Application app,
+    ResponseEntity deleteBadge(@ApiIgnore @RequestAttribute("application") Application app,
                                @ApiParam(value = "The id of the badge.", required = true)
                                @PathVariable("id") long id);
 
