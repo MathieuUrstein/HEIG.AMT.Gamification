@@ -19,7 +19,7 @@ import javax.validation.Valid;
 
 @RestController
 @RequestMapping(URIs.AUTH)
-public class AuthenticationEndpoint {
+public class AuthenticationEndpoint implements AuthenticationApi {
     private final ApplicationRepository applicationRepository;
 
     @Autowired

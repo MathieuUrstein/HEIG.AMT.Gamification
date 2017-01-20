@@ -15,10 +15,13 @@ import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 @Component
 public class AuthenticationFilter implements Filter {
     private final ApplicationRepository applicationRepository;
+    private static Logger LOG = Logger.getLogger(AuthenticationFilter.class.getName());
 
     @Autowired
     public AuthenticationFilter(ApplicationRepository applicationRepository) {
@@ -37,9 +40,16 @@ public class AuthenticationFilter implements Filter {
 
         String uri = request.getRequestURI().substring(request.getContextPath().length());
         String token = JWTUtils.extractToken(request.getHeader("Authorization"));
+
+        boolean doc = uri.equals(URIs.DOCUMENTATION) ||
+                uri.equals(URIs.SWAGGER_HTML) ||
+                uri.startsWith(URIs.SWAGGER_UI_RESOURCES) ||
+                uri.startsWith(URIs.SWAGGER_RESOURCES) ||
+                uri.equals(URIs.V2_API_DOCS);
+
         boolean authRequest = uri.equals(URIs.AUTH);
 
-        if (uri.equals(URIs.REGISTER) || (authRequest && token == null)) {
+        if (doc || uri.equals(URIs.REGISTER) || (authRequest && token == null)) {
             chain.doFilter(servletRequest, response);
             return;
         }
@@ -72,10 +82,10 @@ public class AuthenticationFilter implements Filter {
 
             chain.doFilter(request, response);
         } catch (JWTDecodeException exception) {
-            // FIXME log
-            System.out.println("Invalid JWT format");
+            LOG.log(Level.WARNING, "Invalid JWT format");
             sendError(response, HttpServletResponse.SC_UNAUTHORIZED, "Invalid JWT format");
         }
+        chain.doFilter(servletRequest, servletResponse);
     }
 
     private void sendError(HttpServletResponse response, int status, String message) throws IOException {
