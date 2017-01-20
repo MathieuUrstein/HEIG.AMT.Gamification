@@ -17,7 +17,7 @@ import javax.validation.Valid;
 
 @RestController
 @RequestMapping(URIs.REGISTER)
-public class RegisterEndpoint {
+public class RegisterEndpoint implements RegisterApi {
     private final ApplicationRepository applicationRepository;
 
     @Autowired
@@ -31,7 +31,7 @@ public class RegisterEndpoint {
     }
 
     @RequestMapping(method = RequestMethod.POST)
-    public ResponseEntity login(@Valid @RequestBody CredentialsDTO credentials) {
+    public ResponseEntity register(@Valid @RequestBody CredentialsDTO credentials) {
         Application app = applicationRepository.findByName(credentials.getName());
 
         if (app != null) {
