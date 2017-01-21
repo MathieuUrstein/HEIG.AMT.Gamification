@@ -15,6 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+import springfox.documentation.annotations.ApiIgnore;
 
 import javax.validation.Valid;
 import java.net.URI;
@@ -24,7 +25,7 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping(URIs.EVENT_RULES)
-public class EventRulesEndpoint {
+public class EventRulesEndpoint implements EventRulesAPi {
     private final EventRuleRepository eventRuleRepository;
     private final ApplicationRepository applicationRepository;
     private final PointScaleRepository pointScaleRepository;
@@ -39,29 +40,30 @@ public class EventRulesEndpoint {
 
     @InitBinder
     public void initBinder(WebDataBinder binder) {
-        binder.setValidator(new FieldsRequiredAndNotEmptyValidator(RuleDTO.class));
+        binder.setValidator(new FieldsRequiredAndNotEmptyValidator(EventRuleDTO.class));
     }
 
     @RequestMapping(method = RequestMethod.GET)
-    public List<RuleDTO> getRules(@RequestAttribute("application") Application app) {
+    public List<EventRuleDTO> getEventRules(@ApiIgnore @RequestAttribute("application") Application app) {
         return eventRuleRepository.findByApplicationName(app.getName())
                 .stream()
-                .map(this::toRuleDTO)
+                .map(this::toEventRuleDTO)
                 .collect(Collectors.toList());
     }
 
-    @RequestMapping(method = RequestMethod.GET, value = "/{ruleId}")
-    public RuleDTO getRule(@RequestAttribute("application") Application app, @PathVariable long ruleId) {
-        Rule rule =  eventRuleRepository
-                .findByApplicationNameAndId(app.getName(), ruleId)
+    @RequestMapping(method = RequestMethod.GET, value = "/{id}")
+    public EventRuleDTO getEventRule(@ApiIgnore @RequestAttribute("application") Application app,
+                                     @PathVariable long id) {
+        EventRule rule =  eventRuleRepository
+                .findByApplicationNameAndId(app.getName(), id)
                 .orElseThrow(NotFoundException::new);
 
-        return toRuleDTO(rule);
+        return toEventRuleDTO(rule);
     }
 
     @RequestMapping(method = RequestMethod.POST)
-    public ResponseEntity addEventRule(@Valid @RequestBody EventRuleDTO ruleDTO,
-                                       @RequestAttribute("application") Application application) {
+    public ResponseEntity<Void> createEventRule(@ApiIgnore @RequestAttribute("application") Application application,
+                                                @Valid @RequestBody EventRuleDTO ruleDTO) {
         try {
             Application app = applicationRepository.findByName(application.getName());
             Optional<PointScale> opt = pointScaleRepository
@@ -95,11 +97,11 @@ public class EventRulesEndpoint {
         }
     }
 
-    @RequestMapping(method = RequestMethod.DELETE, value = "/{ruleName}")
-    public ResponseEntity deleteEventRule(@RequestAttribute("application") Application app,
-                                          @PathVariable String ruleName) {
+    @RequestMapping(method = RequestMethod.DELETE, value = "/{id}")
+    public ResponseEntity<Void> deleteEventRule(@ApiIgnore @RequestAttribute("application") Application app,
+                                                @PathVariable long id) {
         EventRule rule = eventRuleRepository
-                .findByApplicationNameAndName(app.getName(), ruleName)
+                .findByApplicationNameAndId(app.getName(), id)
                 .orElseThrow(NotFoundException::new);
 
         eventRuleRepository.delete(rule);
@@ -107,7 +109,7 @@ public class EventRulesEndpoint {
         return ResponseEntity.ok().build();
     }
 
-    private RuleDTO toRuleDTO(Rule rule) {
-        return new RuleDTO(rule.getName());
+    private EventRuleDTO toEventRuleDTO(EventRule rule) {
+        return new EventRuleDTO(rule.getName());
     }
 }

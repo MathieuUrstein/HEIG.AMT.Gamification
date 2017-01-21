@@ -8,6 +8,10 @@ public class EventRuleDTO extends RuleDTO {
     public EventRuleDTO() {
     }
 
+    public EventRuleDTO(String name) {
+        super(name);
+    }
+
     public String getEvent() {
         return event;
     }

@@ -9,6 +9,10 @@ public class TriggerRuleDTO extends RuleDTO {
     public TriggerRuleDTO() {
     }
 
+    public TriggerRuleDTO(String name) {
+        super(name);
+    }
+
     public String getBadgeAwarded() {
         return badgeAwarded;
     }

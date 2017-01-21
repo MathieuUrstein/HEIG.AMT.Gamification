@@ -1,12 +1,17 @@
 package ch.heigvd.gamification.web.api;
 
-import ch.heigvd.gamification.dao.*;
-import ch.heigvd.gamification.dto.EventRuleDTO;
+import ch.heigvd.gamification.dao.ApplicationRepository;
+import ch.heigvd.gamification.dao.BadgeRepository;
+import ch.heigvd.gamification.dao.PointScaleRepository;
+import ch.heigvd.gamification.dao.TriggerRuleRepository;
 import ch.heigvd.gamification.dto.RuleDTO;
 import ch.heigvd.gamification.dto.TriggerRuleDTO;
 import ch.heigvd.gamification.exception.ConflictException;
 import ch.heigvd.gamification.exception.NotFoundException;
-import ch.heigvd.gamification.model.*;
+import ch.heigvd.gamification.model.Application;
+import ch.heigvd.gamification.model.Badge;
+import ch.heigvd.gamification.model.PointScale;
+import ch.heigvd.gamification.model.TriggerRule;
 import ch.heigvd.gamification.util.URIs;
 import ch.heigvd.gamification.validator.FieldsRequiredAndNotEmptyValidator;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +20,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+import springfox.documentation.annotations.ApiIgnore;
 
 import javax.validation.Valid;
 import java.net.URI;
@@ -24,7 +30,7 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping(URIs.TRIGGER_RULES)
-public class TriggerRulesEndpoint {
+public class TriggerRulesEndpoint implements TriggerRulesApi {
     private final TriggerRuleRepository triggerRuleRepository;
     private final ApplicationRepository applicationRepository;
     private final PointScaleRepository pointScaleRepository;
@@ -42,29 +48,30 @@ public class TriggerRulesEndpoint {
 
     @InitBinder
     public void initBinder(WebDataBinder binder) {
-        binder.setValidator(new FieldsRequiredAndNotEmptyValidator(RuleDTO.class));
+        binder.setValidator(new FieldsRequiredAndNotEmptyValidator(TriggerRuleDTO.class));
     }
 
     @RequestMapping(method = RequestMethod.GET)
-    public List<RuleDTO> getRules(@RequestAttribute("application") Application app) {
+    public List<TriggerRuleDTO> getTriggerRules(@ApiIgnore @RequestAttribute("application") Application app) {
         return triggerRuleRepository.findByApplicationName(app.getName())
                 .stream()
-                .map(this::toRuleDTO)
+                .map(this::toTriggerRuleDTO)
                 .collect(Collectors.toList());
     }
 
-    @RequestMapping(method = RequestMethod.GET, value = "/{ruleId}")
-    public RuleDTO getRule(@RequestAttribute("application") Application app, @PathVariable long ruleId) {
-        Rule rule =  triggerRuleRepository
-                .findByApplicationNameAndId(app.getName(), ruleId)
+    @RequestMapping(method = RequestMethod.GET, value = "/{id}")
+    public TriggerRuleDTO getTriggerRule(@ApiIgnore @RequestAttribute("application") Application app,
+                           @PathVariable long id) {
+        TriggerRule rule =  triggerRuleRepository
+                .findByApplicationNameAndId(app.getName(), id)
                 .orElseThrow(NotFoundException::new);
 
-        return toRuleDTO(rule);
+        return toTriggerRuleDTO(rule);
     }
 
     @RequestMapping(method = RequestMethod.POST)
-    public ResponseEntity addTriggerRule(@Valid @RequestBody TriggerRuleDTO ruleDTO,
-                                         @RequestAttribute("application") Application application) {
+    public ResponseEntity<Void> createTriggerRule(@ApiIgnore @RequestAttribute("application") Application application,
+                                               @Valid @RequestBody TriggerRuleDTO ruleDTO) {
         try {
             Application app = applicationRepository.findByName(application.getName());
             Optional<PointScale> optPS = pointScaleRepository
@@ -106,11 +113,11 @@ public class TriggerRulesEndpoint {
         }
     }
 
-    @RequestMapping(method = RequestMethod.DELETE, value = "/{ruleName}")
-    public ResponseEntity deleteTriggerRule(@RequestAttribute("application") Application app,
-                                            @PathVariable String ruleName) {
+    @RequestMapping(method = RequestMethod.DELETE, value = "/{id}")
+    public ResponseEntity<Void> deleteTriggerRule(@ApiIgnore @RequestAttribute("application") Application app,
+                                                  @PathVariable long id) {
         TriggerRule rule = triggerRuleRepository
-                .findByApplicationNameAndName(app.getName(), ruleName)
+                .findByApplicationNameAndId(app.getName(), id)
                 .orElseThrow(NotFoundException::new);
 
         triggerRuleRepository.delete(rule);
@@ -118,7 +125,7 @@ public class TriggerRulesEndpoint {
         return ResponseEntity.ok().build();
     }
 
-    private RuleDTO toRuleDTO(Rule rule) {
-        return new RuleDTO(rule.getName());
+    private TriggerRuleDTO toTriggerRuleDTO(TriggerRule rule) {
+        return new TriggerRuleDTO(rule.getName());
     }
 }
