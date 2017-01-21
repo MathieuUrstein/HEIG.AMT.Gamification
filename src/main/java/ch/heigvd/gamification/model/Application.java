@@ -7,11 +7,11 @@ import java.util.LinkedList;
 import java.util.List;
 
 @Entity
-@Table(name="application")
+@Table(name = "application")
 public class Application {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="id")
+    @Column(name = "id")
     private long id;
 
     @Column(name = "name", unique = true, nullable = false)

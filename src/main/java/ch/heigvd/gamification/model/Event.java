@@ -3,7 +3,8 @@ package ch.heigvd.gamification.model;
 import javax.persistence.*;
 
 @Entity
-@Table(name="event")
+@Table(name = "event")
+@Inheritance(strategy = InheritanceType.JOINED)
 public class Event {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -5,17 +5,17 @@ import java.util.LinkedList;
 import java.util.List;
 
 @Entity
-@Table(name="badge", uniqueConstraints = @UniqueConstraint(columnNames =  {"name", "application_id"}))
+@Table(name = "badge", uniqueConstraints = @UniqueConstraint(columnNames = {"name", "application_id"}))
 public class Badge {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="id")
+    @Column(name = "id")
     private long id;
 
-    @Column(name="name", nullable = false)
+    @Column(name = "name", nullable = false)
     private String name;
 
-    @Column(name="image")
+    @Column(name = "image")
     private byte[] image;
 
     @ManyToOne(fetch = FetchType.LAZY)

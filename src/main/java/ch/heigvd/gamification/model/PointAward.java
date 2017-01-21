@@ -11,11 +11,11 @@ public class PointAward {
     @Column(name = "id")
     private long id;
 
-    @Column(name = "date", columnDefinition="DATETIME", nullable = false)
+    @Column(name = "date", columnDefinition = "DATETIME", nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
     private Date date;
 
-    @Column(name = "points")
+    @Column(name = "points", nullable = false)
     private int points;
 
     @ManyToOne(fetch = FetchType.LAZY)

@@ -5,14 +5,14 @@ import java.util.LinkedList;
 import java.util.List;
 
 @Entity
-@Table(name = "point_scale", uniqueConstraints = @UniqueConstraint(columnNames =  {"name", "application_id"}))
+@Table(name = "point_scale", uniqueConstraints = @UniqueConstraint(columnNames = {"name", "application_id"}))
 public class PointScale {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private long id;
 
-    @Column(name = "name")
+    @Column(name = "name", nullable = false)
     private String name;
 
     @ManyToOne(fetch = FetchType.LAZY)

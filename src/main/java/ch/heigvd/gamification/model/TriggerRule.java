@@ -3,11 +3,13 @@ package ch.heigvd.gamification.model;
 import javax.persistence.*;
 
 @Entity
+@Table(name = "trigger_rule")
+@PrimaryKeyJoinColumn(name = "id")
 public class TriggerRule extends Rule {
-    @Column(name="limit", nullable = false)
+    @Column(name = "limit", nullable = false)
     private int limit;
 
-    @Column(name="above_limit", nullable = false)
+    @Column(name = "above_limit", nullable = false)
     private boolean aboveLimit = true;
 
     @ManyToOne(fetch = FetchType.LAZY)
