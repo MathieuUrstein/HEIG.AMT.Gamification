@@ -8,21 +8,7 @@ from utils import BASE_URL, HTTP_METHODS, API_ERROR_MESSAGES
 from utils.mixins import PreconditionFail
 
 
-class RestAPITestMixin:
-    """
-    This is a mixin for testing an API.
-
-    It adds automated checking for invalid HTTP methods and checks automatically which fields are required in
-    the payload sent to the server.
-
-    It also adds convenience methods to make requests and various other helpers.
-    """
-
-    @property
-    @abstractmethod
-    def url(self):
-        """URL to which to make the requests"""
-
+class APITestMixin:
     @staticmethod
     def prepare_message(base_message, response=None):
         """
@@ -59,6 +45,22 @@ class RestAPITestMixin:
             result = response.text
 
         return "{}\n\nStatus code: {}\nResponse:\n{}\n".format(base_message, response.status_code, result)
+
+
+class RestAPITestMixin(APITestMixin):
+    """
+    This is a mixin for testing an API.
+
+    It adds automated checking for invalid HTTP methods and checks automatically which fields are required in
+    the payload sent to the server.
+
+    It also adds convenience methods to make requests and various other helpers.
+    """
+
+    @property
+    @abstractmethod
+    def url(self):
+        """URL to which to make the requests"""
 
     @property
     def required_fields(self):
