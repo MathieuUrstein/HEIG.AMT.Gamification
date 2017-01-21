@@ -4,7 +4,7 @@ import requests
 from sqlalchemy import create_engine, MetaData
 from sqlalchemy.exc import OperationalError
 
-from tests.utils import DATABASE_CONNECTION_URL, print_customization_and_exit, BASE_URL
+from .. import DATABASE_CONNECTION_URL, print_customization_and_exit, BASE_URL
 
 
 class DatabaseAccessMixin:
@@ -21,7 +21,7 @@ class DatabaseAccessMixin:
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
-        cls.database_engine = create_engine(DATABASE_CONNECTION_URL)
+        cls.database_engine = create_engine(DATABASE_CONNECTION_URL, convert_unicode=True)
         cls.database_meta = MetaData()
 
         try:

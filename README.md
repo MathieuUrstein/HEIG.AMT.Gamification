@@ -11,22 +11,19 @@ Note that this is still a work in progress.
 # Deployment
 
 To deploy our app, you will need the following:
-- Docker version 1.12.3 and docker-compose
-- Apache Maven 3.3.9
+- Docker 1.13.0
+- Docker Compose 1.10.0
 
-*Warning: Before anything, you may need to stop any service running on port 3306 and 8080.*
+*Warning: Before anything, you may need to stop any service running on port 3306 and 8080. You can also define `$GAMIFICATION_APP_PORT` or `$GAMIFICATION_DB_PORT` to redirect one or both ports to your liking.*
 
 1. Clone the repo and cd into it.
-2. `$ ./deploy.sh`
-3. That's it, the app should be listening at [http://localhost:8080/](http://localhost:8080/). Of course, 
-if you don't run docker directly on your system (for example on a vm), the host should be the adress of the docker host and not `localhost`.
+2. Copy `deployment/env.sample` to `deployment/env` and edit the file to your liking. Be careful, it will contain your database password !
+2. `$ docker-compose up db`: this is required the first time you launch the databse, otherwise the app will fail.
+3. `$ ctrl + C`, to stop the database once it is setup.
+4. `$ docker-compose up`
+5. That's it, the app should be listening at [http://localhost:8080/](http://localhost:8080/). Of course, 
+if you don't run docker directly on your system (for example on a vm), the host should be the address of the docker host and not `localhost`. Moreover if you redefined `$GAMIFICATION_APP_PORT` then you need to adapt the port accordingly.
 
-If for any reason you prefer to do it manually instead of running the script, you can do the following:
-
-1. `$ mkdir -p images/maven/gamification`
-2. `$ cp -r src/ images/maven/gamification/`
-3. `$ cp pom.xml images/maven/gamification/`
-4. `$ docker-compose up --build`
 
 # Development
 
@@ -37,11 +34,17 @@ from your IDE (because the host in the url of the DB connexion is an alias defin
 What you could want is run only the mysql docker and run the project in your IDE. In order to do that, 
 you will need to do the following:
 
-1. `$ docker-compose up --build mysql` to run only the mysql container.
+1. `$ docker-compose up --build db` to run only the container with the DB.
+2. You must either:
+  * Specify the `MYSQL_USER`, `MYSQL_PASSWORD`, `DATABASE_HOST`, `MYSQL_DATABASE` environment variables before launching the project 
+  * Create a configuration file. If you chose the first option, you can stop here. However, the configuration file is still useful to specify hibernate behaviour on startup (see note below).
 2. create a [configuration file](http://docs.spring.io/spring-boot/docs/current/reference/html/boot-features-external-config.html#boot-features-external-config-profile-specific-properties)
 in `/src/main/resources/` named `application-default.properties`. You can name it differently (`application-{profile}.properties`),
-but you will have to specify later the profile used when you run the project.
-3. Inside, put the following line: `spring.datasource.url=jdbc:mysql://<host for the docker>:3306/gamification?useSSL=false`.
+but then you will have to specify later the profile used when you run the project.
+3. Inside, put the following lines: 
+  * `spring.datasource.url=jdbc:mysql://<host>:<port>/<db>?useSSL=false`
+  * `spring.datasource.username=<username>`
+  * `spring.datasource.password=<password>`
 4. You can now run the project from your IDE.
 
 Note: the basic behavior of the server is to keep the values registered in the DB. This can be changed by 

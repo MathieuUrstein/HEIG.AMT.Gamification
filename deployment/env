@@ -1,0 +1,5 @@
+MYSQL_DATABASE=gamification
+MYSQL_USER=gamification
+MYSQL_PASSWORD=fwoeijfwoiejfweoijdweoijdwoij
+MYSQL_RANDOM_ROOT_PASSWORD=yes
+DATABASE_HOST=db

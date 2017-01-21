@@ -1,0 +1,10 @@
+FROM maven:3.3-jdk-8-alpine
+
+MAINTAINER Basile Vu <basile.vu@gmail.com>
+
+ADD ./ /gamification
+RUN mvn -f /gamification/pom.xml package && \
+    cp /gamification/target/gamification-0.0.1-SNAPSHOT.jar /app.jar && \
+    rm -rf /gamification
+
+CMD ["java", "-jar", "app.jar"]

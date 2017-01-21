@@ -11,6 +11,8 @@ application-default.properties
 __pycache__
 
 venv
+.venv
 *.conf
 
-/images/maven/gamification/
+# deployment configuration
+env

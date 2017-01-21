@@ -1,14 +1,22 @@
-version: '2'
+version: '2.1'
+
 services:
-  mysql:
-    build: ./images/mysql
-    environment:
-     - MYSQL_ROOT_PASSWORD=root
+  db:
+    image: mariadb:10
+    command: mysqld --sql_mode="STRICT_ALL_TABLES" --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+    env_file: ./deployment/env
+
     ports:
-     - "3306:3306"
-  maven:
-    build: ./images/maven
+      - "${GAMIFICATION_DB_PORT:-3306}:3306"
+
+  app:
+    build:
+      context: .
+      dockerfile: ./deployment/Dockerfile-app
+
+    env_file: ./deployment/env
+
     links:
-     - mysql:db
+     - db
     ports:
-     - "8080:8080"
+     - "${GAMIFICATION_APP_PORT:-8080}:8080"
