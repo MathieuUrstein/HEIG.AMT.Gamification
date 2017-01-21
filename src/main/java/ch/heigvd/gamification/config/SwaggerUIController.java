@@ -11,7 +11,6 @@ public class SwaggerUIController {
 
     @RequestMapping(method = RequestMethod.GET)
 	public String documentation() {
-		System.out.println("swagger-ui.html");
 		return "redirect:swagger-ui.html";
 	}
 }
