@@ -10,7 +10,7 @@ from utils.models import Event
 
 
 class TestEvents(DatabaseWiperTestMixin, AuthenticatedRestAPIMixin, unittest.TestCase):
-    url = BASE_URL + "/events"
+    url = BASE_URL + "/events/"
     invalid_methods = HTTP_METHODS - {"post"}
     required_fields = {"type", "username"}
 

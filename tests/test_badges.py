@@ -10,7 +10,7 @@ from utils.models import Badge
 
 
 class TestBadges(DatabaseWiperTestMixin, AuthenticatedRestAPIMixin, unittest.TestCase):
-    url = BASE_URL + "/badges"
+    url = BASE_URL + "/badges/"
     invalid_methods = HTTP_METHODS - {"get", "post"}
     required_fields = {"name"}
 

@@ -8,7 +8,7 @@ from utils.mixins.api import RestAPITestMixin, RegisterApplicationMixin
 
 
 class TestAuth(DatabaseWiperTestMixin, RestAPITestMixin, RegisterApplicationMixin, unittest.TestCase):
-    url = BASE_URL + "/auth"
+    url = BASE_URL + "/auth/"
     invalid_methods = HTTP_METHODS - {"post"}
     required_fields = {"name", "password"}
 
