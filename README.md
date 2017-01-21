@@ -17,6 +17,7 @@ To deploy our app, you will need the following:
 *Warning: Before anything, you may need to stop any service running on port 3306 and 8080. You can also define `$GAMIFICATION_APP_PORT` or `$GAMIFICATION_DB_PORT` to redirect one or both ports to your liking.*
 
 1. Clone the repo and cd into it.
+2. Copy `deployment/env.sample` to `deployment/env` and edit the file to your liking. Be careful, it will contain your database password !
 2. `$ docker-compose up db  # this is required the first time you launch the databse, otherwise the app will fail.`
 3. `$ ctrl + C  # to stop the database once it is setup`
 4. `$ docker-compose up`
