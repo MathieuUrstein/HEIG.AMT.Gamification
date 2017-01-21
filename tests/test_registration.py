@@ -3,10 +3,10 @@ import unittest
 import requests
 from sqlalchemy import select
 
-from tests.utils import HTTP_METHODS, BASE_URL
-from tests.utils.mixins.database import DatabaseWiperTestMixin
-from tests.utils.mixins.api import RestAPITestMixin
-from tests.utils.models import Application
+from utils import HTTP_METHODS, BASE_URL
+from utils.mixins.database import DatabaseWiperTestMixin
+from utils.mixins.api import RestAPITestMixin
+from utils.models import Application
 
 
 class TestRegistration(DatabaseWiperTestMixin, RestAPITestMixin, unittest.TestCase):
@@ -33,11 +33,10 @@ class TestRegistration(DatabaseWiperTestMixin, RestAPITestMixin, unittest.TestCa
         self.assertCountEqual(list(r.json()["name"].keys()), ["code", "message"])
 
     def test_password_is_hashed(self):
-        r = requests.post(self.url, json=self.application)
-        self.assertEqual(
-            r.status_code,
+        self.check_precondition(
+            requests.post(self.url, json=self.application),
             requests.codes.created,
-            msg=self.prepare_message("User couldn't be created, aborting test", r)
+            "User couldn't be created, aborting test"
         )
 
         result = self.database_connection.execute(
