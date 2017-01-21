@@ -76,7 +76,14 @@ public interface BadgesApi {
             @ApiResponse(
                     code = 201,
                     message = "Successful operation.",
-                    response = Void.class
+                    response = Void.class,
+                    responseHeaders = {
+                            @ResponseHeader(
+                                    name = "Location",
+                                    description = "URI of newly created object.",
+                                    response = String.class
+                            )
+                    }
             ),
             @ApiResponse(
                     code = 409,
@@ -89,8 +96,8 @@ public interface BadgesApi {
             consumes = {"application/json"},
             method = RequestMethod.POST)
     ResponseEntity<Void> createBadge(@ApiIgnore @RequestAttribute("application") Application application,
-                               @ApiParam(value = "The info needed to create the badge.", required = true)
-                               @Valid @RequestBody BadgeDTO badgeDTO);
+                                     @ApiParam(value = "The info needed to create the badge.", required = true)
+                                     @Valid @RequestBody BadgeDTO badgeDTO);
 
     // TODO
     /*
@@ -133,7 +140,7 @@ public interface BadgesApi {
     @ApiResponses(value = {
             @ApiResponse(
                     code = 200,
-                    message = "Success",
+                    message = "Successful operation.",
                     response = Void.class
             ),
             @ApiResponse(

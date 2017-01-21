@@ -16,17 +16,24 @@ public interface RegisterApi {
             response = Void.class,
             tags={}
     )
-    @ApiResponses(value = { 
-        @ApiResponse(
-                code = 201,
-                message = "Successful operation.",
-                response = Void.class
-        ),
-        @ApiResponse(
-                code = 409,
-                message = "Error code 3: Application name must be unique.",
-                response = Void.class
-        )
+    @ApiResponses(value = {
+            @ApiResponse(
+                    code = 201,
+                    message = "Successful operation.",
+                    response = Void.class,
+                    responseHeaders = {
+                            @ResponseHeader(
+                                    name = "Authorization",
+                                    description = "The JTW token.",
+                                    response = String.class
+                            )
+                    }
+            ),
+            @ApiResponse(
+                    code = 409,
+                    message = "Error code 3: Application name must be unique.",
+                    response = Void.class
+            )
     })
     @RequestMapping(
             value = "/register/",

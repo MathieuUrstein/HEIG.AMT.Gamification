@@ -21,7 +21,14 @@ public interface AuthenticationApi {
             @ApiResponse(
                     code = 200,
                     message = "Successful operation.",
-                    response = Void.class
+                    response = Void.class,
+                    responseHeaders = {
+                            @ResponseHeader(
+                                    name = "Authorization",
+                                    description = "The JTW token.",
+                                    response = String.class
+                            )
+                    }
             ),
             @ApiResponse(
                     code = 400,
@@ -36,11 +43,6 @@ public interface AuthenticationApi {
                                     "- Error code todo: JWT invalid.\n" +
                                     "- Error code todo: Invalid JWT format.",
                     response = Void.class
-            ),
-            @ApiResponse(
-                    code = 409,
-                    message = "Application already exists.",
-                    response = Void.class
             )
     })
     @RequestMapping(
@@ -50,6 +52,6 @@ public interface AuthenticationApi {
             method = RequestMethod.POST
     )
     ResponseEntity<Void> login(@ApiParam(value = "The credentials of the application.", required = true)
-                         @Valid @RequestBody CredentialsDTO body);
+                               @Valid @RequestBody CredentialsDTO body);
 
 }

@@ -23,7 +23,7 @@ public interface EventsApi {
             authorizations = {
                     @Authorization(value = "JWT")
             }, tags = {}
-            )
+    )
     @ApiResponses(value = {
             @ApiResponse(
                     code = 201,
@@ -37,7 +37,7 @@ public interface EventsApi {
             method = RequestMethod.POST
     )
     ResponseEntity<Void> createEvent(@ApiIgnore @RequestAttribute("application") Application app,
-                               @ApiParam(value = "The info of the event.", required = true)
-                               @Valid @RequestBody EventDTO eventDTO);
+                                     @ApiParam(value = "The info of the event.", required = true)
+                                     @Valid @RequestBody EventDTO eventDTO);
 
 }

@@ -21,12 +21,12 @@ public interface UsersApi {
                     @Authorization(value = "JWT")
             }, tags={}
     )
-    @ApiResponses(value = { 
-        @ApiResponse(
-                code = 200,
-                message = "Successful operation.",
-                response = UserDTO.class
-        )
+    @ApiResponses(value = {
+            @ApiResponse(
+                    code = 200,
+                    message = "Successful operation.",
+                    response = UserDTO.class
+            )
     })
     @RequestMapping(
             value = "/users/",
@@ -44,17 +44,17 @@ public interface UsersApi {
                     @Authorization(value = "JWT")
             }, tags={}
     )
-    @ApiResponses(value = { 
-        @ApiResponse(
-                code = 200,
-                message = "Successful operation",
-                response = UserDTO.class
-        ),
-        @ApiResponse(
-                code = 404,
-                message = "User not found.",
-                response = Void.class
-        )
+    @ApiResponses(value = {
+            @ApiResponse(
+                    code = 200,
+                    message = "Successful operation",
+                    response = UserDTO.class
+            ),
+            @ApiResponse(
+                    code = 404,
+                    message = "User not found.",
+                    response = Void.class
+            )
     })
     @RequestMapping(
             value = "/users/{username}/",

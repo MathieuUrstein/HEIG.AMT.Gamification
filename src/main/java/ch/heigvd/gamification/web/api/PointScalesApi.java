@@ -80,7 +80,14 @@ public interface PointScalesApi {
             @ApiResponse(
                     code = 201,
                     message = "Successful operation.",
-                    response = Void.class
+                    response = Void.class,
+                    responseHeaders = {
+                            @ResponseHeader(
+                                    name = "Location",
+                                    description = "URI of newly created object.",
+                                    response = String.class
+                            )
+                    }
             ),
             @ApiResponse(
                     code = 409,
@@ -95,8 +102,8 @@ public interface PointScalesApi {
             method = RequestMethod.POST
     )
     ResponseEntity<Void> createPointScale(Application app,
-                                    @ApiParam(value = "The info needed to create a point scale.", required = true)
-                                    @RequestBody PointScaleDTO pointScaleDTO);
+                                          @ApiParam(value = "The info needed to create a point scale.", required = true)
+                                          @RequestBody PointScaleDTO pointScaleDTO);
 
 
     // TODO
@@ -166,6 +173,6 @@ public interface PointScalesApi {
             method = RequestMethod.DELETE
     )
     ResponseEntity<Void> deletePointScale(Application app,
-                                    @ApiParam(value = "The id of the point scale.", required = true)
-                                    @PathVariable("id") long id);
+                                          @ApiParam(value = "The id of the point scale.", required = true)
+                                          @PathVariable("id") long id);
 }
