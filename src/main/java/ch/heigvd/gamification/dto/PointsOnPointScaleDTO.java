@@ -8,6 +8,11 @@ public class PointsOnPointScaleDTO {
     public PointsOnPointScaleDTO() {
     }
 
+    public PointsOnPointScaleDTO(long pointScaleId, int points) {
+        this.pointScaleId = pointScaleId;
+        this.points = points;
+    }
+
     public long getPointScaleId() {
         return pointScaleId;
     }

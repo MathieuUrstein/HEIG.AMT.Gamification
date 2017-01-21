@@ -28,7 +28,7 @@ public class UsersEndpoint implements UsersApi {
     public List<UserDTO> getUsers(@ApiIgnore @RequestAttribute("application") Application app) {
         return userRepository.findByApplicationName(app.getName())
                 .stream()
-                .map(this::toUserDTO)
+                .map(User::toDTO)
                 .collect(Collectors.toList());
     }
 
@@ -39,11 +39,7 @@ public class UsersEndpoint implements UsersApi {
                 .findByApplicationNameAndUsername(app.getName(), username)
                 .orElseThrow(NotFoundException::new);
 
-        return toUserDTO(user);
-    }
-
-    private UserDTO toUserDTO(User user) {
-        return new UserDTO(user.getUsername());
+        return user.toDTO();
     }
 }
 

@@ -10,10 +10,6 @@ public class UserDTO {
     public UserDTO() {
     }
 
-    public UserDTO(String username) {
-        this.username = username;
-    }
-
     public void setUsername(String username) {
         this.username = username;
     }

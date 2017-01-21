@@ -45,7 +45,7 @@ public class BadgesEndpoint implements BadgesApi {
     public List<BadgeDTO> getBadges(@ApiIgnore @RequestAttribute("application") Application app) {
         return badgeRepository.findByApplicationName(app.getName())
                 .stream()
-                .map(this::toBadgeDTO)
+                .map(Badge::toDTO)
                 .collect(Collectors.toList());
     }
 
@@ -55,7 +55,7 @@ public class BadgesEndpoint implements BadgesApi {
                 .findByApplicationNameAndId(app.getName(), id)
                 .orElseThrow(NotFoundException::new);
 
-        return toBadgeDTO(badge);
+        return badge.toDTO();
     }
 
     @RequestMapping(method = RequestMethod.POST)
@@ -98,7 +98,4 @@ public class BadgesEndpoint implements BadgesApi {
         return ResponseEntity.ok().build();
     }
 
-    private BadgeDTO toBadgeDTO(Badge badge) {
-        return new BadgeDTO(badge.getName(), badge.getImage());
-    }
 }
