@@ -49,7 +49,7 @@ public interface AuthenticationApi {
             consumes = {"application/json"},
             method = RequestMethod.POST
     )
-    ResponseEntity login(@ApiParam(value = "The credentials of the application.", required = true)
+    ResponseEntity<Void> login(@ApiParam(value = "The credentials of the application.", required = true)
                          @Valid @RequestBody CredentialsDTO body);
 
 }

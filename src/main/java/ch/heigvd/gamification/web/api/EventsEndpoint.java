@@ -30,8 +30,8 @@ public class EventsEndpoint implements EventsApi {
     }
 
     @RequestMapping(method = RequestMethod.POST)
-    public ResponseEntity createEvent(@ApiIgnore @RequestAttribute("application") Application app,
-                                      @Valid @RequestBody EventDTO eventDTO) {
+    public ResponseEntity<Void> createEvent(@ApiIgnore @RequestAttribute("application") Application app,
+                                            @Valid @RequestBody EventDTO eventDTO) {
         try {
             eventProcessor.processEvent(app, eventDTO);
         }

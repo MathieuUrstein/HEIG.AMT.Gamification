@@ -35,7 +35,7 @@ public interface PointScalesApi {
             value = "/pointScales/",
             produces = {"application/json"},
             method = RequestMethod.GET)
-    List<PointScaleDTO>getPointScales(Application app);
+    List<PointScaleDTO> getPointScales(Application app);
 
     @ApiOperation(
             value = "Retrieves the given point scale.",
@@ -54,7 +54,7 @@ public interface PointScalesApi {
             @ApiResponse(
                     code = 404,
                     message = "Point scale not found.",
-                    response = PointScaleDTO.class
+                    response = Void.class
             )
     })
     @RequestMapping(
@@ -94,7 +94,7 @@ public interface PointScalesApi {
             consumes = {"application/json"},
             method = RequestMethod.POST
     )
-    ResponseEntity createPointScale(Application app,
+    ResponseEntity<Void> createPointScale(Application app,
                                     @ApiParam(value = "The info needed to create a point scale.", required = true)
                                     @RequestBody PointScaleDTO pointScaleDTO);
 
@@ -165,7 +165,7 @@ public interface PointScalesApi {
             consumes = {"application/json"},
             method = RequestMethod.DELETE
     )
-    ResponseEntity deletePointScale(Application app,
+    ResponseEntity<Void> deletePointScale(Application app,
                                     @ApiParam(value = "The id of the point scale.", required = true)
                                     @PathVariable("id") long id);
 }

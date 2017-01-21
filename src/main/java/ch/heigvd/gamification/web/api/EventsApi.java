@@ -36,7 +36,7 @@ public interface EventsApi {
             consumes = {"application/json"},
             method = RequestMethod.POST
     )
-    ResponseEntity createEvent(@ApiIgnore @RequestAttribute("application") Application app,
+    ResponseEntity<Void> createEvent(@ApiIgnore @RequestAttribute("application") Application app,
                                @ApiParam(value = "The info of the event.", required = true)
                                @Valid @RequestBody EventDTO eventDTO);
 

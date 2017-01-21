@@ -59,7 +59,7 @@ public class BadgesEndpoint implements BadgesApi {
     }
 
     @RequestMapping(method = RequestMethod.POST)
-    public ResponseEntity createBadge(@ApiIgnore @RequestAttribute("application") Application application,
+    public ResponseEntity<Void> createBadge(@ApiIgnore @RequestAttribute("application") Application application,
                                       @Valid @RequestBody BadgeDTO badgeDTO) {
         // TODO : image with a url
 
@@ -87,7 +87,7 @@ public class BadgesEndpoint implements BadgesApi {
     }
 
     @RequestMapping(method = RequestMethod.DELETE, value = "/{id}")
-    public ResponseEntity deleteBadge(@ApiIgnore @RequestAttribute("application") Application app,
+    public ResponseEntity<Void> deleteBadge(@ApiIgnore @RequestAttribute("application") Application app,
                                       @PathVariable long id) {
         Badge badge = badgeRepository
                 .findByApplicationNameAndId(app.getName(), id)

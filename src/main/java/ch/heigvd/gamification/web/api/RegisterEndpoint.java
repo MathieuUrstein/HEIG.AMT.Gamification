@@ -31,7 +31,7 @@ public class RegisterEndpoint implements RegisterApi {
     }
 
     @RequestMapping(method = RequestMethod.POST)
-    public ResponseEntity register(@Valid @RequestBody CredentialsDTO credentials) {
+    public ResponseEntity<Void> register(@Valid @RequestBody CredentialsDTO credentials) {
         Application app = applicationRepository.findByName(credentials.getName());
 
         if (app != null) {

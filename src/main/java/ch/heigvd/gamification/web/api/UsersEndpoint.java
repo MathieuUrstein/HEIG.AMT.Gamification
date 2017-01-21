@@ -35,7 +35,7 @@ public class UsersEndpoint implements UsersApi {
     @RequestMapping(method = RequestMethod.GET, value = "/{username}")
     public UserDTO getUser(@ApiIgnore @RequestAttribute("application") Application app,
                            @PathVariable String username) {
-        User user =  userRepository
+        User user = userRepository
                 .findByApplicationNameAndUsername(app.getName(), username)
                 .orElseThrow(NotFoundException::new);
 

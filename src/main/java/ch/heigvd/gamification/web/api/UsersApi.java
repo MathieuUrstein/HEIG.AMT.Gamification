@@ -53,7 +53,7 @@ public interface UsersApi {
         @ApiResponse(
                 code = 404,
                 message = "User not found.",
-                response = UserDTO.class
+                response = Void.class
         )
     })
     @RequestMapping(

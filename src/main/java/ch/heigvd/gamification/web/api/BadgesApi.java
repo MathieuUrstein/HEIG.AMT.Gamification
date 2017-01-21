@@ -53,7 +53,7 @@ public interface BadgesApi {
             @ApiResponse(
                     code = 404,
                     message = "Badge not found.",
-                    response = BadgeDTO.class
+                    response = Void.class
             )
     })
     @RequestMapping(
@@ -88,7 +88,7 @@ public interface BadgesApi {
             produces = {"application/json"},
             consumes = {"application/json"},
             method = RequestMethod.POST)
-    ResponseEntity createBadge(@ApiIgnore @RequestAttribute("application") Application application,
+    ResponseEntity<Void> createBadge(@ApiIgnore @RequestAttribute("application") Application application,
                                @ApiParam(value = "The info needed to create the badge.", required = true)
                                @Valid @RequestBody BadgeDTO badgeDTO);
 
@@ -139,7 +139,7 @@ public interface BadgesApi {
             @ApiResponse(
                     code = 404,
                     message = "Badge not found.",
-                    response = BadgeDTO.class
+                    response = Void.class
             )
     })
     @RequestMapping(
@@ -148,8 +148,8 @@ public interface BadgesApi {
             consumes = {"application/json"},
             method = RequestMethod.DELETE
     )
-    ResponseEntity deleteBadge(@ApiIgnore @RequestAttribute("application") Application app,
-                               @ApiParam(value = "The id of the badge.", required = true)
-                               @PathVariable("id") long id);
+    ResponseEntity<Void> deleteBadge(@ApiIgnore @RequestAttribute("application") Application app,
+                                     @ApiParam(value = "The id of the badge.", required = true)
+                                     @PathVariable("id") long id);
 
 }

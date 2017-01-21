@@ -56,7 +56,7 @@ public class PointScalesEndpoint implements PointScalesApi {
     }
 
     @RequestMapping(method = RequestMethod.POST)
-    public ResponseEntity createPointScale(@ApiIgnore @RequestAttribute("application") Application application,
+    public ResponseEntity<Void> createPointScale(@ApiIgnore @RequestAttribute("application") Application application,
                                            @Valid @RequestBody PointScaleDTO pointScaleDTO) {
         try {
             Application app = applicationRepository.findByName(application.getName());
@@ -81,7 +81,7 @@ public class PointScalesEndpoint implements PointScalesApi {
     }
 
     @RequestMapping(method = RequestMethod.DELETE, value = "/{id}")
-    public ResponseEntity deletePointScale(@ApiIgnore @RequestAttribute("application") Application app,
+    public ResponseEntity<Void> deletePointScale(@ApiIgnore @RequestAttribute("application") Application app,
                                            @PathVariable long id) {
         PointScale pointScale = pointScaleRepository
                 .findByApplicationNameAndId(app.getName(), id)

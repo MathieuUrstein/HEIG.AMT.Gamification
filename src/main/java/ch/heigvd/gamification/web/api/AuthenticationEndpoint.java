@@ -33,7 +33,7 @@ public class AuthenticationEndpoint implements AuthenticationApi {
     }
 
     @RequestMapping(method = RequestMethod.POST)
-    public ResponseEntity login(@Valid @RequestBody CredentialsDTO credentials) {
+    public ResponseEntity<Void> login(@Valid @RequestBody CredentialsDTO credentials) {
         Application app = applicationRepository.findByName(credentials.getName());
 
         if (app == null) {
