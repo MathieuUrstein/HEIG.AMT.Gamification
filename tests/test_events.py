@@ -4,7 +4,6 @@ import requests
 from sqlalchemy import select
 
 from utils import BASE_URL, HTTP_METHODS
-from utils.mixins import PreconditionFail
 from utils.mixins.database import DatabaseWiperTestMixin
 from utils.mixins.api import AuthenticatedRestAPIMixin
 from utils.models import Event
@@ -32,6 +31,12 @@ class TestEvents(DatabaseWiperTestMixin, AuthenticatedRestAPIMixin, unittest.Tes
         ))
 
         self.assertEqual(self.database_connection.execute(select([Event])).rowcount, 1)
+
+    def test_can_create_event_with_username_as_integer(self):
+        self.assertEqual(
+            self.request("post", self.url, json=dict(type="death", username=2)).status_code,
+            requests.codes.created
+        )
 
     def test_cannot_create_badge_twice(self):
         r = self.request("post", self.url, json=self.event)
