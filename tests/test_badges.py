@@ -3,14 +3,14 @@ import unittest
 import requests
 from sqlalchemy import select
 
-from tests.utils import BASE_URL, HTTP_METHODS
-from tests.utils.mixins.database import DatabaseWiperTestMixin
-from tests.utils.mixins.api import AuthenticatedRestAPIMixin
-from tests.utils.models import Badge
+from utils import BASE_URL, HTTP_METHODS
+from utils.mixins.database import DatabaseWiperTestMixin
+from utils.mixins.api import AuthenticatedRestAPIMixin
+from utils.models import Badge
 
 
 class TestBadges(DatabaseWiperTestMixin, AuthenticatedRestAPIMixin, unittest.TestCase):
-    url = BASE_URL + "/badges"
+    url = BASE_URL + "/badges/"
     invalid_methods = HTTP_METHODS - {"get", "post"}
     required_fields = {"name"}
 
@@ -26,7 +26,9 @@ class TestBadges(DatabaseWiperTestMixin, AuthenticatedRestAPIMixin, unittest.Tes
         self.assertEqual(self.database_connection.execute(select([Badge])).rowcount, 1)
 
     def test_cannot_create_badge_twice(self):
-        self.assertEqual(self.request("post", self.url, json=self.badge).status_code, requests.codes.created)
+        self.check_precondition(
+            self.request("post", self.url, json=self.badge), requests.codes.created, "Could not create badge"
+        )
 
         r = self.request("post", self.url, json=self.badge)
         self.assertEqual(r.status_code, requests.codes.conflict)
@@ -38,7 +40,11 @@ class TestBadges(DatabaseWiperTestMixin, AuthenticatedRestAPIMixin, unittest.Tes
         self.check_message(r.json()["name"])
 
     def test_two_applications_can_have_same_badge_name(self):
-        self.assertEqual(self.request("post", self.url, json=self.badge).status_code, requests.codes.created)
+        self.check_precondition(
+            self.request("post", self.url, json=self.badge),
+            requests.codes.created,
+            "Could not create first application badge"
+        )
 
         new_token = "Bearer {}".format(self.register_application("goat"))
         r = requests.post(self.url, json=self.badge, headers=dict(Authorization=new_token))
@@ -46,10 +52,7 @@ class TestBadges(DatabaseWiperTestMixin, AuthenticatedRestAPIMixin, unittest.Tes
 
     def test_can_retrieve_badge(self):
         r = self.request("post", self.url, json=self.badge)
-        self.assertEqual(
-            r.status_code, requests.codes.created,
-            msg=self.prepare_message("Could not create badge, aborting test", r)
-        )
+        self.check_precondition(r, requests.codes.created, "Could not create badge, aborting test")
 
         r = self.request("get", r.headers["Location"])
         self.assertEqual(r.status_code, requests.codes.ok, msg=self.prepare_message("Could not retrieve badge", r))

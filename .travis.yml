@@ -22,7 +22,7 @@ env:
 
 before_install:
   - mysql -e "DROP SCHEMA IF EXISTS gamification;"
-  - mysql -e "CREATE SCHEMA gamification DEFAULT CHARACTER SET utf8;"
+  - mysql -e "CREATE SCHEMA gamification DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_bin;"
 
 
 install:

@@ -93,7 +93,7 @@ if CONFIG.get(DATABASE_SECTION, PASSWORD) is not None:
 else:
     user = CONFIG.get(DATABASE_SECTION, USER)
 
-DATABASE_CONNECTION_URL = "{protocol}://{user}@{host}/{name}".format(
+DATABASE_CONNECTION_URL = "{protocol}://{user}@{host}/{name}?charset=utf8mb4".format(
     protocol=CONFIG.get(DATABASE_SECTION, PROTOCOL),
     user=user,
     host=CONFIG.get(DATABASE_SECTION, HOST),

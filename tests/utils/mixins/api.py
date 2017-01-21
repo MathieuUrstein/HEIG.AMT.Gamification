@@ -4,23 +4,11 @@ from pprint import pformat
 import requests
 from abc import abstractmethod, ABCMeta
 
-from tests.utils import BASE_URL, HTTP_METHODS, API_ERROR_MESSAGES
+from utils import BASE_URL, HTTP_METHODS, API_ERROR_MESSAGES
+from utils.mixins import PreconditionFail
 
 
-class RestAPITestMixin:
-    """
-    This is a mixin for testing an API.
-
-    It adds automated checking for invalid HTTP methods and checks automatically which fields are required in
-    the payload sent to the server.
-
-    It also adds convenience methods to make requests and various other helpers.
-    """
-    @property
-    @abstractmethod
-    def url(self):
-        """URL to which to make the requests"""
-
+class APITestMixin:
     @staticmethod
     def prepare_message(base_message, response=None):
         """
@@ -34,11 +22,11 @@ class RestAPITestMixin:
             return base_message
 
         try:
-            res = pformat(response.json())\
-                .replace("{", "{\n ")\
-                .replace("}", "\n}")\
-                .replace("[", "[\n ")\
-                .replace("]", "\n]")\
+            res = pformat(response.json()) \
+                .replace("{", "{\n ") \
+                .replace("}", "\n}") \
+                .replace("[", "[\n ") \
+                .replace("]", "\n]") \
                 .split("\n")
 
             count_tabs = 0
@@ -57,6 +45,22 @@ class RestAPITestMixin:
             result = response.text
 
         return "{}\n\nStatus code: {}\nResponse:\n{}\n".format(base_message, response.status_code, result)
+
+
+class RestAPITestMixin(APITestMixin):
+    """
+    This is a mixin for testing an API.
+
+    It adds automated checking for invalid HTTP methods and checks automatically which fields are required in
+    the payload sent to the server.
+
+    It also adds convenience methods to make requests and various other helpers.
+    """
+
+    @property
+    @abstractmethod
+    def url(self):
+        """URL to which to make the requests"""
 
     @property
     def required_fields(self):
@@ -93,14 +97,22 @@ class RestAPITestMixin:
         This is to make sure that we don't mix up error codes and send twice the same for two different errors.
 
         :param entry: entry containing the error code and message
-        :param msg: message to show when the assert fails
         """
-        if API_ERROR_MESSAGES.get(entry["code"]) is None:
+        if entry.get("code") is None or entry.get("message") is None:
+            self.fail("Error message is missing code or message : \n\n{}\n".format(entry))
+        elif API_ERROR_MESSAGES.get(entry["code"]) is None:
             # first time we get the message, we add it to the global list
             API_ERROR_MESSAGES[entry["code"]] = entry["message"]
         else:
             # we already got the same code, let's check that the same message it received
             self.assertEqual(API_ERROR_MESSAGES[entry["code"]], entry["message"])
+
+    def check_precondition(self, response, expected_code, msg):
+        if response.status_code != expected_code:
+            raise PreconditionFail(self.prepare_message(
+                "{}\n\nExpected {}, but got {} \n".format(msg, expected_code, response.status_code),
+                response
+            ))
 
     def test_invalid_methods(self):
         for method in self.invalid_methods:
@@ -137,7 +149,7 @@ class RestAPITestMixin:
         )
 
 
-class AuthenticatedRestAPIMixin(RestAPITestMixin, metaclass=ABCMeta):
+class RegisterApplicationMixin(metaclass=ABCMeta):
     default_application = dict(name="goatsy", password="goat")
     token = None
 
@@ -164,6 +176,8 @@ class AuthenticatedRestAPIMixin(RestAPITestMixin, metaclass=ABCMeta):
 
         return response.headers["Authorization"]
 
+
+class AuthenticatedRestAPIMixin(RestAPITestMixin, RegisterApplicationMixin, metaclass=ABCMeta):
     def request(self, method, url, json=None, headers=None):
         """Extend `RestAPITestMixin.request` to add the authentication header."""
         if headers is None:
