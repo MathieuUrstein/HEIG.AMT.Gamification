@@ -19,7 +19,7 @@ import javax.validation.Valid;
 
 @RestController
 @RequestMapping(URIs.AUTH)
-public class AuthenticationEndpoint {
+public class AuthenticationEndpoint implements AuthenticationApi {
     private final ApplicationRepository applicationRepository;
 
     @Autowired
@@ -33,7 +33,7 @@ public class AuthenticationEndpoint {
     }
 
     @RequestMapping(method = RequestMethod.POST)
-    public ResponseEntity login(@Valid @RequestBody CredentialsDTO credentials) {
+    public ResponseEntity<Void> login(@Valid @RequestBody CredentialsDTO credentials) {
         Application app = applicationRepository.findByName(credentials.getName());
 
         if (app == null) {

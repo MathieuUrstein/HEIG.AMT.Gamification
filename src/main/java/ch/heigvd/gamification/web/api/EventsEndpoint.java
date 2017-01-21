@@ -10,12 +10,13 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
+import springfox.documentation.annotations.ApiIgnore;
 
 import javax.validation.Valid;
 
 @RestController
 @RequestMapping(URIs.EVENTS)
-public class EventsEndpoint {
+public class EventsEndpoint implements EventsApi {
     private final EventProcessor eventProcessor;
 
     @Autowired
@@ -29,7 +30,8 @@ public class EventsEndpoint {
     }
 
     @RequestMapping(method = RequestMethod.POST)
-    public ResponseEntity addEvent(@Valid @RequestBody EventDTO eventDTO, @RequestAttribute("application") Application app) {
+    public ResponseEntity<Void> createEvent(@ApiIgnore @RequestAttribute("application") Application app,
+                                            @Valid @RequestBody EventDTO eventDTO) {
         try {
             eventProcessor.processEvent(app, eventDTO);
         }

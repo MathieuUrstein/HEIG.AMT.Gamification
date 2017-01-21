@@ -14,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+import springfox.documentation.annotations.ApiIgnore;
 
 import javax.validation.Valid;
 import java.net.URI;
@@ -22,7 +23,7 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping(URIs.POINT_SCALES)
-public class PointScalesEndpoint {
+public class PointScalesEndpoint implements PointScalesApi {
     private final PointScaleRepository pointScaleRepository;
     private final ApplicationRepository applicationRepository;
 
@@ -37,30 +38,31 @@ public class PointScalesEndpoint {
     }
 
     @RequestMapping(method = RequestMethod.GET)
-    public List<PointScaleDTO> getPointScales(@RequestAttribute("application") Application app) {
+    public List<PointScaleDTO> getPointScales(@ApiIgnore @RequestAttribute("application") Application app) {
         return pointScaleRepository.findByApplicationName(app.getName())
                 .stream()
                 .map(this::toPointScaleDTO)
                 .collect(Collectors.toList());
     }
 
-    @RequestMapping(method = RequestMethod.GET, value = "/{pointScaleId}")
-    public PointScaleDTO getPointScale(@RequestAttribute("application") Application app, @PathVariable long pointScaleId) {
+    @RequestMapping(method = RequestMethod.GET, value = "/{id}")
+    public PointScaleDTO getPointScale(@ApiIgnore @RequestAttribute("application") Application app,
+                                       @PathVariable long id) {
         PointScale pointScale = pointScaleRepository
-                .findByApplicationNameAndId(app.getName(), pointScaleId)
+                .findByApplicationNameAndId(app.getName(), id)
                 .orElseThrow(NotFoundException::new);
 
         return toPointScaleDTO(pointScale);
     }
 
     @RequestMapping(method = RequestMethod.POST)
-    public ResponseEntity addPointScale(@Valid @RequestBody PointScaleDTO badgeDTO,
-                                   @RequestAttribute("application") Application application) {
+    public ResponseEntity<Void> createPointScale(@ApiIgnore @RequestAttribute("application") Application application,
+                                                 @Valid @RequestBody PointScaleDTO pointScaleDTO) {
         try {
             Application app = applicationRepository.findByName(application.getName());
             PointScale pointScale = new PointScale();
 
-            pointScale.setName(badgeDTO.getName());
+            pointScale.setName(pointScaleDTO.getName());
             pointScale.setApplication(app);
             app.addPointScale(pointScale);
 
@@ -78,10 +80,11 @@ public class PointScalesEndpoint {
         }
     }
 
-    @RequestMapping(method = RequestMethod.DELETE, value = "/{pointScaleId}")
-    public ResponseEntity deletePointScale(@RequestAttribute("application") Application app, @PathVariable long pointScaleId) {
+    @RequestMapping(method = RequestMethod.DELETE, value = "/{id}")
+    public ResponseEntity<Void> deletePointScale(@ApiIgnore @RequestAttribute("application") Application app,
+                                                 @PathVariable long id) {
         PointScale pointScale = pointScaleRepository
-                .findByApplicationNameAndId(app.getName(), pointScaleId)
+                .findByApplicationNameAndId(app.getName(), id)
                 .orElseThrow(NotFoundException::new);
 
         pointScaleRepository.delete(pointScale);

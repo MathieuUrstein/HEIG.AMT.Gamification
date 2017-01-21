@@ -9,13 +9,14 @@ import ch.heigvd.gamification.model.User;
 import ch.heigvd.gamification.util.URIs;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import springfox.documentation.annotations.ApiIgnore;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping(URIs.USERS)
-public class UsersEndpoint {
+public class UsersEndpoint implements UsersApi {
     private final UserRepository userRepository;
 
     @Autowired
@@ -24,7 +25,7 @@ public class UsersEndpoint {
     }
 
     @RequestMapping(method = RequestMethod.GET)
-    public List<UserDTO> getUsers(@RequestAttribute("application") Application app) {
+    public List<UserDTO> getUsers(@ApiIgnore @RequestAttribute("application") Application app) {
         return userRepository.findByApplicationName(app.getName())
                 .stream()
                 .map(this::toUserDTO)
@@ -32,8 +33,9 @@ public class UsersEndpoint {
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/{username}")
-    public UserDTO getUser(@PathVariable String username, @RequestAttribute("application") Application app) {
-        User user =  userRepository
+    public UserDTO getUser(@ApiIgnore @RequestAttribute("application") Application app,
+                           @PathVariable String username) {
+        User user = userRepository
                 .findByApplicationNameAndUsername(app.getName(), username)
                 .orElseThrow(NotFoundException::new);
 

@@ -15,6 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+import springfox.documentation.annotations.ApiIgnore;
 
 import javax.validation.Valid;
 import java.net.URI;
@@ -23,7 +24,7 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping(URIs.BADGES)
-public class BadgesEndpoint {
+public class BadgesEndpoint implements BadgesApi {
     // TODO : endpoint for images (badges)
 
     private final BadgeRepository badgeRepository;
@@ -41,24 +42,25 @@ public class BadgesEndpoint {
     }
 
     @RequestMapping(method = RequestMethod.GET)
-    public List<BadgeDTO> getBadges(@RequestAttribute("application") Application app) {
+    public List<BadgeDTO> getBadges(@ApiIgnore @RequestAttribute("application") Application app) {
         return badgeRepository.findByApplicationName(app.getName())
                 .stream()
                 .map(this::toBadgeDTO)
                 .collect(Collectors.toList());
     }
 
-    @RequestMapping(method = RequestMethod.GET, value = "/{badgeId}")
-    public BadgeDTO getBadge(@RequestAttribute("application") Application app, @PathVariable long badgeId) {
+    @RequestMapping(method = RequestMethod.GET, value = "/{id}")
+    public BadgeDTO getBadge(@ApiIgnore @RequestAttribute("application") Application app, @PathVariable long id) {
         Badge badge = badgeRepository
-                .findByApplicationNameAndId(app.getName(), badgeId)
+                .findByApplicationNameAndId(app.getName(), id)
                 .orElseThrow(NotFoundException::new);
 
         return toBadgeDTO(badge);
     }
 
     @RequestMapping(method = RequestMethod.POST)
-    public ResponseEntity addBadge(@Valid @RequestBody BadgeDTO badgeDTO, @RequestAttribute("application") Application application) {
+    public ResponseEntity<Void> createBadge(@ApiIgnore @RequestAttribute("application") Application application,
+                                            @Valid @RequestBody BadgeDTO badgeDTO) {
         // TODO : image with a url
 
         try {
@@ -84,10 +86,11 @@ public class BadgesEndpoint {
         }
     }
 
-    @RequestMapping(method = RequestMethod.DELETE, value = "/{badgeId}")
-    public ResponseEntity deleteBadge(@RequestAttribute("application") Application app, @PathVariable long badgeId) {
+    @RequestMapping(method = RequestMethod.DELETE, value = "/{id}")
+    public ResponseEntity<Void> deleteBadge(@ApiIgnore @RequestAttribute("application") Application app,
+                                            @PathVariable long id) {
         Badge badge = badgeRepository
-                .findByApplicationNameAndId(app.getName(), badgeId)
+                .findByApplicationNameAndId(app.getName(), id)
                 .orElseThrow(NotFoundException::new);
 
         badgeRepository.delete(badge);
