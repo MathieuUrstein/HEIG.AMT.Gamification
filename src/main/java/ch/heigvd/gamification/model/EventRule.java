@@ -16,7 +16,9 @@ public class EventRule extends Rule {
     @JoinColumn(name = "point_scale_id", nullable = false)
     private PointScale pointScale;
 
-    public EventRule() {}
+    public EventRule() {
+        super();
+    }
 
     public String getEvent() {
         return event;

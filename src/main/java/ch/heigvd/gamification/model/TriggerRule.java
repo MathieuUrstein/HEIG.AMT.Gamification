@@ -6,7 +6,7 @@ import javax.persistence.*;
 @Table(name = "trigger_rule")
 @PrimaryKeyJoinColumn(name = "id")
 public class TriggerRule extends Rule {
-    @Column(name = "limit", nullable = false)
+    @Column(name = "[limit]", nullable = false)
     private int limit;
 
     @Column(name = "above_limit", nullable = false)
@@ -20,7 +20,9 @@ public class TriggerRule extends Rule {
     @JoinColumn(name = "point_scale_id", nullable = false)
     private PointScale pointScale;
 
-    public TriggerRule() {}
+    public TriggerRule() {
+        super();
+    }
 
     public int getLimit() {
         return limit;
