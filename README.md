@@ -14,19 +14,15 @@ To deploy our app, you will need the following:
 - Docker version 1.12.3 and docker-compose
 - Apache Maven 3.3.9
 
-*Warning: Before anything, you may need to stop any service running on port 3306 and 8080.*
+*Warning: Before anything, you may need to stop any service running on port 3306 and 8080. You can also define `$GAMIFICATION_APP_PORT` or `$GAMIFICATION_DB_PORT` to redirect one or both ports to your liking.*
 
 1. Clone the repo and cd into it.
-2. `$ ./deploy.sh`
-3. That's it, the app should be listening at [http://localhost:8080/](http://localhost:8080/). Of course, 
-if you don't run docker directly on your system (for example on a vm), the host should be the adress of the docker host and not `localhost`.
+2. `$ docker-compose up db  # this is required the first time you launch the databse, otherwise the app will fail.`
+3. `$ ctrl + C  # to stop the database once it is setup`
+4. `$ docker-compose up`
+5. That's it, the app should be listening at [http://localhost:8080/](http://localhost:8080/). Of course, 
+if you don't run docker directly on your system (for example on a vm), the host should be the address of the docker host and not `localhost`. Moreover if you redefined `$GAMIFICATION_APP_PORT` then you need to adapt the port accordingly.
 
-If for any reason you prefer to do it manually instead of running the script, you can do the following:
-
-1. `$ mkdir -p images/maven/gamification`
-2. `$ cp -r src/ images/maven/gamification/`
-3. `$ cp pom.xml images/maven/gamification/`
-4. `$ docker-compose up --build`
 
 # Development
 

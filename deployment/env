@@ -1,0 +1,5 @@
+MYSQL_DATABASE=webpolls
+MYSQL_USER=webpolls
+MYSQL_PASSWORD=fwoeijfwoiejfweoijdweoijdwoij
+MYSQL_RANDOM_ROOT_PASSWORD=yes
+DATABASE_HOST=db

@@ -1,0 +1,13 @@
+test*
+images/
+
+.travis.yml
+docker-compose.yml
+
+*.md
+*.iml
+.gitignore
+
+src/main/resources/application-default.properties
+src/main/resources/application-travis.properties
+target/

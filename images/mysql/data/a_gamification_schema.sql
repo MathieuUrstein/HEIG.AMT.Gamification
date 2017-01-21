@@ -1,2 +1,0 @@
-DROP SCHEMA IF EXISTS gamification;
-CREATE SCHEMA gamification DEFAULT CHARACTER SET utf8;
