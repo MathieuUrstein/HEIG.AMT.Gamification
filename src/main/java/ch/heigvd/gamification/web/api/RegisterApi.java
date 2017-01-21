@@ -34,7 +34,7 @@ public interface RegisterApi {
             consumes = {"application/json"},
             method = RequestMethod.POST
     )
-    ResponseEntity<Void> register(@ApiParam(value = "The info needed to create a gamified application.",
-            required = true) @RequestBody CredentialsDTO body);
+    ResponseEntity<Void> register(@ApiParam(value = "The credentials of the application to create.", required = true)
+                                  @RequestBody CredentialsDTO body);
 
 }
