@@ -77,7 +77,14 @@ public interface TriggerRulesApi {
             @ApiResponse(
                     code = 201,
                     message = "Successful operation.",
-                    response = Void.class
+                    response = Void.class,
+                    responseHeaders = {
+                    @ResponseHeader(
+                            name = "Location",
+                            description = "URI of newly created object.",
+                            response = String.class
+                    )
+            }
             ),
             @ApiResponse(
                     code = 409,
