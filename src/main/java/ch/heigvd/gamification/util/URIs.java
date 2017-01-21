@@ -8,6 +8,8 @@ public interface URIs {
     String POINT_SCALES = "/pointScales";
     String REGISTER = "/register";
     String RULES = "/rules";
+    String EVENT_RULES = RULES + "/events";
+    String TRIGGER_RULES = RULES + "/triggers";
     String DOCUMENTATION = "/";
     String SWAGGER_HTML = "/swagger-ui.html";
     String SWAGGER_UI_RESOURCES = "/webjars/springfox-swagger-ui";
