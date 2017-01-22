@@ -58,7 +58,8 @@ public interface TriggerRulesApi {
 
     @ApiOperation(
             value = "Creates a new trigger rule.",
-            notes = "",
+            notes = "The rule will not automatically award badges but will be applied when the user has points " +
+                    "awarded on a point scale.",
             response = Void.class,
             authorizations = {
                     @Authorization(value = "JWT")
@@ -70,12 +71,12 @@ public interface TriggerRulesApi {
                     message = "Successful operation.",
                     response = Void.class,
                     responseHeaders = {
-                    @ResponseHeader(
-                            name = "Location",
-                            description = "URI of newly created object.",
-                            response = String.class
-                    )
-            }
+                            @ResponseHeader(
+                                    name = "Location",
+                                    description = "URI of newly created object.",
+                                    response = String.class
+                            )
+                    }
             ),
             @ApiResponse(
                     code = 400,

@@ -2,11 +2,13 @@
 
 A gamification platform for aplications that want to attribute badges and points accordingly to rules specified. 
 
-Applications can register to the platform and create rules, badges and point scales for their users. When there is an event notified to the platform related to an user (for example a message posted), his state is modified and accordingly to the rules established, he can gain point or badges.
+Applications can register to the platform and create rules, badges and point scales for their users. When there is an event notified to the platform related to an user (for example a message posted), his state is modified and accordingly to the rules established, he can gain point or badges. 
 
 This project was made with [Spring Boot](https://projects.spring.io/spring-boot/) in the AMT course at HEIG-VD. 
 
-Note that this is still a work in progress.
+An example of a gamified application doing requests using the API can be found [there](https://github.com/MathieuUrstein/HEIG.AMT.Gamification.Frontend).
+
+Don't hesitate to check our [wiki](https://github.com/MathieuUrstein/HEIG.AMT.Gamification/wiki) for additionnal information!
 
 # Deployment
 
@@ -18,9 +20,9 @@ To deploy our app, you will need the following:
 
 1. Clone the repo and cd into it.
 2. Copy `deployment/env.sample` to `deployment/env` and edit the file to your liking. Be careful, it will contain your database password !
-2. `$ docker-compose up db`: this is required the first time you launch the databse, otherwise the app will fail.
+2. `$ docker-compose up --build db`: this is required the first time you launch the databse, otherwise the app will fail.
 3. `$ ctrl + C`, to stop the database once it is setup.
-4. `$ docker-compose up`
+4. `$ docker-compose up --build`
 5. That's it, the app should be listening at [http://localhost:8080/](http://localhost:8080/). Of course, 
 if you don't run docker directly on your system (for example on a vm), the host should be the address of the docker host and not `localhost`. Moreover if you redefined `$GAMIFICATION_APP_PORT` then you need to adapt the port accordingly.
 
@@ -71,7 +73,8 @@ Requirements:
 4. Still at the root of the project, run `python -m unittest discover tests`.
 5. The results of the unit tests are displayed.
 
-*Note : you can skip running concurrency tests, which take quite some time, by setting GAMIFICATION_SKIP_CONCURRENCY_TESTS*
+*Note : you can skip running concurrency tests, which take quite some time, by setting the `GAMIFICATION_SKIP_CONCURRENCY_TESTS`
+env variable.*
 
 
 # Authors

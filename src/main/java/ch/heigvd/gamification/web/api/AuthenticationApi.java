@@ -37,9 +37,7 @@ public interface AuthenticationApi {
                     code = 401,
                     message =
                             "- Error code 4: The application does not exist.\n" +
-                                    "- Error code 5: Authentication failed.\n" +
-                                    "- Error code todo: JWT invalid.\n" +
-                                    "- Error code todo: Invalid JWT format.",
+                            "- Error code 5: Authentication failed.",
                     response = Void.class
             )
     })
