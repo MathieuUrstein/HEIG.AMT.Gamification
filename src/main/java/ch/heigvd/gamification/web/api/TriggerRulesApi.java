@@ -40,7 +40,8 @@ public interface TriggerRulesApi {
             response = TriggerRuleDTO.class,
             authorizations = {
                     @Authorization(value = "JWT")
-            }, tags = {})
+            }, tags = {}
+    )
     @ApiResponses(value = {
             @ApiResponse(
                     code = 200,
@@ -123,7 +124,8 @@ public interface TriggerRulesApi {
             response = Void.class,
             authorizations = {
                     @Authorization(value = "JWT")
-            }, tags={})
+            }, tags = {}
+    )
     @ApiResponses(value = {
             @ApiResponse(code = 200,
                     message = "Successful operation.",

@@ -90,7 +90,8 @@ public interface BadgesApi {
             response = Void.class,
             authorizations = {
                     @Authorization(value = "JWT")
-            }, tags={})
+            }, tags = {}
+    )
     @ApiResponses(value = {
             @ApiResponse(
                     code = 200,
@@ -114,7 +115,8 @@ public interface BadgesApi {
 
     @ApiOperation(value = "Deletes a given badge.", notes = "", response = Void.class, authorizations = {
             @Authorization(value = "JWT")
-    }, tags = {})
+    }, tags = {}
+    )
     @ApiResponses(value = {
             @ApiResponse(
                     code = 200,

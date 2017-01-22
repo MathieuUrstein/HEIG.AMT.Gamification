@@ -94,7 +94,8 @@ public interface PointScalesApi {
             response = Void.class,
             authorizations = {
                     @Authorization(value = "JWT")
-            }, tags={})
+            }, tags = {}
+    )
     @ApiResponses(value = {
             @ApiResponse(
                     code = 200,
