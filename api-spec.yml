@@ -323,6 +323,8 @@ paths:
             Location:
               description: "URI of newly created object."
               type: string
+        400:
+          description: "Error code 10: Specified point scale doesn't exist."
         409:
           description: "Error code 3: Event rule name must be unique in the current application."
       security:
@@ -365,31 +367,8 @@ paths:
       responses:
         200:
           description: "Successful operation."
-        404:
-          description: "Event rule not found."
-        409:
-          description: "Error code 3: Event rule name must be unique in the current application."
-      security:
-        - JWT: []
-          
-    patch:
-      summary: "Partially updates the given event rule."
-      parameters:
-        - name: name
-          in: path
-          description: "The name of the given event rule."
-          required: true
-          type: string
-          
-        - name: body
-          in: body
-          description: "The modified fields of the event rule."
-          required: false
-          schema:
-            $ref: "#/definitions/EventRule"
-      responses:
-        200:
-          description: "Successful operation."
+        400:
+          description: "Error code 10: Specified point scale doesn't exist."
         404:
           description: "Event rule not found."
         409:
@@ -442,6 +421,8 @@ paths:
             Location:
               description: "URI of newly created object."
               type: string
+        400:
+          description: "- Error code 10: Specified point scale doesn't exist.\n- Error code 11:             Specified badge doesn't exist."
         409:
           description: "Error code 3: Trigger rule name must be unique in the current application."
       security:
@@ -484,31 +465,8 @@ paths:
       responses:
         200:
           description: "Successful operation."
-        404:
-          description: "Trigger rule not found."
-        409:
-          description: "Error code 3: Trigger rule name must be unique in the current application."
-      security:
-        - JWT: []
-          
-    patch:
-      summary: "Partially updates the given trigger rule."
-      parameters:
-        - name: name
-          in: path
-          description: "The name of the given trigger rule."
-          required: true
-          type: string
-          
-        - name: body
-          in: body
-          description: "The modified fields of the trigger rule."
-          required: false
-          schema:
-            $ref: "#/definitions/TriggerRule"
-      responses:
-        200:
-          description: "Successful operation."
+        400:
+          description: "- Error code 10: Specified point scale doesn't exist.\n- Error code 11:             Specified badge doesn't exist."
         404:
           description: "Trigger rule not found."
         409:

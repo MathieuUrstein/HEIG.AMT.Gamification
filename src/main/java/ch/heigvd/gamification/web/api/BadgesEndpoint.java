@@ -59,7 +59,6 @@ public class BadgesEndpoint implements BadgesApi {
     @RequestMapping(method = RequestMethod.POST)
     public ResponseEntity<Void> createBadge(@ApiIgnore @RequestAttribute("application") Application application,
                                             @Valid @RequestBody BadgeDTO badgeDTO) {
-
         try {
             Application app = applicationRepository.findByName(application.getName());
             Badge badge = new Badge();
@@ -85,11 +84,11 @@ public class BadgesEndpoint implements BadgesApi {
     @RequestMapping(method = RequestMethod.PUT, value = "/{name}")
     public ResponseEntity<Void> completeUpdateBadge(@ApiIgnore @RequestAttribute("application") Application app,
                                                     @PathVariable String name, @Valid @RequestBody BadgeDTO badgeDTO) {
-        Badge badge = badgeRepository
-                .findByApplicationNameAndName(app.getName(), name)
-                .orElseThrow(NotFoundException::new);
-
         try {
+            Badge badge = badgeRepository
+                    .findByApplicationNameAndName(app.getName(), name)
+                    .orElseThrow(NotFoundException::new);
+
             badge.setName(badgeDTO.getName());
 
             badgeRepository.save(badge);

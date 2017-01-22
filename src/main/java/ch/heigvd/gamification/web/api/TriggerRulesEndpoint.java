@@ -61,7 +61,7 @@ public class TriggerRulesEndpoint implements TriggerRulesApi {
 
     @RequestMapping(method = RequestMethod.GET, value = "/{name}")
     public TriggerRuleDTO getTriggerRule(@ApiIgnore @RequestAttribute("application") Application app,
-                           @PathVariable String name) {
+                                         @PathVariable String name) {
         TriggerRule rule = triggerRuleRepository
                 .findByApplicationNameAndName(app.getName(), name)
                 .orElseThrow(NotFoundException::new);
@@ -71,7 +71,7 @@ public class TriggerRulesEndpoint implements TriggerRulesApi {
 
     @RequestMapping(method = RequestMethod.POST)
     public ResponseEntity<Void> createTriggerRule(@ApiIgnore @RequestAttribute("application") Application application,
-                                               @Valid @RequestBody TriggerRuleDTO ruleDTO) {
+                                                  @Valid @RequestBody TriggerRuleDTO ruleDTO) {
         try {
             Application app = applicationRepository.findByName(application.getName());
             PointScale pointScale = pointScaleRepository
@@ -100,6 +100,38 @@ public class TriggerRulesEndpoint implements TriggerRulesApi {
                     .buildAndExpand(rule.getName()).toUri();
 
             return ResponseEntity.created(location).build();
+        }
+        catch (DataIntegrityViolationException e) {
+            // The name of a rule must be unique in a gamified application
+            throw new ConflictException("name");
+        }
+    }
+
+    @RequestMapping(method = RequestMethod.PUT, value = "/{name}")
+    public ResponseEntity<Void> completeUpdateTriggerRule(@ApiIgnore @RequestAttribute("application") Application app,
+                                                          @PathVariable String name, @Valid @RequestBody TriggerRuleDTO ruleDTO) {
+        try {
+            TriggerRule triggerRule = triggerRuleRepository
+                    .findByApplicationNameAndName(app.getName(), name)
+                    .orElseThrow(NotFoundException::new);
+
+            PointScale pointScale = pointScaleRepository
+                    .findByApplicationNameAndName(app.getName(), ruleDTO.getPointScale())
+                    .orElseThrow(PointScaleNotFoundException::new);
+
+            Badge badge = badgeRepository
+                    .findByApplicationNameAndName(app.getName(), ruleDTO.getBadgeAwarded())
+                    .orElseThrow(BadgeNotFoundException::new);
+
+            triggerRule.setName(ruleDTO.getName());
+            triggerRule.setBadgeAwarded(badge);
+            triggerRule.setPointScale(pointScale);
+            triggerRule.setLimit(ruleDTO.getLimit());
+            triggerRule.setAboveLimit(ruleDTO.getAboveLimit());
+
+            triggerRuleRepository.save(triggerRule);
+
+            return ResponseEntity.ok().build();
         }
         catch (DataIntegrityViolationException e) {
             // The name of a rule must be unique in a gamified application

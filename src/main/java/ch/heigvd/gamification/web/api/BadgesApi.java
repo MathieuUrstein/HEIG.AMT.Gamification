@@ -90,17 +90,23 @@ public interface BadgesApi {
             response = Void.class,
             authorizations = {
                     @Authorization(value = "JWT")
-            }, tags={  })
+            }, tags={})
     @ApiResponses(value = {
-            @ApiResponse(code = 200,
+            @ApiResponse(
+                    code = 200,
                     message = "Successful operation.",
-                    response = Void.class),
-            @ApiResponse(code = 404,
+                    response = Void.class
+            ),
+            @ApiResponse(
+                    code = 404,
                     message = "Badge not found.",
-                    response = Void.class),
-            @ApiResponse(code = 409,
+                    response = Void.class
+            ),
+            @ApiResponse(
+                    code = 409,
                     message = "Error code 3: Badge name must be unique in the current application.",
-                    response = Void.class)
+                    response = Void.class
+            )
     })
     ResponseEntity<Void> completeUpdateBadge(@ApiIgnore @RequestAttribute("application") Application application,
                                              @ApiParam(value = "The name of the badge.", required = true) @PathVariable("name") String name,
