@@ -1,15 +1,17 @@
 import unittest
 
+import os
 import requests
 from sqlalchemy import select
 
 from utils import BASE_URL, HTTP_METHODS
+from utils.mixins.concurrency import ConcurrentTesterMixin, skip_concurrency_env_variable
 from utils.mixins.database import DatabaseWiperTestMixin
 from utils.mixins.api import AuthenticatedRestAPIMixin
 from utils.models import User
 
 
-class TestEvents(DatabaseWiperTestMixin, AuthenticatedRestAPIMixin, unittest.TestCase):
+class TestEvents(DatabaseWiperTestMixin, AuthenticatedRestAPIMixin, ConcurrentTesterMixin, unittest.TestCase):
     url = BASE_URL + "/events/"
     invalid_methods = HTTP_METHODS - {"post"}
     required_fields = {"type", "username"}
@@ -48,6 +50,25 @@ class TestEvents(DatabaseWiperTestMixin, AuthenticatedRestAPIMixin, unittest.Tes
         new_token = "Bearer {}".format(self.register_application("goat"))
         r = requests.post(self.url, json=self.event, headers=dict(Authorization=new_token))
         self.assertEqual(r.status_code, requests.codes.created)
+
+    @unittest.skip("This test needs fixing")
+    @unittest.skipIf(
+        os.environ.get(skip_concurrency_env_variable, False),
+        "Skipping concurrency test because {} is set".format(skip_concurrency_env_variable)
+    )
+    def test_can_send_events_concurrently(self):
+        self.check_precondition(
+            self.request("post", self.url, json=self.event),
+            requests.codes.created,
+            "Could not create badge, aborting test"
+        )
+        headers = {"Authorization": "Bearer {}".format(self.token)}
+
+        for i in range(self.concurrency_tests):
+            res = self.request_concurrently(
+                "post", self.url, self.request_per_concurrent_test, json=self.event, headers=headers
+            )
+            self.check_only_one_created(res)
 
 
 if __name__ == '__main__':
