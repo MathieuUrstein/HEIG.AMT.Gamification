@@ -72,9 +72,9 @@ class TestBadges(DatabaseWiperTestMixin, AuthenticatedRestAPIMixin, ConcurrentTe
         headers = {"Authorization": "Bearer {}".format(self.token)}
 
         for i in range(self.concurrency_tests):
-            app = dict(name="badge-conc-{}".format(i))
+            badge = dict(name="badge-conc-{}".format(i))
             res = self.request_concurrently(
-                "post", self.url, self.request_per_concurrent_test, json=app, headers=headers
+                "post", self.url, self.request_per_concurrent_test, json=badge, headers=headers
             )
             self.check_only_one_created(res)
 
