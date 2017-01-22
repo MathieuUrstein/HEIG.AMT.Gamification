@@ -26,4 +26,20 @@ public interface ErrorsCodes {
     // Authentication failed
     String AUTHENTICATION_FAILED = "5";
     String AUTHENTICATION_FAILED_MESSAGE = "authentication failed";
+
+    // Authentication failed
+    String ALREADY_AUTHENTICATED = "6";
+    String ALREADY_AUTHENTICATED_MESSAGE = "already authenticated";
+
+    // No token
+    String NO_TOKEN = "7";
+    String NO_TOKEN_MESSAGE = "no token";
+
+    // JWT is not valid
+    String JWT_INVALID = "8";
+    String JWT_INVALID_MESSAGE = "JWT is invalid";
+
+    // JWT format is not valid
+    String INVALID_JWT_FORMAT = "9";
+    String INVALID_JWT_FORMAT_MESSAGE = "invalid JWT format";
 }

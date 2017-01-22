@@ -34,7 +34,7 @@ public class EventsEndpoint implements EventsApi {
     public ResponseEntity<Void> createEvent(@ApiIgnore @RequestAttribute("application") Application app,
                                             @Valid @RequestBody EventDTO eventDTO) {
 
-        // retry processing event as long as there is a
+        // retry processing event as long as there is a problem
         boolean exception;
         do {
             exception = false;

@@ -1,7 +1,8 @@
 package ch.heigvd.gamification.web.filter;
 
 import ch.heigvd.gamification.dao.ApplicationRepository;
-import ch.heigvd.gamification.error.FilterError;
+import ch.heigvd.gamification.error.ErrorDescription;
+import ch.heigvd.gamification.error.ErrorsCodes;
 import ch.heigvd.gamification.model.Application;
 import ch.heigvd.gamification.util.JWTUtils;
 import ch.heigvd.gamification.util.URIs;
@@ -29,7 +30,8 @@ public class AuthenticationFilter implements Filter {
     }
 
     @Override
-    public void init(FilterConfig filterConfig) throws ServletException {}
+    public void init(FilterConfig filterConfig) throws ServletException {
+    }
 
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain chain)
@@ -41,6 +43,8 @@ public class AuthenticationFilter implements Filter {
         String uri = request.getRequestURI().substring(request.getContextPath().length());
         String token = JWTUtils.extractToken(request.getHeader("Authorization"));
 
+        boolean staticFiles = uri.startsWith(URIs.STATIC);
+
         boolean doc = uri.equals(URIs.DOCUMENTATION) ||
                 uri.equals(URIs.SWAGGER_HTML) ||
                 uri.startsWith(URIs.SWAGGER_UI_RESOURCES) ||
@@ -49,13 +53,14 @@ public class AuthenticationFilter implements Filter {
 
         boolean authRequest = uri.equals(URIs.AUTH);
 
-        if (doc || uri.equals(URIs.REGISTER) || (authRequest && token == null)) {
+        if (staticFiles || doc || uri.equals(URIs.REGISTER) || (authRequest && token == null)) {
             chain.doFilter(servletRequest, response);
             return;
         }
 
         if (token == null) {
-            sendError(response, HttpServletResponse.SC_UNAUTHORIZED, "No token");
+            sendError(response, HttpServletResponse.SC_UNAUTHORIZED, ErrorsCodes.NO_TOKEN,
+                    ErrorsCodes.NO_TOKEN_MESSAGE);
             return;
         }
 
@@ -68,12 +73,14 @@ public class AuthenticationFilter implements Filter {
                     chain.doFilter(request, response);
                     return;
                 }
-                sendError(response, HttpServletResponse.SC_UNAUTHORIZED, "Invalid JWT");
+                sendError(response, HttpServletResponse.SC_UNAUTHORIZED, ErrorsCodes.JWT_INVALID,
+                        ErrorsCodes.JWT_INVALID_MESSAGE);
                 return;
             }
 
             if (authRequest) {
-                sendError(response, HttpServletResponse.SC_BAD_REQUEST, "Already authenticated");
+                sendError(response, HttpServletResponse.SC_BAD_REQUEST, ErrorsCodes.ALREADY_AUTHENTICATED,
+                        ErrorsCodes.ALREADY_AUTHENTICATED_MESSAGE);
                 return;
             }
 
@@ -83,18 +90,21 @@ public class AuthenticationFilter implements Filter {
             chain.doFilter(request, response);
         } catch (JWTDecodeException exception) {
             LOG.log(Level.WARNING, "Invalid JWT format");
-            sendError(response, HttpServletResponse.SC_UNAUTHORIZED, "Invalid JWT format");
+            sendError(response, HttpServletResponse.SC_UNAUTHORIZED, ErrorsCodes.INVALID_JWT_FORMAT,
+                    ErrorsCodes.INVALID_JWT_FORMAT_MESSAGE);
         }
     }
 
-    private void sendError(HttpServletResponse response, int status, String message) throws IOException {
+    private void sendError(HttpServletResponse response, int status, String errorCode, String message) throws
+            IOException {
         response.setStatus(status);
         response.setHeader("Content-Type", "application/json");
 
         ObjectMapper mapper = new ObjectMapper();
-        response.getWriter().write(mapper.writeValueAsString(new FilterError(message)));
+        response.getWriter().write(mapper.writeValueAsString(new ErrorDescription(errorCode, message)));
     }
 
     @Override
-    public void destroy() {}
+    public void destroy() {
+    }
 }
