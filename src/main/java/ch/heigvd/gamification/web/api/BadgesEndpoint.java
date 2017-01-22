@@ -75,7 +75,7 @@ public class BadgesEndpoint implements BadgesApi {
             badgeRepository.save(badge);
 
             URI location = ServletUriComponentsBuilder
-                    .fromCurrentRequest().path("/{name}")
+                    .fromCurrentRequest().path("/{name}/")
                     .buildAndExpand(badge.getName()).toUri();
 
             return ResponseEntity.created(location).build();
