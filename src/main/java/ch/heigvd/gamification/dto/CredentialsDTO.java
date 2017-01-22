@@ -5,14 +5,13 @@ import io.swagger.annotations.ApiModelProperty;
 
 @ApiModel(description = "The credentials of an application.")
 public class CredentialsDTO {
-    @ApiModelProperty(value = "The username of the application.", required = true)
-    private String name;
 
-    @ApiModelProperty(value = "The password of the application.", required = true)
+    private String name;
     private String password;
 
     public CredentialsDTO() {}
 
+    @ApiModelProperty(value = "The username of the application.", required = true)
     public String getName() {
         return name;
     }
@@ -21,6 +20,7 @@ public class CredentialsDTO {
         this.name = name;
     }
 
+    @ApiModelProperty(value = "The password of the application.", required = true)
     public String getPassword() {
         return password;
     }

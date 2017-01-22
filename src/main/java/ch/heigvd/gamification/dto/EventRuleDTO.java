@@ -5,13 +5,8 @@ import io.swagger.annotations.ApiModelProperty;
 
 @ApiModel(description = "A rule applied on event creation.")
 public class EventRuleDTO extends RuleDTO {
-    @ApiModelProperty(value = "The event on which the rule is applied.", required = true)
     private String event;
-
-    @ApiModelProperty(value = "The point scale on which the rule is applied.", required = true)
     private String pointScale;
-
-    @ApiModelProperty(value = "How many points are given on the point scale.", required = true)
     private int pointsGiven;
 
     public EventRuleDTO() {
@@ -21,6 +16,7 @@ public class EventRuleDTO extends RuleDTO {
         super(name);
     }
 
+    @ApiModelProperty(value = "The event on which the rule is applied.", required = true)
     public String getEvent() {
         return event;
     }
@@ -29,6 +25,7 @@ public class EventRuleDTO extends RuleDTO {
         this.event = event;
     }
 
+    @ApiModelProperty(value = "The point scale on which the rule is applied.", required = true)
     public String getPointScale() {
         return pointScale;
     }
@@ -37,6 +34,7 @@ public class EventRuleDTO extends RuleDTO {
         this.pointScale = pointScale;
     }
 
+    @ApiModelProperty(value = "How many points are given on the point scale.", required = true)
     public int getPointsGiven() {
         return pointsGiven;
     }

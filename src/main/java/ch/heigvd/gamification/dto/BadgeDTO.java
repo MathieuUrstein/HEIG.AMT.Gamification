@@ -9,8 +9,6 @@ import io.swagger.annotations.ApiModelProperty;
  */
 @ApiModel(description = "A badge in an application.")
 public class BadgeDTO {
-
-    @ApiModelProperty(value = "The name of the badge.", required = true)
     private String name;
 
     private byte[] image;
@@ -23,6 +21,11 @@ public class BadgeDTO {
         this.image = image;
     }
 
+    @ApiModelProperty(value = "The name of the badge.", required = true)
+    public String getName() {
+        return name;
+    }
+
     public void setName(String name) {
         this.name = name;
     }
@@ -31,10 +34,7 @@ public class BadgeDTO {
         this.image = image;
     }
 
-    public String getName() {
-        return name;
-    }
-
+    @ApiModelProperty(value = "The image of the badge.")
     public byte[] getImage() {
         return image;
     }

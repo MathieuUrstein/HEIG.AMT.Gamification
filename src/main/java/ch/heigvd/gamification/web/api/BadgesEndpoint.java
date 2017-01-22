@@ -8,7 +8,7 @@ import ch.heigvd.gamification.exception.NotFoundException;
 import ch.heigvd.gamification.model.Application;
 import ch.heigvd.gamification.model.Badge;
 import ch.heigvd.gamification.util.URIs;
-import ch.heigvd.gamification.validator.BadgeDTOValidator;
+import ch.heigvd.gamification.validator.FieldsRequiredAndNotEmptyValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.ResponseEntity;
@@ -38,7 +38,7 @@ public class BadgesEndpoint implements BadgesApi {
 
     @InitBinder
     public void initBinder(WebDataBinder binder) {
-        binder.setValidator(new BadgeDTOValidator());
+        binder.setValidator(new FieldsRequiredAndNotEmptyValidator(BadgeDTO.class));
     }
 
     @RequestMapping(method = RequestMethod.GET)

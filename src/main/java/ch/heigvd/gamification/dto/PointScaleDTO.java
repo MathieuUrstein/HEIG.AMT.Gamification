@@ -5,7 +5,6 @@ import io.swagger.annotations.ApiModelProperty;
 
 @ApiModel(description = "A point scale in an application.")
 public class PointScaleDTO {
-    @ApiModelProperty(value = "The name of the point scale.", required = true)
     private String name;
 
     public PointScaleDTO() {
@@ -19,6 +18,7 @@ public class PointScaleDTO {
         this.name = name;
     }
 
+    @ApiModelProperty(value = "The name of the point scale.", required = true)
     public String getName() {
         return name;
     }
