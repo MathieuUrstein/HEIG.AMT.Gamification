@@ -80,6 +80,26 @@ public class PointScalesEndpoint implements PointScalesApi {
         }
     }
 
+    @RequestMapping(method = RequestMethod.PUT, value = "/{name}")
+    public ResponseEntity<Void> completeUpdatePointScale(@ApiIgnore @RequestAttribute("application") Application app,
+                                                         @PathVariable String name, @Valid @RequestBody PointScaleDTO pointScaleDTO) {
+        try {
+            PointScale pointScale = pointScaleRepository
+                    .findByApplicationNameAndName(app.getName(), name)
+                    .orElseThrow(NotFoundException::new);
+
+            pointScale.setName(pointScaleDTO.getName());
+
+            pointScaleRepository.save(pointScale);
+
+            return ResponseEntity.ok().build();
+        }
+        catch (DataIntegrityViolationException e) {
+            // The name of a point scales must be unique in a gamified application
+            throw new ConflictException("name");
+        }
+    }
+
     @RequestMapping(method = RequestMethod.DELETE, value = "/{name}")
     public ResponseEntity<Void> deletePointScale(@ApiIgnore @RequestAttribute("application") Application app,
                                                  @PathVariable String name) {

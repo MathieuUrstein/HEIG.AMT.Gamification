@@ -50,9 +50,9 @@ paths:
               description: "The JWT token."
               type: string
         400:
-          description: "Error code todo: Application already authenticated."
+          description: "Error code 6: Application already authenticated."
         401:
-          description: "- Error code 4: The application does not exist.\n- Error code 5: Authentication failed. \n- Error code todo: Invalid JWT.\n- Error code todo: Invalid JWT format."
+          description: "- Error code 4: The application does not exist.\n- Error code 5: Authentication failed. \n- Error code 8: Invalid JWT.\n- Error code 9: Invalid JWT format."
   
   /events/:
     post:
@@ -182,31 +182,6 @@ paths:
       security:
         - JWT: []
           
-    patch:
-      summary: "Partially updates a given badge."
-      parameters:
-        - name: name
-          in: path
-          description: "The name of the badge."
-          required: true
-          type: string
-          
-        - name: body
-          in: body
-          description: "The new info of the badge."
-          required: false
-          schema:
-            $ref: "#/definitions/Badge"
-      responses:
-        200:
-          description: "Successful operation."
-        404:
-          description: "Badge not found."
-        409:
-          description: "Error code 3: Badge name must be unique in the current application."
-      security:
-        - JWT: []
-          
     delete:
       summary: "Deletes a given badge."
       parameters:
@@ -303,31 +278,6 @@ paths:
       security:
         - JWT: []
           
-    patch:
-      summary: "Partially updates the given point scale."
-      parameters:
-        - name: name
-          in: path
-          description: "The name of the point scale."
-          required: true
-          type: string
-          
-        - name: body
-          in: body
-          description: "The new info of the point scale."
-          required: false
-          schema:
-            $ref: "#/definitions/PointScale"
-      responses:
-        200:
-          description: "Successful operation."
-        404:
-          description: "Point scale not found."
-        409:
-          description: "Error code 3: Point scale name must be unique in the current application."
-      security:
-        - JWT: []
-          
     delete:
       summary: "Deletes the given point scale."
       parameters:
@@ -373,6 +323,8 @@ paths:
             Location:
               description: "URI of newly created object."
               type: string
+        400:
+          description: "Error code 10: Specified point scale doesn't exist."
         409:
           description: "Error code 3: Event rule name must be unique in the current application."
       security:
@@ -415,31 +367,8 @@ paths:
       responses:
         200:
           description: "Successful operation."
-        404:
-          description: "Event rule not found."
-        409:
-          description: "Error code 3: Event rule name must be unique in the current application."
-      security:
-        - JWT: []
-          
-    patch:
-      summary: "Partially updates the given event rule."
-      parameters:
-        - name: name
-          in: path
-          description: "The name of the given event rule."
-          required: true
-          type: string
-          
-        - name: body
-          in: body
-          description: "The modified fields of the event rule."
-          required: false
-          schema:
-            $ref: "#/definitions/EventRule"
-      responses:
-        200:
-          description: "Successful operation."
+        400:
+          description: "Error code 10: Specified point scale doesn't exist."
         404:
           description: "Event rule not found."
         409:
@@ -492,6 +421,8 @@ paths:
             Location:
               description: "URI of newly created object."
               type: string
+        400:
+          description: "- Error code 10: Specified point scale doesn't exist.\n- Error code 11:             Specified badge doesn't exist."
         409:
           description: "Error code 3: Trigger rule name must be unique in the current application."
       security:
@@ -534,31 +465,8 @@ paths:
       responses:
         200:
           description: "Successful operation."
-        404:
-          description: "Trigger rule not found."
-        409:
-          description: "Error code 3: Trigger rule name must be unique in the current application."
-      security:
-        - JWT: []
-          
-    patch:
-      summary: "Partially updates the given trigger rule."
-      parameters:
-        - name: name
-          in: path
-          description: "The name of the given trigger rule."
-          required: true
-          type: string
-          
-        - name: body
-          in: body
-          description: "The modified fields of the trigger rule."
-          required: false
-          schema:
-            $ref: "#/definitions/TriggerRule"
-      responses:
-        200:
-          description: "Successful operation."
+        400:
+          description: "- Error code 10: Specified point scale doesn't exist.\n- Error code 11:             Specified badge doesn't exist."
         404:
           description: "Trigger rule not found."
         409:

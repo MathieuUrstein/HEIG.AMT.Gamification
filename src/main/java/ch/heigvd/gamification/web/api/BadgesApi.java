@@ -85,36 +85,38 @@ public interface BadgesApi {
                                      @ApiParam(value = "The info needed to create the badge.", required = true)
                                      @Valid @RequestBody BadgeDTO badgeDTO);
 
-    // TODO
-    /*
-    @ApiOperation(value = "Partially updates a given badge.", notes = "", response = Void.class, authorizations = {
-        @Authorization(value = "JWT")
-    }, tags={  })
+    @ApiOperation(value = "Makes a complete update for a given badge.",
+            notes = "",
+            response = Void.class,
+            authorizations = {
+                    @Authorization(value = "JWT")
+            }, tags = {}
+    )
     @ApiResponses(value = {
-        @ApiResponse(code = 200, message = "Successful operation.", response = Void.class),
-        @ApiResponse(code = 404, message = "Badge not found.", response = Void.class),
-        @ApiResponse(code = 409, message = "Error code 3: Badge name must be unique in the current application.",
-        response = Void.class) })
-    ResponseEntity<Void> badgesIdPatch(@ApiParam(value = "The id of the badge.",required=true ) @PathVariable("id")
-    BigDecimal id,
-        @ApiParam(value = "The new info of the badge."  ) @RequestBody Badge body);
-
-
-    @ApiOperation(value = "Updates a given badge.", notes = "", response = Void.class, authorizations = {
-        @Authorization(value = "JWT")
-    }, tags={  })
-    @ApiResponses(value = {
-        @ApiResponse(code = 200, message = "Successful operation.", response = Void.class),
-        @ApiResponse(code = 404, message = "Badge not found.", response = Void.class),
-        @ApiResponse(code = 409, message = "Error code 3: Badge name must be unique in the current application.",
-        response = Void.class) })
-    ResponseEntity<Void> badgesIdPut(@ApiParam(value = "The id of the badge.",required=true ) @PathVariable("id")
-    BigDecimal id,
-        @ApiParam(value = "The new info of the badge." ,required=true ) @RequestBody Badge body);*/
+            @ApiResponse(
+                    code = 200,
+                    message = "Successful operation.",
+                    response = Void.class
+            ),
+            @ApiResponse(
+                    code = 404,
+                    message = "Badge not found.",
+                    response = Void.class
+            ),
+            @ApiResponse(
+                    code = 409,
+                    message = "Error code 3: Badge name must be unique in the current application.",
+                    response = Void.class
+            )
+    })
+    ResponseEntity<Void> completeUpdateBadge(@ApiIgnore @RequestAttribute("application") Application application,
+                                             @ApiParam(value = "The name of the badge.", required = true) @PathVariable("name") String name,
+                                             @ApiParam(value = "The new info of the badge.", required=true) @Valid @RequestBody BadgeDTO badgeDTO);
 
     @ApiOperation(value = "Deletes a given badge.", notes = "", response = Void.class, authorizations = {
             @Authorization(value = "JWT")
-    }, tags = {})
+    }, tags = {}
+    )
     @ApiResponses(value = {
             @ApiResponse(
                     code = 200,

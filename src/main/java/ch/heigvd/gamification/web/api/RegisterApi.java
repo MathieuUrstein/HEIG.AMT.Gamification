@@ -4,8 +4,6 @@ import ch.heigvd.gamification.dto.CredentialsDTO;
 import io.swagger.annotations.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 
 @Api(value = "register", description = "the register API")
 public interface RegisterApi {

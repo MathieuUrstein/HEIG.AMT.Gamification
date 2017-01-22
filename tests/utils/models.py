@@ -13,4 +13,5 @@ Base.prepare(engine, reflect=True)
 Application = Base.classes.application
 Badge = Base.classes.badge
 Event = Base.classes.event
+PointScale = Base.classes.point_scale
 User = Base.classes.user

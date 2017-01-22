@@ -96,6 +96,33 @@ public class EventRulesEndpoint implements EventRulesAPi {
         }
     }
 
+    @RequestMapping(method = RequestMethod.PUT, value = "/{name}")
+    public ResponseEntity<Void> completeUpdateEventRule(@ApiIgnore @RequestAttribute("application") Application app,
+                                                        @PathVariable String name, @Valid @RequestBody EventRuleDTO ruleDTO) {
+        try {
+            EventRule eventRule = eventRuleRepository
+                    .findByApplicationNameAndName(app.getName(), name)
+                    .orElseThrow(NotFoundException::new);
+
+            PointScale pointScale = pointScaleRepository
+                    .findByApplicationNameAndName(app.getName(), ruleDTO.getPointScale())
+                    .orElseThrow(PointScaleNotFoundException::new);
+
+            eventRule.setName(ruleDTO.getName());
+            eventRule.setEvent(ruleDTO.getEvent());
+            eventRule.setPointScale(pointScale);
+            eventRule.setPointsGiven(ruleDTO.getPointsGiven());
+
+            eventRuleRepository.save(eventRule);
+
+            return ResponseEntity.ok().build();
+        }
+        catch (DataIntegrityViolationException e) {
+            // The name of a rule must be unique in a gamified application
+            throw new ConflictException("name");
+        }
+    }
+
     @RequestMapping(method = RequestMethod.DELETE, value = "/{name}")
     public ResponseEntity<Void> deleteEventRule(@ApiIgnore @RequestAttribute("application") Application app,
                                                 @PathVariable String name) {

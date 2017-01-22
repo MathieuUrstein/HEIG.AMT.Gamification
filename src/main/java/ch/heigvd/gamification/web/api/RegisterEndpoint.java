@@ -39,7 +39,8 @@ public class RegisterEndpoint implements RegisterApi {
 
         try {
             applicationRepository.save(app);
-        } catch (DataIntegrityViolationException e) {
+        }
+        catch (DataIntegrityViolationException e) {
             throw new ConflictException("name");
         }
 

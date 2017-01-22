@@ -59,7 +59,6 @@ public class BadgesEndpoint implements BadgesApi {
     @RequestMapping(method = RequestMethod.POST)
     public ResponseEntity<Void> createBadge(@ApiIgnore @RequestAttribute("application") Application application,
                                             @Valid @RequestBody BadgeDTO badgeDTO) {
-
         try {
             Application app = applicationRepository.findByName(application.getName());
             Badge badge = new Badge();
@@ -75,6 +74,26 @@ public class BadgesEndpoint implements BadgesApi {
                     .buildAndExpand(badge.getName()).toUri();
 
             return ResponseEntity.created(location).build();
+        }
+        catch (DataIntegrityViolationException e) {
+            // The name of a badge must be unique in a gamified application
+            throw new ConflictException("name");
+        }
+    }
+
+    @RequestMapping(method = RequestMethod.PUT, value = "/{name}")
+    public ResponseEntity<Void> completeUpdateBadge(@ApiIgnore @RequestAttribute("application") Application app,
+                                                    @PathVariable String name, @Valid @RequestBody BadgeDTO badgeDTO) {
+        try {
+            Badge badge = badgeRepository
+                    .findByApplicationNameAndName(app.getName(), name)
+                    .orElseThrow(NotFoundException::new);
+
+            badge.setName(badgeDTO.getName());
+
+            badgeRepository.save(badge);
+
+            return ResponseEntity.ok().build();
         }
         catch (DataIntegrityViolationException e) {
             // The name of a badge must be unique in a gamified application

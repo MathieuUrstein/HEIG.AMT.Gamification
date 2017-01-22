@@ -4,8 +4,6 @@ import ch.heigvd.gamification.dto.UserDTO;
 import ch.heigvd.gamification.model.Application;
 import io.swagger.annotations.*;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 
 import java.util.List;
 

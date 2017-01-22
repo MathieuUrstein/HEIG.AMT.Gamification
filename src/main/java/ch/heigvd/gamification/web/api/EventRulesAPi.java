@@ -5,10 +5,11 @@ import ch.heigvd.gamification.model.Application;
 import io.swagger.annotations.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestAttribute;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import springfox.documentation.annotations.ApiIgnore;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @Api(value = "event rules", description = "the event rules API")
@@ -81,6 +82,11 @@ public interface EventRulesAPi {
                     }
             ),
             @ApiResponse(
+                    code = 400,
+                    message = "Error code 10: Specified point scale doesn't exist.",
+                    response = Void.class
+            ),
+            @ApiResponse(
                     code = 409,
                     message = "Error code 3: Event rule name must be unique in the current " +
                             "application.",
@@ -92,37 +98,35 @@ public interface EventRulesAPi {
                                                  required = true)
                                          @RequestBody EventRuleDTO body);
 
-    // TODO
-    /*
-    @ApiOperation(value = "Partially updates the given event rule.", notes = "", response = Void.class,
+    @ApiOperation(value = "Makes a complete update for a given event rule.",
+            notes = "",
+            response = Void.class,
             authorizations = {
                     @Authorization(value = "JWT")
-            }, tags = {})
+            }, tags = {}
+    )
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Successful operation.", response = Void.class),
-            @ApiResponse(code = 404, message = "Event rule not found.", response = Void.class),
-            @ApiResponse(code = 409, message = "Error code 3: Event rule name must be unique in the current " +
-                    "application.", response = Void.class)})
-    ResponseEntity<Void> rulesEventsIdPatch(@ApiParam(value = "The id of the given event rule.", required = true)
-                                            @PathVariable("id") BigDecimal id,
-                                            @ApiParam(value = "The modified fields of the event rule.") @RequestBody
-                                                    EventRuleDTO body);
-
-
-    @ApiOperation(value = "Updates the given event rule.", notes = "", response = Void.class, authorizations = {
-            @Authorization(value = "JWT")
-    }, tags = {})
-    @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Successful operation.", response = Void.class),
-            @ApiResponse(code = 404, message = "Event rule not found.", response = Void.class),
-            @ApiResponse(code = 409, message = "Error code 3: Event rule name must be unique in the current " +
-                    "application.", response = Void.class)})
-    ResponseEntity<Void> rulesEventsIdPut(@ApiParam(value = "The id of the given event rule.", required = true)
-                                          @PathVariable("id") BigDecimal id,
-                                          @ApiParam(value = "The modified event rule.", required = true) @RequestBody
-                                                  EventRuleDTO body);
-
-    */
+            @ApiResponse(code = 200,
+                    message = "Successful operation.",
+                    response = Void.class
+            ),
+            @ApiResponse(
+                    code = 400,
+                    message = "Error code 10: Specified point scale doesn't exist.",
+                    response = Void.class
+            ),
+            @ApiResponse(code = 404,
+                    message = "Event rule not found.",
+                    response = Void.class
+            ),
+            @ApiResponse(code = 409,
+                    message = "Error code 3: Event rule name must be unique in the current application.",
+                    response = Void.class
+            )
+    })
+    ResponseEntity<Void> completeUpdateEventRule(@ApiIgnore @RequestAttribute("application") Application application,
+                                                 @ApiParam(value = "The name of the event rule.", required = true) @PathVariable("name") String name,
+                                                 @ApiParam(value = "The new info of the event rule.", required=true) @Valid @RequestBody EventRuleDTO ruleDTO);
 
     @ApiOperation(
             value = "Deletes the given event rule.",
