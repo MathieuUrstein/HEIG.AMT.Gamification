@@ -51,6 +51,14 @@ public class GlobalControllerExceptionHandler {
         return new ErrorDescription(ErrorsCodes.POINT_SCALE_NOT_FOUND, ErrorsCodes.POINT_SCALE_NOT_FOUND_MESSAGE);
     }
 
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(BadgeNotFoundException.class)
+    @ResponseBody
+    ErrorDescription handleBadRequest(BadgeNotFoundException e) {
+        return new ErrorDescription(ErrorsCodes.BADGE_NOT_FOUND, ErrorsCodes.BADGE_NOT_FOUND_MESSAGE);
+    }
+
+
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
     @ExceptionHandler(ApplicationDoesNotExistException.class)
     @ResponseBody

@@ -5,8 +5,10 @@ import ch.heigvd.gamification.dao.BadgeRepository;
 import ch.heigvd.gamification.dao.PointScaleRepository;
 import ch.heigvd.gamification.dao.TriggerRuleRepository;
 import ch.heigvd.gamification.dto.TriggerRuleDTO;
+import ch.heigvd.gamification.exception.BadgeNotFoundException;
 import ch.heigvd.gamification.exception.ConflictException;
 import ch.heigvd.gamification.exception.NotFoundException;
+import ch.heigvd.gamification.exception.PointScaleNotFoundException;
 import ch.heigvd.gamification.model.Application;
 import ch.heigvd.gamification.model.Badge;
 import ch.heigvd.gamification.model.PointScale;
@@ -73,12 +75,12 @@ public class TriggerRulesEndpoint implements TriggerRulesApi {
         try {
             Application app = applicationRepository.findByName(application.getName());
             PointScale pointScale = pointScaleRepository
-                    .findByApplicationNameAndName(application.getName(), ruleDTO.getName())
-                    .orElseThrow(NotFoundException::new);
+                    .findByApplicationNameAndName(application.getName(), ruleDTO.getPointScale())
+                    .orElseThrow(PointScaleNotFoundException::new);
 
             Badge badge = badgeRepository
                     .findByApplicationNameAndName(application.getName(), ruleDTO.getBadgeAwarded())
-                    .orElseThrow(NotFoundException::new);
+                    .orElseThrow(BadgeNotFoundException::new);
 
             TriggerRule rule = new TriggerRule();
 
