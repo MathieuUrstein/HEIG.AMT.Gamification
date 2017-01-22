@@ -13,8 +13,12 @@ public class TriggerRuleDTO extends RuleDTO {
     public TriggerRuleDTO() {
     }
 
-    public TriggerRuleDTO(String name) {
+    public TriggerRuleDTO(String name, String badgeAwarded, String pointScale, Integer limit, Boolean aboveLimit) {
         super(name);
+        this.badgeAwarded = badgeAwarded;
+        this.pointScale = pointScale;
+        this.limit = limit;
+        this.aboveLimit = aboveLimit;
     }
 
     @ApiModelProperty(value = "The badge awarded when rule condition matched.", required = true)

@@ -56,7 +56,7 @@ public class EventRulesEndpoint implements EventRulesAPi {
     @RequestMapping(method = RequestMethod.GET, value = "/{name}")
     public EventRuleDTO getEventRule(@ApiIgnore @RequestAttribute("application") Application app,
                                      @PathVariable String name) {
-        EventRule rule =  eventRuleRepository
+        EventRule rule = eventRuleRepository
                 .findByApplicationNameAndName(app.getName(), name)
                 .orElseThrow(NotFoundException::new);
 
@@ -109,6 +109,6 @@ public class EventRulesEndpoint implements EventRulesAPi {
     }
 
     private EventRuleDTO toEventRuleDTO(EventRule rule) {
-        return new EventRuleDTO(rule.getName());
+        return new EventRuleDTO(rule.getName(), rule.getEvent(), rule.getPointScale().getName(), rule.getPointsGiven());
     }
 }

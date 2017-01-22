@@ -62,7 +62,7 @@ public class TriggerRulesEndpoint implements TriggerRulesApi {
     @RequestMapping(method = RequestMethod.GET, value = "/{name}")
     public TriggerRuleDTO getTriggerRule(@ApiIgnore @RequestAttribute("application") Application app,
                            @PathVariable String name) {
-        TriggerRule rule =  triggerRuleRepository
+        TriggerRule rule = triggerRuleRepository
                 .findByApplicationNameAndName(app.getName(), name)
                 .orElseThrow(NotFoundException::new);
 
@@ -120,6 +120,7 @@ public class TriggerRulesEndpoint implements TriggerRulesApi {
     }
 
     private TriggerRuleDTO toTriggerRuleDTO(TriggerRule rule) {
-        return new TriggerRuleDTO(rule.getName());
+        return new TriggerRuleDTO(rule.getName(), rule.getBadgeAwarded().getName(), rule.getPointScale().getName(),
+                rule.getLimit(), rule.getAboveLimit());
     }
 }

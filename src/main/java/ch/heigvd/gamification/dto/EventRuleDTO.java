@@ -12,8 +12,11 @@ public class EventRuleDTO extends RuleDTO {
     public EventRuleDTO() {
     }
 
-    public EventRuleDTO(String name) {
+    public EventRuleDTO(String name, String event, String pointScale, Integer pointsGiven) {
         super(name);
+        this.event = event;
+        this.pointScale = pointScale;
+        this.pointsGiven = pointsGiven;
     }
 
     @ApiModelProperty(value = "The event on which the rule is applied.", required = true)
