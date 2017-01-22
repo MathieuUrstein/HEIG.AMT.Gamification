@@ -6,31 +6,31 @@ import io.swagger.annotations.ApiModelProperty;
 @ApiModel(description = "How many points an user has on a given point scale.")
 public class PointsOnPointScaleDTO {
     private String pointScale;
-    private int points;
+    private Integer points;
 
     public PointsOnPointScaleDTO() {
     }
 
-    public PointsOnPointScaleDTO(String pointScale, int points) {
+    public PointsOnPointScaleDTO(String pointScale, Integer points) {
         this.pointScale = pointScale;
         this.points = points;
     }
 
     @ApiModelProperty(value = "The point scale.", required = true)
-    public String getPointScaleId() {
+    public String getPointScale() {
         return pointScale;
     }
 
-    public void setPointScaleId(String pointScale) {
+    public void setPointScale(String pointScale) {
         this.pointScale = pointScale;
     }
 
     @ApiModelProperty(value = "How many points are on the point scale.", required = true)
-    public int getPoints() {
+    public Integer getPoints() {
         return points;
     }
 
-    public void setPoints(int points) {
+    public void setPoints(Integer points) {
         this.points = points;
     }
 }

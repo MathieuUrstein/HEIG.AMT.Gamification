@@ -35,7 +35,7 @@ public class RegisterEndpoint implements RegisterApi {
         Application app = applicationRepository.findByName(credentials.getName());
 
         if (app != null) {
-            // The name of a gamified application must be unique.
+            // The name of a gamified application must be unique
             throw new ConflictException("name");
         }
 

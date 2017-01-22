@@ -13,7 +13,7 @@ public class PointAward {
 
     @Column(name = "date", columnDefinition = "DATETIME", nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
-    private Date date;
+    private Date date = new Date();
 
     @Column(name = "points", nullable = false)
     private int points;

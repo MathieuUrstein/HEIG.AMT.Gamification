@@ -7,14 +7,18 @@ import io.swagger.annotations.ApiModelProperty;
 public class TriggerRuleDTO extends RuleDTO {
     private String badgeAwarded;
     private String pointScale;
-    private int limit;
-    private boolean aboveLimit;
+    private Integer limit;
+    private Boolean aboveLimit;
 
     public TriggerRuleDTO() {
     }
 
-    public TriggerRuleDTO(String name) {
+    public TriggerRuleDTO(String name, String badgeAwarded, String pointScale, Integer limit, Boolean aboveLimit) {
         super(name);
+        this.badgeAwarded = badgeAwarded;
+        this.pointScale = pointScale;
+        this.limit = limit;
+        this.aboveLimit = aboveLimit;
     }
 
     @ApiModelProperty(value = "The badge awarded when rule condition matched.", required = true)
@@ -36,20 +40,20 @@ public class TriggerRuleDTO extends RuleDTO {
     }
 
     @ApiModelProperty(value = "The point limit to award the badge.", required = true)
-    public int getLimit() {
+    public Integer getLimit() {
         return limit;
     }
 
-    public void setLimit(int limit) {
+    public void setLimit(Integer limit) {
         this.limit = limit;
     }
 
     @ApiModelProperty(value = "Whether the badge is given above or below point limit.", required = true)
-    public boolean getAboveLimit() {
+    public Boolean getAboveLimit() {
         return aboveLimit;
     }
 
-    public void setAboveLimit(boolean aboveLimit) {
+    public void setAboveLimit(Boolean aboveLimit) {
         this.aboveLimit = aboveLimit;
     }
 }

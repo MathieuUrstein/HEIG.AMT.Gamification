@@ -42,4 +42,12 @@ public interface ErrorsCodes {
     // JWT format is not valid
     String INVALID_JWT_FORMAT = "9";
     String INVALID_JWT_FORMAT_MESSAGE = "invalid JWT format";
+
+    // Point scale not found when creating a new rule
+    String POINT_SCALE_NOT_FOUND = "10";
+    String POINT_SCALE_NOT_FOUND_MESSAGE = "specified point scale doesn't exist";
+
+    // Badge not found when creating a new rule of type trigger
+    String BADGE_NOT_FOUND = "6";
+    String BADGE_NOT_FOUND_MESSAGE = "specified badge doesn't exist";
 }

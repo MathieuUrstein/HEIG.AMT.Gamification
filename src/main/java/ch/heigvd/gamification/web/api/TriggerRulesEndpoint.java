@@ -5,8 +5,10 @@ import ch.heigvd.gamification.dao.BadgeRepository;
 import ch.heigvd.gamification.dao.PointScaleRepository;
 import ch.heigvd.gamification.dao.TriggerRuleRepository;
 import ch.heigvd.gamification.dto.TriggerRuleDTO;
+import ch.heigvd.gamification.exception.BadgeNotFoundException;
 import ch.heigvd.gamification.exception.ConflictException;
 import ch.heigvd.gamification.exception.NotFoundException;
+import ch.heigvd.gamification.exception.PointScaleNotFoundException;
 import ch.heigvd.gamification.model.Application;
 import ch.heigvd.gamification.model.Badge;
 import ch.heigvd.gamification.model.PointScale;
@@ -24,7 +26,6 @@ import springfox.documentation.annotations.ApiIgnore;
 import javax.validation.Valid;
 import java.net.URI;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RestController
@@ -61,7 +62,7 @@ public class TriggerRulesEndpoint implements TriggerRulesApi {
     @RequestMapping(method = RequestMethod.GET, value = "/{name}")
     public TriggerRuleDTO getTriggerRule(@ApiIgnore @RequestAttribute("application") Application app,
                            @PathVariable String name) {
-        TriggerRule rule =  triggerRuleRepository
+        TriggerRule rule = triggerRuleRepository
                 .findByApplicationNameAndName(app.getName(), name)
                 .orElseThrow(NotFoundException::new);
 
@@ -73,26 +74,20 @@ public class TriggerRulesEndpoint implements TriggerRulesApi {
                                                @Valid @RequestBody TriggerRuleDTO ruleDTO) {
         try {
             Application app = applicationRepository.findByName(application.getName());
-            Optional<PointScale> optPS = pointScaleRepository
-                    .findByApplicationNameAndName(application.getName(), ruleDTO.getName());
+            PointScale pointScale = pointScaleRepository
+                    .findByApplicationNameAndName(application.getName(), ruleDTO.getPointScale())
+                    .orElseThrow(PointScaleNotFoundException::new);
 
-            if (!optPS.isPresent()) {
-                throw new NotFoundException();
-            }
-
-            Optional<Badge> optBadge = badgeRepository
-                    .findByApplicationNameAndName(application.getName(), ruleDTO.getBadgeAwarded());
-
-            if (!optBadge.isPresent()) {
-                throw new NotFoundException();
-            }
+            Badge badge = badgeRepository
+                    .findByApplicationNameAndName(application.getName(), ruleDTO.getBadgeAwarded())
+                    .orElseThrow(BadgeNotFoundException::new);
 
             TriggerRule rule = new TriggerRule();
 
             rule.setName(ruleDTO.getName());
             rule.setApplication(app);
-            rule.setBadgeAwarded(optBadge.get());
-            rule.setPointScale(optPS.get());
+            rule.setBadgeAwarded(badge);
+            rule.setPointScale(pointScale);
             rule.setLimit(ruleDTO.getLimit());
             rule.setAboveLimit(ruleDTO.getAboveLimit());
 
@@ -107,7 +102,7 @@ public class TriggerRulesEndpoint implements TriggerRulesApi {
             return ResponseEntity.created(location).build();
         }
         catch (DataIntegrityViolationException e) {
-            // The name of a trigger rule must be unique in a gamified application.
+            // The name of a rule must be unique in a gamified application
             throw new ConflictException("name");
         }
     }
@@ -125,6 +120,7 @@ public class TriggerRulesEndpoint implements TriggerRulesApi {
     }
 
     private TriggerRuleDTO toTriggerRuleDTO(TriggerRule rule) {
-        return new TriggerRuleDTO(rule.getName());
+        return new TriggerRuleDTO(rule.getName(), rule.getBadgeAwarded().getName(), rule.getPointScale().getName(),
+                rule.getLimit(), rule.getAboveLimit());
     }
 }
