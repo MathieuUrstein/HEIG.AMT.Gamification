@@ -12,7 +12,9 @@ import java.io.UnsupportedEncodingException;
 public class JWTUtils {
     public static final String SCHEMA = "Bearer";
     public static final String ISSUER = "auth0";
-    public static final String SECRET_KEY = "gamification"; // FIXME temporary
+
+    // The secret key to use. Should have been in a config file.
+    public static final String SECRET_KEY = "gamification";
 
     private static JWTVerifier verifier;
 

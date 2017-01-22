@@ -31,11 +31,6 @@ public interface EventRulesAPi {
                     response = EventRuleDTO.class
             )
     })
-    @RequestMapping(
-            value = "/rules/events/",
-            produces = {"application/json"},
-            method = RequestMethod.GET
-    )
     List<EventRuleDTO> getEventRules(Application app);
 
     @ApiOperation(
@@ -59,12 +54,6 @@ public interface EventRulesAPi {
                     response = EventRuleDTO.class
             )
     })
-    @RequestMapping(
-            value = "/rules/events/{name}/",
-            produces = {"application/json"},
-            consumes = {"application/json"},
-            method = RequestMethod.GET
-    )
     EventRuleDTO getEventRule(Application app,
                               @ApiParam(value = "The name of the event rule.", required = true)
                               @PathVariable("name") String name);
@@ -98,12 +87,6 @@ public interface EventRulesAPi {
                     response = Void.class
             )
     })
-    @RequestMapping(
-            value = "/rules/events/",
-            produces = {"application/json"},
-            consumes = {"application/json"},
-            method = RequestMethod.POST
-    )
     ResponseEntity<Void> createEventRule(Application app,
                                          @ApiParam(value = "The info needed to create a new event rule.",
                                                  required = true)
@@ -120,10 +103,6 @@ public interface EventRulesAPi {
             @ApiResponse(code = 404, message = "Event rule not found.", response = Void.class),
             @ApiResponse(code = 409, message = "Error code 3: Event rule name must be unique in the current " +
                     "application.", response = Void.class)})
-    @RequestMapping(value = "/rules/events/{id}/",
-            produces = {"application/json"},
-            consumes = {"application/json"},
-            method = RequestMethod.PATCH)
     ResponseEntity<Void> rulesEventsIdPatch(@ApiParam(value = "The id of the given event rule.", required = true)
                                             @PathVariable("id") BigDecimal id,
                                             @ApiParam(value = "The modified fields of the event rule.") @RequestBody
@@ -138,10 +117,6 @@ public interface EventRulesAPi {
             @ApiResponse(code = 404, message = "Event rule not found.", response = Void.class),
             @ApiResponse(code = 409, message = "Error code 3: Event rule name must be unique in the current " +
                     "application.", response = Void.class)})
-    @RequestMapping(value = "/rules/events/{id}/",
-            produces = {"application/json"},
-            consumes = {"application/json"},
-            method = RequestMethod.PUT)
     ResponseEntity<Void> rulesEventsIdPut(@ApiParam(value = "The id of the given event rule.", required = true)
                                           @PathVariable("id") BigDecimal id,
                                           @ApiParam(value = "The modified event rule.", required = true) @RequestBody
@@ -170,12 +145,6 @@ public interface EventRulesAPi {
                     response = Void.class
             )
     })
-    @RequestMapping(
-            value = "/rules/events/{name}/",
-            produces = {"application/json"},
-            consumes = {"application/json"},
-            method = RequestMethod.DELETE
-    )
     ResponseEntity<Void> deleteEventRule(Application app,
                                          @ApiParam(value = "The name of the given event rule.", required = true)
                                          @PathVariable("name") String name);

@@ -31,10 +31,6 @@ public interface PointScalesApi {
                     response = PointScale.class
             )
     })
-    @RequestMapping(
-            value = "/pointScales/",
-            produces = {"application/json"},
-            method = RequestMethod.GET)
     List<PointScaleDTO> getPointScales(Application app);
 
     @ApiOperation(
@@ -57,12 +53,6 @@ public interface PointScalesApi {
                     response = Void.class
             )
     })
-    @RequestMapping(
-            value = "/pointScales/{name}/",
-            produces = {"application/json"},
-            consumes = {"application/json"},
-            method = RequestMethod.GET
-    )
     PointScaleDTO getPointScale(Application app,
                                 @ApiParam(value = "The name of the point scale.", required = true)
                                 @PathVariable("name") String name);
@@ -95,12 +85,6 @@ public interface PointScalesApi {
                     response = Void.class
             )
     })
-    @RequestMapping(
-            value = "/pointScales/",
-            produces = {"application/json"},
-            consumes = {"application/json"},
-            method = RequestMethod.POST
-    )
     ResponseEntity<Void> createPointScale(Application app,
                                           @ApiParam(value = "The info needed to create a point scale.", required = true)
                                           @RequestBody PointScaleDTO pointScaleDTO);
@@ -117,10 +101,6 @@ public interface PointScalesApi {
             @ApiResponse(code = 404, message = "Point scale not found.", response = Void.class),
             @ApiResponse(code = 409, message = "Error code 3: Point scale name must be unique in the current " +
                     "application.", response = Void.class)})
-    @RequestMapping(value = "/pointScales/{id}/",
-            produces = {"application/json"},
-            consumes = {"application/json"},
-            method = RequestMethod.PATCH)
     ResponseEntity<Void> pointScalesIdPatch(@ApiParam(value = "The id of the point scale.", required = true)
                                             @PathVariable("id") BigDecimal id,
                                             @ApiParam(value = "The new info of the point scale.") @RequestBody
@@ -136,10 +116,6 @@ public interface PointScalesApi {
             @ApiResponse(code = 404, message = "Point scale not found.", response = Void.class),
             @ApiResponse(code = 409, message = "Error code 3: Point scale name must be unique in the current " +
                     "application.", response = Void.class)})
-    @RequestMapping(value = "/pointScales/{id}/",
-            produces = {"application/json"},
-            consumes = {"application/json"},
-            method = RequestMethod.PUT)
     ResponseEntity<Void> pointScalesIdPut(@ApiParam(value = "The id of the point scale.", required = true)
                                           @PathVariable("id") BigDecimal id,
                                           @ApiParam(value = "The new info of the point scale.", required = true)
@@ -166,12 +142,6 @@ public interface PointScalesApi {
                     response = Void.class
             )
     })
-    @RequestMapping(
-            value = "/pointScales/{name}/",
-            produces = {"application/json"},
-            consumes = {"application/json"},
-            method = RequestMethod.DELETE
-    )
     ResponseEntity<Void> deletePointScale(Application app,
                                           @ApiParam(value = "The name of the point scale.", required = true)
                                           @PathVariable("name") String name);

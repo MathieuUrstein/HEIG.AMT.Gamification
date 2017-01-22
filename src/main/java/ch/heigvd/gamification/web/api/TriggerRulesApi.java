@@ -31,11 +31,6 @@ public interface TriggerRulesApi {
                     response = TriggerRuleDTO.class
             )
     })
-    @RequestMapping(
-            value = "/rules/triggers/",
-            produces = {"application/json"},
-            method = RequestMethod.GET
-    )
     List<TriggerRuleDTO> getTriggerRules(Application app);
 
     @ApiOperation(
@@ -56,11 +51,6 @@ public interface TriggerRulesApi {
                     message = "Trigger rule not found.",
                     response = TriggerRuleDTO.class)
     })
-    @RequestMapping(
-            value = "/rules/triggers/{name}/",
-            produces = {"application/json"},
-            method = RequestMethod.GET
-    )
     TriggerRuleDTO getTriggerRule(Application app,
                                   @ApiParam(value = "The name of the trigger rule.", required = true)
                                   @PathVariable("name") String name);
@@ -92,12 +82,6 @@ public interface TriggerRulesApi {
                     response = Void.class
             )
     })
-    @RequestMapping(
-            value = "/rules/triggers/",
-            produces = {"application/json"},
-            consumes = {"application/json"},
-            method = RequestMethod.POST
-    )
     ResponseEntity<Void> createTriggerRule(Application app,
                                            @ApiParam(value = "The info needed to create a new trigger rule.",
                                                    required = true)
@@ -123,12 +107,6 @@ public interface TriggerRulesApi {
                     response = Void.class
             )
     })
-    @RequestMapping(
-            value = "/rules/triggers/{name}/",
-            produces = {"application/json"},
-            consumes = {"application/json"},
-            method = RequestMethod.DELETE
-    )
     ResponseEntity<Void> deleteTriggerRule(Application app,
                                            @ApiParam(value = "The name of the given trigger rule.", required = true)
                                            @PathVariable("name") String name);
@@ -145,10 +123,6 @@ public interface TriggerRulesApi {
             @ApiResponse(code = 404, message = "Trigger rule not found.", response = Void.class),
             @ApiResponse(code = 409, message = "Error code 3: Trigger rule name must be unique in the current " +
                     "application.", response = Void.class)})
-    @RequestMapping(value = "/rules/triggers/{id}/",
-            produces = {"application/json"},
-            consumes = {"application/json"},
-            method = RequestMethod.PATCH)
     ResponseEntity<Void> rulesTriggersIdPatch(@ApiParam(value = "The id of the given trigger rule.", required = true)
                                               @PathVariable("id") long id,
                                               @ApiParam(value = "The modified fields of the trigger rule.")
@@ -163,10 +137,6 @@ public interface TriggerRulesApi {
             @ApiResponse(code = 404, message = "Trigger rule not found.", response = Void.class),
             @ApiResponse(code = 409, message = "Error code 3: Trigger rule name must be unique in the current " +
                     "application.", response = Void.class)})
-    @RequestMapping(value = "/rules/triggers/{id}/",
-            produces = {"application/json"},
-            consumes = {"application/json"},
-            method = RequestMethod.PUT)
     ResponseEntity<Void> rulesTriggersIdPut(@ApiParam(value = "The id of the given trigger rule.", required = true)
                                             @PathVariable("id") long id,
                                             @ApiParam(value = "The modified trigger rule.", required = true)

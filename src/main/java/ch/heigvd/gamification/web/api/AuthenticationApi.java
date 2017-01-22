@@ -16,7 +16,7 @@ public interface AuthenticationApi {
             response = Void.class,
             tags = {}
     )
-    // TODO error codes
+
     @ApiResponses(value = {
             @ApiResponse(
                     code = 200,
@@ -32,7 +32,7 @@ public interface AuthenticationApi {
             ),
             @ApiResponse(
                     code = 400,
-                    message = "Error code todo: Application already authenticated.",
+                    message = "Error code 6: Application already authenticated.",
                     response = Void.class
             ),
             @ApiResponse(
@@ -45,12 +45,6 @@ public interface AuthenticationApi {
                     response = Void.class
             )
     })
-    @RequestMapping(
-            value = "/auth/",
-            produces = {"application/json"},
-            consumes = {"application/json"},
-            method = RequestMethod.POST
-    )
     ResponseEntity<Void> login(@ApiParam(value = "The credentials of the application.", required = true)
                                @Valid @RequestBody CredentialsDTO body);
 
