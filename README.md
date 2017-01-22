@@ -23,9 +23,9 @@ To deploy our app, you will need the following:
 2. `$ docker-compose up --build db`: this is required the first time you launch the databse, otherwise the app will fail.
 3. `$ ctrl + C`, to stop the database once it is setup.
 4. `$ docker-compose up --build`
-5. That's it, the app should be listening at [http://localhost:8080/](http://localhost:8080/). Of course, 
-if you don't run docker directly on your system (for example on a vm), the host should be the address of the docker host and not `localhost`. Moreover if you redefined `$GAMIFICATION_APP_PORT` then you need to adapt the port accordingly.
+5. That's it, the app should be listening at [http://localhost:8080/api](http://localhost:8080/api). There, you can see the documentation of the API of the platform. Of course, if you don't run docker directly on your system (for example on a vm), the host should be the address of the docker host and not `localhost`. Moreover if you redefined `$GAMIFICATION_APP_PORT` then you need to adapt the port accordingly.
 
+*Warning: if you plan to use the gamification platform, you should also change the `SECRET_KEY` value used to sign JWT in the `JWT.properties` file (in the resources folder).*
 
 # Development
 
