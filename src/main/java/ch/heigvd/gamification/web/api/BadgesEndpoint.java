@@ -82,6 +82,26 @@ public class BadgesEndpoint implements BadgesApi {
         }
     }
 
+    @RequestMapping(method = RequestMethod.PUT, value = "/{name}")
+    public ResponseEntity<Void> completeUpdateBadge(@ApiIgnore @RequestAttribute("application") Application app,
+                                                    @PathVariable String name, @Valid @RequestBody BadgeDTO badgeDTO) {
+        Badge badge = badgeRepository
+                .findByApplicationNameAndName(app.getName(), name)
+                .orElseThrow(NotFoundException::new);
+
+        try {
+            badge.setName(badgeDTO.getName());
+
+            badgeRepository.save(badge);
+
+            return ResponseEntity.ok().build();
+        }
+        catch (DataIntegrityViolationException e) {
+            // The name of a badge must be unique in a gamified application
+            throw new ConflictException("name");
+        }
+    }
+
     @RequestMapping(method = RequestMethod.DELETE, value = "/{name}")
     public ResponseEntity<Void> deleteBadge(@ApiIgnore @RequestAttribute("application") Application app,
                                             @PathVariable String name) {

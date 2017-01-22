@@ -182,31 +182,6 @@ paths:
       security:
         - JWT: []
           
-    patch:
-      summary: "Partially updates a given badge."
-      parameters:
-        - name: name
-          in: path
-          description: "The name of the badge."
-          required: true
-          type: string
-          
-        - name: body
-          in: body
-          description: "The new info of the badge."
-          required: false
-          schema:
-            $ref: "#/definitions/Badge"
-      responses:
-        200:
-          description: "Successful operation."
-        404:
-          description: "Badge not found."
-        409:
-          description: "Error code 3: Badge name must be unique in the current application."
-      security:
-        - JWT: []
-          
     delete:
       summary: "Deletes a given badge."
       parameters:
