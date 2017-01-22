@@ -17,8 +17,14 @@ public class SwaggerDocumentationConfig {
     ApiInfo apiInfo() {
         return new ApiInfoBuilder()
                 .title("AMT - gamification")
-                .description("The API specification for the AMT - gamification project. All endpoints are implicitely" +
-                        " prefixed by __/api__ for the sake of readability.")
+                .description(
+                        "The API specification for the AMT - gamification project. All endpoints are implicitely " +
+                        "prefixed by __/api__ for the sake of readability.\n\n" +
+                        "All the endpoints except `/auth/` and `/register/` are protected by a JWT-based " +
+                        "authentication, thus the following `401` errors can occur:\n\n" +
+                        "- Error code 7: No token.\n" +
+                        "- Error code 8: JWT invalid."
+                )
                 .license("")
                 .licenseUrl("http://unlicense.org")
                 .termsOfServiceUrl("")
