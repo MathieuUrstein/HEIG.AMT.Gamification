@@ -11,7 +11,7 @@ from utils.models import Application
 
 
 class TestRegistration(DatabaseWiperTestMixin, RestAPITestMixin, ConcurrentTesterMixin, unittest.TestCase):
-    url = BASE_URL + "/register"
+    url = BASE_URL + "/register/"
     invalid_methods = HTTP_METHODS - {"post"}
     required_fields = {"name", "password"}
 
