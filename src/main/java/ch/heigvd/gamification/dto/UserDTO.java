@@ -1,10 +1,19 @@
 package ch.heigvd.gamification.dto;
 
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+
 import java.util.List;
 
+@ApiModel(description = "An user generating various events in an application.")
 public class UserDTO {
+    @ApiModelProperty(value = "The username of the user.", required = true)
     private String username;
+
+    @ApiModelProperty(value = "The badges awarded to the user.", required = true)
     private List<BadgeDTO> badges;
+
+    @ApiModelProperty(value = "The points received by the user.", required = true)
     private List<PointsOnPointScaleDTO> points;
 
     public UserDTO() {

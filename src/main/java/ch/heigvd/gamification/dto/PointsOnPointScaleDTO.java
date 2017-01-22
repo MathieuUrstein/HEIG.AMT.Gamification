@@ -1,24 +1,30 @@
 package ch.heigvd.gamification.dto;
 
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 
+@ApiModel(description = "How many points an user has on a given point scale.")
 public class PointsOnPointScaleDTO {
-    private long pointScaleId;
+    @ApiModelProperty(value = "The point scale.", required = true)
+    private String pointScale;
+
+    @ApiModelProperty(value = "How many points are on the point scale.", required = true)
     private int points;
 
     public PointsOnPointScaleDTO() {
     }
 
-    public PointsOnPointScaleDTO(long pointScaleId, int points) {
-        this.pointScaleId = pointScaleId;
+    public PointsOnPointScaleDTO(String pointScale, int points) {
+        this.pointScale = pointScale;
         this.points = points;
     }
 
-    public long getPointScaleId() {
-        return pointScaleId;
+    public String getPointScaleId() {
+        return pointScale;
     }
 
-    public void setPointScaleId(long pointScaleId) {
-        this.pointScaleId = pointScaleId;
+    public void setPointScaleId(String pointScale) {
+        this.pointScale = pointScale;
     }
 
     public int getPoints() {

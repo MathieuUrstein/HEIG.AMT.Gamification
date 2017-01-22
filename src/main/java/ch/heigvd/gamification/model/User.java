@@ -96,9 +96,9 @@ public class User {
                 .map(ba -> ba.getBadge().toDTO())
                 .collect(Collectors.toList());
 
-        Map<Long, Integer> pointsOnPointScales = new HashMap<>();
+        Map<String, Integer> pointsOnPointScales = new HashMap<>();
         for (PointAward pa: pointAwards) {
-            long key = pa.getPointScale().getId();
+            String key = pa.getPointScale().getName();
             int points = pointsOnPointScales.containsKey(key) ? pointsOnPointScales.get(key) : 0;
             pointsOnPointScales.put(key, points + pa.getPoints());
         }
