@@ -35,15 +35,7 @@ public class EventProcessor {
     @Async
     @Transactional
     public void processEvent(Application application, EventDTO eventDTO) {
-
-
-        /*Event event = new Event();
-
-        event.setType(eventDTO.getType());
-        event.setUser(user);
-        user.addEvent(event);
-
-        userRepository.save(user);*/
+        // Here we could save the event if we wanted to do something later with it
 
         User u = getOrCreateUser(application, eventDTO.getUsername());
         givePoints(u, application.getName(), eventDTO.getType());
@@ -162,6 +154,7 @@ public class EventProcessor {
             user.setUsername(username);
             user.setApplication(application);
             app.addUser(user);
+            userRepository.save(user);
 
             return user;
         }

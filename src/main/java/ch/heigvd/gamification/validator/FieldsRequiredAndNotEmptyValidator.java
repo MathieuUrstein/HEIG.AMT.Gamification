@@ -10,9 +10,17 @@ import java.beans.Introspector;
 import java.beans.PropertyDescriptor;
 import java.lang.reflect.InvocationTargetException;
 
+/**
+ * Used as a validator to ensure that every field in the specified DTO is present in the json.
+ */
 public class FieldsRequiredAndNotEmptyValidator implements Validator {
     private final Class dtoClass;
 
+    /**
+     * The DTO containing the fields that will be used to validate json.
+     *
+     * @param dtoClass The class od the DTO.
+     */
     public FieldsRequiredAndNotEmptyValidator(Class dtoClass) {
         this.dtoClass = dtoClass;
     }

@@ -7,6 +7,9 @@ import org.springframework.validation.Errors;
 import org.springframework.validation.ValidationUtils;
 import org.springframework.validation.Validator;
 
+/**
+ * Used as a validator for the fields of a badge in a json.
+ */
 public class BadgeDTOValidator implements Validator {
 
     @Override

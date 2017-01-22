@@ -33,13 +33,17 @@ public class EventsEndpoint implements EventsApi {
     @RequestMapping(method = RequestMethod.POST)
     public ResponseEntity<Void> createEvent(@ApiIgnore @RequestAttribute("application") Application app,
                                             @Valid @RequestBody EventDTO eventDTO) {
-        try {
-            eventProcessor.processEvent(app, eventDTO);
-        }
-        catch (DataIntegrityViolationException e) {
-            // We relaunch the request when it fails.
-            eventProcessor.processEvent(app, eventDTO);
-        }
+
+        // retry processing event as long as there is a
+        boolean exception;
+        do {
+            exception = false;
+            try {
+                eventProcessor.processEvent(app, eventDTO);
+            } catch (DataIntegrityViolationException e) {
+                exception = true;
+            }
+        } while (exception);
 
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
