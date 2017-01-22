@@ -8,6 +8,7 @@ import ch.heigvd.gamification.util.JWTUtils;
 import ch.heigvd.gamification.util.URIs;
 import ch.heigvd.gamification.validator.FieldsRequiredAndNotEmptyValidator;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.WebDataBinder;
@@ -32,18 +33,15 @@ public class RegisterEndpoint implements RegisterApi {
 
     @RequestMapping(method = RequestMethod.POST)
     public ResponseEntity<Void> register(@Valid @RequestBody CredentialsDTO credentials) {
-        Application app = applicationRepository.findByName(credentials.getName());
-
-        if (app != null) {
-            // The name of a gamified application must be unique
-            throw new ConflictException("name");
-        }
-
-        app = new Application();
+        Application app = new Application();
         app.setName(credentials.getName());
         app.setPassword(credentials.getPassword());
 
-        applicationRepository.save(app);
+        try {
+            applicationRepository.save(app);
+        } catch (DataIntegrityViolationException e) {
+            throw new ConflictException("name");
+        }
 
         return ResponseEntity
                 .status(HttpStatus.CREATED)
