@@ -122,7 +122,6 @@ class RestAPITestMixin(APITestMixin):
                 self.assertEqual(self.request(method, self.url).status_code, requests.codes.not_allowed)
 
     def test_required_fields(self):
-        # FIXME skip if "post" is not acceptable
         response = self.request("post", self.url, json=dict())
         response_keys = set(response.json().keys())
 

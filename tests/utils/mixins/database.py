@@ -52,3 +52,10 @@ class DatabaseWiperTestMixin(DatabaseAccessMixin):
 
         for table in reversed(self.database_meta.sorted_tables):
             self.database_connection.execute(table.delete())
+
+    @classmethod
+    def tearDownClass(cls):
+        for table in reversed(cls.database_meta.sorted_tables):
+            cls.database_connection.execute(table.delete())
+
+        super().tearDownClass()
