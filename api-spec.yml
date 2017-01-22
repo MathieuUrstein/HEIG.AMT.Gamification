@@ -50,9 +50,9 @@ paths:
               description: "The JWT token."
               type: string
         400:
-          description: "Error code todo: Application already authenticated."
+          description: "Error code 6: Application already authenticated."
         401:
-          description: "- Error code 4: The application does not exist.\n- Error code 5: Authentication failed. \n- Error code todo: Invalid JWT.\n- Error code todo: Invalid JWT format."
+          description: "- Error code 4: The application does not exist.\n- Error code 5: Authentication failed. \n- Error code 8: Invalid JWT.\n- Error code 9: Invalid JWT format."
   
   /events/:
     post:
