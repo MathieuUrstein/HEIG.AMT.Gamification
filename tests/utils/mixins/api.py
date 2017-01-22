@@ -44,7 +44,9 @@ class APITestMixin:
         except JSONDecodeError:
             result = response.text
 
-        return "{}\n\nStatus code: {}\nResponse:\n{}\n".format(base_message, response.status_code, result)
+        return "{}\n\nUrl: {}\nStatus code: {}\nResponse:\n{}\n".format(
+            base_message, response.url, response.status_code, result
+        )
 
 
 class RestAPITestMixin(APITestMixin):

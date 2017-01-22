@@ -48,6 +48,12 @@ class TestRegistration(DatabaseWiperTestMixin, RestAPITestMixin, ConcurrentTeste
         self.assertNotEqual(self.application["password"], result["password"], msg="Password is not hashed")
 
     def test_can_only_create_one_application_with_a_given_name(self):
+        self.check_precondition(
+            requests.post(self.url, json=self.application),
+            requests.codes.created,
+            "Cannot create users, aborting test"
+        )
+
         for i in range(self.concurrency_tests):
             app = dict(name="conc-{}".format(i), password="pass")
             res = self.request_concurrently("post", self.url, self.request_per_concurrent_test, json=app)
