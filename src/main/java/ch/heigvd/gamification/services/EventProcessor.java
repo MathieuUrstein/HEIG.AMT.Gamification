@@ -50,7 +50,7 @@ public class EventProcessor {
      * @param event The current event type.
      */
     private void givePoints(User u, String appName, String event) {
-        for (EventRule er: eventRuleRepository.findByApplicationName(appName)) {
+        for (EventRule er : eventRuleRepository.findByApplicationName(appName)) {
             if (er.getEvent().equals(event)) {
                 createPointAward(u, er);
             }
@@ -84,7 +84,7 @@ public class EventProcessor {
                 .findByUserApplicationNameAndUserUsername(appName, user.getUsername());
         Map<PointScale, Integer> sumPointsByScale = computeSumPointsByScale(appName, user.getUsername());
 
-        for (TriggerRule tr: triggerRuleRepository.findByApplicationName(appName)) {
+        for (TriggerRule tr : triggerRuleRepository.findByApplicationName(appName)) {
             int totPointsReceived = sumPointsByScale.get(tr.getPointScale());
             boolean above = tr.getAboveLimit();
             if ((above && totPointsReceived >= tr.getLimit()) || (!above && totPointsReceived <= tr.getLimit())) {
@@ -122,7 +122,7 @@ public class EventProcessor {
      * @param badgeAwards The badges awards.
      */
     private void createBadgeAwardIfNotOwned(User user, Badge badge, List<BadgeAward> badgeAwards) {
-        for (BadgeAward ba: badgeAwards) {
+        for (BadgeAward ba : badgeAwards) {
             if (ba.getBadge() == badge) {
                 return;
             }
