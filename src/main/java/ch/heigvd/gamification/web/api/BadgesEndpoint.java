@@ -49,10 +49,10 @@ public class BadgesEndpoint implements BadgesApi {
                 .collect(Collectors.toList());
     }
 
-    @RequestMapping(method = RequestMethod.GET, value = "/{id}")
-    public BadgeDTO getBadge(@ApiIgnore @RequestAttribute("application") Application app, @PathVariable long id) {
+    @RequestMapping(method = RequestMethod.GET, value = "/{name}")
+    public BadgeDTO getBadge(@ApiIgnore @RequestAttribute("application") Application app, @PathVariable String name) {
         Badge badge = badgeRepository
-                .findByApplicationNameAndId(app.getName(), id)
+                .findByApplicationNameAndName(app.getName(), name)
                 .orElseThrow(NotFoundException::new);
 
         return badge.toDTO();
@@ -75,8 +75,8 @@ public class BadgesEndpoint implements BadgesApi {
             badgeRepository.save(badge);
 
             URI location = ServletUriComponentsBuilder
-                    .fromCurrentRequest().path("/{id}")
-                    .buildAndExpand(badge.getId()).toUri();
+                    .fromCurrentRequest().path("/{name}")
+                    .buildAndExpand(badge.getName()).toUri();
 
             return ResponseEntity.created(location).build();
         }
@@ -86,11 +86,11 @@ public class BadgesEndpoint implements BadgesApi {
         }
     }
 
-    @RequestMapping(method = RequestMethod.DELETE, value = "/{id}")
+    @RequestMapping(method = RequestMethod.DELETE, value = "/{name}")
     public ResponseEntity<Void> deleteBadge(@ApiIgnore @RequestAttribute("application") Application app,
-                                            @PathVariable long id) {
+                                            @PathVariable String name) {
         Badge badge = badgeRepository
-                .findByApplicationNameAndId(app.getName(), id)
+                .findByApplicationNameAndName(app.getName(), name)
                 .orElseThrow(NotFoundException::new);
 
         badgeRepository.delete(badge);

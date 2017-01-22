@@ -85,15 +85,15 @@ paths:
       security:
         - JWT: []
           
-  /users/{id}/:
+  /users/{username}/:
     get:
       summary: "Retrieves a specified user."
       parameters:
-        - name: id
+        - name: username
           in: path
-          description: "The id of the user."
+          description: "The username of the user."
           required: true
-          type: number
+          type: string
       responses:
         200:
           description: "Successful operation"
@@ -138,20 +138,20 @@ paths:
       security:
         - JWT: []
           
-  /badges/{id}/:
+  /badges/{name}/:
     get:
       summary: "Retrieves a given badge."
       parameters:
-        - name: id
+        - name: name
           in: path
-          description: "The id of the badge."
+          description: "The name of the badge."
           required: true
-          type: number
+          type: string
       responses:
         200:
           description: "Successful operation."
           schema:
-            $ref: "#/definitions/BadgeWithId"
+            $ref: "#/definitions/Badge"
         404:
           description: "Badge not found."
       security:
@@ -160,11 +160,11 @@ paths:
     put:
       summary: "Updates a given badge."
       parameters:
-        - name: id
+        - name: name
           in: path
-          description: "The id of the badge."
+          description: "The name of the badge."
           required: true
-          type: number
+          type: string
           
         - name: body
           in: body
@@ -185,11 +185,11 @@ paths:
     patch:
       summary: "Partially updates a given badge."
       parameters:
-        - name: id
+        - name: name
           in: path
-          description: "The id of the badge."
+          description: "The name of the badge."
           required: true
-          type: number
+          type: string
           
         - name: body
           in: body
@@ -210,11 +210,11 @@ paths:
     delete:
       summary: "Deletes a given badge."
       parameters:
-        - name: id
+        - name: name
           in: path
-          description: "The id of the badge."
+          description: "The name of the badge."
           required: true
-          type: number
+          type: string
       responses:
         200:
           description: "Successful operation."
@@ -232,7 +232,7 @@ paths:
           schema:
             type: array
             items:
-              $ref: "#/definitions/PointScaleWithId"
+              $ref: "#/definitions/PointScale"
       security:
         - JWT: []
   
@@ -257,22 +257,22 @@ paths:
       security:
         - JWT: []
   
-  /pointScales/{id}/:
+  /pointScales/{name}/:
     get:
       summary: "Retrieves the given point scale."
       parameters:
-        - name: id
+        - name: name
           in: path
-          description: "The id of the point scale."
+          description: "The name of the point scale."
           required: true
-          type: number
+          type: string
       responses:
         200:
           description: "Successful operation."
           schema:
             type: array
             items:
-              $ref: "#/definitions/PointScaleWithId"
+              $ref: "#/definitions/PointScale"
         404:
           description: "Point scale not found."
       security:
@@ -281,11 +281,11 @@ paths:
     put:
       summary: "Updates the given point scale."
       parameters:
-        - name: id
+        - name: name
           in: path
-          description: "The id of the point scale."
+          description: "The name of the point scale."
           required: true
-          type: number
+          type: string
           
         - name: body
           in: body
@@ -306,11 +306,11 @@ paths:
     patch:
       summary: "Partially updates the given point scale."
       parameters:
-        - name: id
+        - name: name
           in: path
-          description: "The id of the point scale."
+          description: "The name of the point scale."
           required: true
-          type: number
+          type: string
           
         - name: body
           in: body
@@ -331,11 +331,11 @@ paths:
     delete:
       summary: "Deletes the given point scale."
       parameters:
-        - name: id
+        - name: name
           in: path
-          description: "The id of the point scale."
+          description: "The name of the point scale."
           required: true
-          type: number
+          type: string
       responses:
         200:
           description: "Successful operation."
@@ -353,7 +353,7 @@ paths:
           schema:
             type: array
             items:
-              $ref: "#/definitions/EventRuleWithId"
+              $ref: "#/definitions/EventRule"
       security:
         - JWT: []
   
@@ -378,20 +378,20 @@ paths:
       security:
         - JWT: []
     
-  /rules/events/{id}/:
+  /rules/events/{name}/:
     get:
       summary: "Retrieves a given event rule."
       parameters:
-        - name: id
+        - name: name
           in: path
-          description: "The id of the event rule."
+          description: "The name of the event rule."
           required: true
-          type: number
+          type: string
       responses:
         200:
           description: "Successful operation."
           schema:
-            $ref: "#/definitions/EventRuleWithId"
+            $ref: "#/definitions/EventRule"
         404:
           description: "Event rule not found."
       security:
@@ -400,11 +400,11 @@ paths:
     put:
       summary: "Updates the given event rule."
       parameters:
-        - name: id
+        - name: name
           in: path
-          description: "The id of the given event rule."
+          description: "The name of the given event rule."
           required: true
-          type: number
+          type: string
           
         - name: body
           in: body
@@ -425,11 +425,11 @@ paths:
     patch:
       summary: "Partially updates the given event rule."
       parameters:
-        - name: id
+        - name: name
           in: path
-          description: "The id of the given event rule."
+          description: "The name of the given event rule."
           required: true
-          type: number
+          type: string
           
         - name: body
           in: body
@@ -450,11 +450,11 @@ paths:
     delete:
       summary: "Deletes the given event rule."
       parameters:
-        - name: id
+        - name: name
           in: path
-          description: "The id of the given event rule."
+          description: "The name of the given event rule."
           required: true
-          type: number
+          type: string
       responses:
         200:
           description: "Successful operation."
@@ -472,7 +472,7 @@ paths:
           schema:
             type: array
             items:
-              $ref: "#/definitions/TriggerRuleWithId"
+              $ref: "#/definitions/TriggerRule"
       security:
         - JWT: []
   
@@ -497,20 +497,20 @@ paths:
       security:
         - JWT: []
     
-  /rules/triggers/{id}/:
+  /rules/triggers/{name}/:
     get:
       summary: "Retrieves a given trigger rule."
       parameters:
-        - name: id
+        - name: name
           in: path
-          description: "The id of the trigger rule."
+          description: "The name of the trigger rule."
           required: true
-          type: number
+          type: string
       responses:
         200:
           description: "Successful operation."
           schema:
-            $ref: "#/definitions/TriggerRuleWithId"
+            $ref: "#/definitions/TriggerRule"
         404:
           description: "Trigger rule not found."
       security:
@@ -519,11 +519,11 @@ paths:
     put:
       summary: "Updates the given trigger rule."
       parameters:
-        - name: id
+        - name: name
           in: path
-          description: "The id of the given trigger rule."
+          description: "The name of the given trigger rule."
           required: true
-          type: number
+          type: string
           
         - name: body
           in: body
@@ -544,11 +544,11 @@ paths:
     patch:
       summary: "Partially updates the given trigger rule."
       parameters:
-        - name: id
+        - name: name
           in: path
-          description: "The id of the given trigger rule."
+          description: "The name of the given trigger rule."
           required: true
-          type: number
+          type: string
           
         - name: body
           in: body
@@ -569,11 +569,11 @@ paths:
     delete:
       summary: "Deletes the given trigger rule."
       parameters:
-        - name: id
+        - name: name
           in: path
-          description: "The id of the given trigger rule."
+          description: "The name of the given trigger rule."
           required: true
-          type: number
+          type: string
       responses:
         200:
           description: "Successful operation."
@@ -659,16 +659,6 @@ definitions:
       name:
         type: string
         description: "The name of the badge."
-        
-  BadgeWithId:
-    description: "A badge with his id."
-    type: object
-    allOf:
-      - $ref: "#/definitions/Badge"
-      - properties:
-          id:
-            description: "The id of badge."
-            type: number
             
   PointScale:
     description: "A point scale in an application."
@@ -677,16 +667,6 @@ definitions:
       name:
         description: "The name of the point scale."
         type: string
-        
-  PointScaleWithId:
-    description: "A point scale with its id."
-    type: object
-    allOf:
-      - $ref: "#/definitions/PointScale"
-      - properties:
-          id:
-            description: "The id of badge."
-            type: number
 
   EventRule:
     description: "A rule applied on event creation."
@@ -705,16 +685,6 @@ definitions:
         type: number
         description: "How many points are given on the point scale."
         
-            
-  EventRuleWithId:
-    description: "An event rule with its id."
-    type: object
-    allOf:
-      - $ref: "#/definitions/EventRule"
-      - properties:
-          id:
-            description: "The id of the event rule."
-            type: number
 
   TriggerRule:
     description: "A rule applied on point scale change."
@@ -735,14 +705,3 @@ definitions:
       aboveLimit:
         type: boolean
         description: "Whether the badge is given above or below point limit."
-        
-  TriggerRuleWithId:
-    description: "A trigger rule with its id."
-    type: object
-    allOf:
-      - $ref: "#/definitions/TriggerRule"
-      - properties:
-          id:
-            description: "The id of the trigger rule."
-            type: number
-      

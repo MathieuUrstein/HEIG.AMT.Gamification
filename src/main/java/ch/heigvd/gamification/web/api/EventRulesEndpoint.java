@@ -1,12 +1,14 @@
 package ch.heigvd.gamification.web.api;
 
-import ch.heigvd.gamification.dao.*;
+import ch.heigvd.gamification.dao.ApplicationRepository;
+import ch.heigvd.gamification.dao.EventRuleRepository;
+import ch.heigvd.gamification.dao.PointScaleRepository;
 import ch.heigvd.gamification.dto.EventRuleDTO;
-import ch.heigvd.gamification.dto.RuleDTO;
-import ch.heigvd.gamification.dto.TriggerRuleDTO;
 import ch.heigvd.gamification.exception.ConflictException;
 import ch.heigvd.gamification.exception.NotFoundException;
-import ch.heigvd.gamification.model.*;
+import ch.heigvd.gamification.model.Application;
+import ch.heigvd.gamification.model.EventRule;
+import ch.heigvd.gamification.model.PointScale;
 import ch.heigvd.gamification.util.URIs;
 import ch.heigvd.gamification.validator.FieldsRequiredAndNotEmptyValidator;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,11 +53,11 @@ public class EventRulesEndpoint implements EventRulesAPi {
                 .collect(Collectors.toList());
     }
 
-    @RequestMapping(method = RequestMethod.GET, value = "/{id}")
+    @RequestMapping(method = RequestMethod.GET, value = "/{name}")
     public EventRuleDTO getEventRule(@ApiIgnore @RequestAttribute("application") Application app,
-                                     @PathVariable long id) {
+                                     @PathVariable String name) {
         EventRule rule =  eventRuleRepository
-                .findByApplicationNameAndId(app.getName(), id)
+                .findByApplicationNameAndName(app.getName(), name)
                 .orElseThrow(NotFoundException::new);
 
         return toEventRuleDTO(rule);
@@ -85,23 +87,23 @@ public class EventRulesEndpoint implements EventRulesAPi {
             eventRuleRepository.save(rule);
 
             URI location = ServletUriComponentsBuilder
-                    .fromCurrentRequest().path("/{id}")
-                    .buildAndExpand(rule.getId()).toUri();
+                    .fromCurrentRequest().path("/{name}")
+                    .buildAndExpand(rule.getName()).toUri();
 
             return ResponseEntity.created(location).build();
         }
 
         catch (DataIntegrityViolationException e) {
-            // The name of a rule must be unique in a gamified application.
+            // The name of a event rule must be unique in a gamified application.
             throw new ConflictException("name");
         }
     }
 
-    @RequestMapping(method = RequestMethod.DELETE, value = "/{id}")
+    @RequestMapping(method = RequestMethod.DELETE, value = "/{name}")
     public ResponseEntity<Void> deleteEventRule(@ApiIgnore @RequestAttribute("application") Application app,
-                                                @PathVariable long id) {
+                                                @PathVariable String name) {
         EventRule rule = eventRuleRepository
-                .findByApplicationNameAndId(app.getName(), id)
+                .findByApplicationNameAndName(app.getName(), name)
                 .orElseThrow(NotFoundException::new);
 
         eventRuleRepository.delete(rule);

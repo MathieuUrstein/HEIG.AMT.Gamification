@@ -60,14 +60,14 @@ public interface EventRulesAPi {
             )
     })
     @RequestMapping(
-            value = "/rules/events/{id}/",
+            value = "/rules/events/{name}/",
             produces = {"application/json"},
             consumes = {"application/json"},
             method = RequestMethod.GET
     )
     EventRuleDTO getEventRule(Application app,
-                              @ApiParam(value = "The id of the event rule.", required = true)
-                              @PathVariable("id") long id);
+                              @ApiParam(value = "The name of the event rule.", required = true)
+                              @PathVariable("name") String name);
 
     @ApiOperation(
             value = "Creates a new event rule.",
@@ -171,13 +171,13 @@ public interface EventRulesAPi {
             )
     })
     @RequestMapping(
-            value = "/rules/events/{id}/",
+            value = "/rules/events/{name}/",
             produces = {"application/json"},
             consumes = {"application/json"},
             method = RequestMethod.DELETE
     )
     ResponseEntity<Void> deleteEventRule(Application app,
-                                         @ApiParam(value = "The id of the given event rule.", required = true)
-                                         @PathVariable("id") long id);
+                                         @ApiParam(value = "The name of the given event rule.", required = true)
+                                         @PathVariable("name") String name);
 
 }

@@ -58,14 +58,14 @@ public interface PointScalesApi {
             )
     })
     @RequestMapping(
-            value = "/pointScales/{id}/",
+            value = "/pointScales/{name}/",
             produces = {"application/json"},
             consumes = {"application/json"},
             method = RequestMethod.GET
     )
     PointScaleDTO getPointScale(Application app,
-                                @ApiParam(value = "The id of the point scale.", required = true)
-                                @PathVariable("id") long id);
+                                @ApiParam(value = "The name of the point scale.", required = true)
+                                @PathVariable("name") String name);
 
 
     @ApiOperation(
@@ -167,12 +167,12 @@ public interface PointScalesApi {
             )
     })
     @RequestMapping(
-            value = "/pointScales/{id}/",
+            value = "/pointScales/{name}/",
             produces = {"application/json"},
             consumes = {"application/json"},
             method = RequestMethod.DELETE
     )
     ResponseEntity<Void> deletePointScale(Application app,
-                                          @ApiParam(value = "The id of the point scale.", required = true)
-                                          @PathVariable("id") long id);
+                                          @ApiParam(value = "The name of the point scale.", required = true)
+                                          @PathVariable("name") String name);
 }

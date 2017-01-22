@@ -57,12 +57,12 @@ public interface BadgesApi {
             )
     })
     @RequestMapping(
-            value = "/badges/{id}/",
+            value = "/badges/{name}/",
             produces = {"application/json"},
             method = RequestMethod.GET
     )
     BadgeDTO getBadge(@ApiIgnore @RequestAttribute("application") Application app,
-                      @ApiParam(value = "The id of the badge.", required = true) @PathVariable("id") long id);
+                      @ApiParam(value = "The name of the badge.", required = true) @PathVariable("name") String name);
 
     @ApiOperation(
             value = "Creates a new badge.",
@@ -150,13 +150,13 @@ public interface BadgesApi {
             )
     })
     @RequestMapping(
-            value = "/badges/{id}/",
+            value = "/badges/{name}/",
             produces = {"application/json"},
             consumes = {"application/json"},
             method = RequestMethod.DELETE
     )
     ResponseEntity<Void> deleteBadge(@ApiIgnore @RequestAttribute("application") Application app,
-                                     @ApiParam(value = "The id of the badge.", required = true)
-                                     @PathVariable("id") long id);
+                                     @ApiParam(value = "The name of the badge.", required = true)
+                                     @PathVariable("name") String name);
 
 }
