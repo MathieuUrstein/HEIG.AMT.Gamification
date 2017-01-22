@@ -87,7 +87,7 @@ public class EventRulesEndpoint implements EventRulesAPi {
             eventRuleRepository.save(rule);
 
             URI location = ServletUriComponentsBuilder
-                    .fromCurrentRequest().path("/{name}")
+                    .fromCurrentRequest().path("/{name}/")
                     .buildAndExpand(rule.getName()).toUri();
 
             return ResponseEntity.created(location).build();

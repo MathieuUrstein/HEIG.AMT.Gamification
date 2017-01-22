@@ -1,5 +1,9 @@
 package ch.heigvd.gamification.dto;
 
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+
+@ApiModel(description = "A rule applied on event creation.")
 public class EventRuleDTO extends RuleDTO {
     private String event;
     private String pointScale;
@@ -12,6 +16,7 @@ public class EventRuleDTO extends RuleDTO {
         super(name);
     }
 
+    @ApiModelProperty(value = "The event on which the rule is applied.", required = true)
     public String getEvent() {
         return event;
     }
@@ -20,6 +25,7 @@ public class EventRuleDTO extends RuleDTO {
         this.event = event;
     }
 
+    @ApiModelProperty(value = "The point scale on which the rule is applied.", required = true)
     public String getPointScale() {
         return pointScale;
     }
@@ -28,6 +34,7 @@ public class EventRuleDTO extends RuleDTO {
         this.pointScale = pointScale;
     }
 
+    @ApiModelProperty(value = "How many points are given on the point scale.", required = true)
     public int getPointsGiven() {
         return pointsGiven;
     }

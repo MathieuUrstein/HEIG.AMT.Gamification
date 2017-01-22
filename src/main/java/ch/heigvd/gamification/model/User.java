@@ -26,9 +26,6 @@ public class User {
     @JoinColumn(name = "application_id", nullable = false)
     private Application application;
 
-    @OneToMany(targetEntity = Event.class, fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "user")
-    private List<Event> events = new LinkedList<>();
-
     @OneToMany(targetEntity = BadgeAward.class, fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "user")
     private List<BadgeAward> badgeAwards = new LinkedList<>();
 
@@ -66,14 +63,6 @@ public class User {
         this.application = application;
     }
 
-    public List<Event> getEvents() {
-        return events;
-    }
-
-    public void addEvent(Event event) {
-        events.add(event);
-    }
-
     public List<BadgeAward> getBadgeAwards() {
         return badgeAwards;
     }
@@ -96,9 +85,9 @@ public class User {
                 .map(ba -> ba.getBadge().toDTO())
                 .collect(Collectors.toList());
 
-        Map<Long, Integer> pointsOnPointScales = new HashMap<>();
+        Map<String, Integer> pointsOnPointScales = new HashMap<>();
         for (PointAward pa: pointAwards) {
-            long key = pa.getPointScale().getId();
+            String key = pa.getPointScale().getName();
             int points = pointsOnPointScales.containsKey(key) ? pointsOnPointScales.get(key) : 0;
             pointsOnPointScales.put(key, points + pa.getPoints());
         }

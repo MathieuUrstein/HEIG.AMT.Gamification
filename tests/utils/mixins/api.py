@@ -169,7 +169,7 @@ class RegisterApplicationMixin(metaclass=ABCMeta):
         :param password: password of the application
         :return: an authentication token for registering
         """
-        response = requests.post(BASE_URL + "/register", json=dict(name=name, password=password))
+        response = requests.post(BASE_URL + "/register/", json=dict(name=name, password=password))
 
         if response.status_code != requests.codes.created:
             raise Exception("Could not register application, aborting test")

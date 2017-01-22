@@ -69,7 +69,7 @@ public class PointScalesEndpoint implements PointScalesApi {
             pointScaleRepository.save(pointScale);
 
             URI location = ServletUriComponentsBuilder
-                    .fromCurrentRequest().path("/{name}")
+                    .fromCurrentRequest().path("/{name}/")
                     .buildAndExpand(pointScale.getName()).toUri();
 
             return ResponseEntity.created(location).build();

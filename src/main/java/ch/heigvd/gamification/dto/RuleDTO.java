@@ -1,5 +1,7 @@
 package ch.heigvd.gamification.dto;
 
+import io.swagger.annotations.ApiModelProperty;
+
 public class RuleDTO {
     private String name;
 
@@ -14,6 +16,7 @@ public class RuleDTO {
         this.name = name;
     }
 
+    @ApiModelProperty(value = "The name of the rule.", required = true)
     public String getName() {
         return name;
     }

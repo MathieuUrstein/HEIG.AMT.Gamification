@@ -13,3 +13,4 @@ Base.prepare(engine, reflect=True)
 Application = Base.classes.application
 Badge = Base.classes.badge
 Event = Base.classes.event
+User = Base.classes.user

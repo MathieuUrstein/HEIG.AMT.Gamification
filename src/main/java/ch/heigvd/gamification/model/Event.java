@@ -14,11 +14,16 @@ public class Event {
     @Column(name = "type", nullable = false)
     private String type;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", nullable = false)
-    private User user;
+    @Column(name = "username", nullable = false)
+    private String username;
 
-    public Event() {}
+    public Event() {
+    }
+
+    public Event(String type, String username) {
+        this.type = type;
+        this.username = username;
+    }
 
     public long getId() {
         return id;
@@ -36,11 +41,11 @@ public class Event {
         this.type = type;
     }
 
-    public User getUser() {
-        return user;
+    public String getUserName() {
+        return username;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setUserName(User user) {
+        this.username = username;
     }
 }
