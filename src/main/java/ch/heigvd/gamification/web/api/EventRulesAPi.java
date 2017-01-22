@@ -73,12 +73,12 @@ public interface EventRulesAPi {
                     message = "Successful operation.",
                     response = Void.class,
                     responseHeaders = {
-                    @ResponseHeader(
-                            name = "Location",
-                            description = "URI of newly created object.",
-                            response = String.class
-                    )
-            }
+                            @ResponseHeader(
+                                    name = "Location",
+                                    description = "URI of newly created object.",
+                                    response = String.class
+                            )
+                    }
             ),
             @ApiResponse(
                     code = 409,
