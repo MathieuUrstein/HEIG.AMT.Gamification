@@ -77,7 +77,7 @@ class IntegrationTest(DatabaseWiperTestMixin, APITestMixin, TestCase):
 
         # create a second event rule
         data = dict(
-            pointScale=point_scale_testing, name=event_rule_count_test_fixed, event=event_test_fixed, pointsGiven=1
+            pointScale=point_scale_testing, name=event_rule_count_test_fixed, event=event_test_fixed, pointsGiven=3
         )
         self.check_answer(
             self.request("post", self.url + "/rules/events/", json=data),
@@ -103,23 +103,21 @@ class IntegrationTest(DatabaseWiperTestMixin, APITestMixin, TestCase):
             "Could not create an event"
         )
 
-        # check that user was indeed created and given the points
+        # check that user was indeed created and given the points but no award
         users = self.request("get", self.url + "/users/").json()
-        self.assertEqual(len(users), 1, "More user are present than what we prepared")
+        self.assertEqual(len(users), 1, "More user are present than what we prepared.")
         user = users[0]
 
         self.assertEqual(
-            len(user["points"]), 1, "User received points in more than one pointScale, which we did not create"
+            len(user["points"]),
+            1,
+            "User received points in more than one pointScale which we did not create, or in none"
         )
 
-        self.assertEqual(user["points"][0]["points"], 1, "User did not receive the one point it was awarded")
+        self.assertEqual(user["points"][0]["points"], 1, "User did not receive the one point it was awarded.")
 
-        data = dict(type=event_test_created, username=user)
-        self.check_answer(
-            self.request("post", self.url + "/events/", json=data),
-            requests.codes.created,
-            "Could not create an event"
-        )
+        self.assertEqual(len(user["badges"]), 0, "User was awarded points even though he shouldn't have.")
+
         # give more points to get the award
         data = dict(type=event_test_fixed, username=user)
         for _ in range(2):

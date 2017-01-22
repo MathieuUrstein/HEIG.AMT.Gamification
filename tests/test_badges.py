@@ -41,6 +41,51 @@ class TestBadges(DatabaseWiperTestMixin, AuthenticatedRestAPIMixin, ConcurrentTe
         )
         self.check_message(r.json()["name"])
 
+    def test_can_delete_badge(self):
+        self.check_precondition(
+            self.request("post", self.url, json=self.badge),
+            requests.codes.created,
+            "Could not create first application badge"
+        )
+        self.assertEqual(
+            self.request("delete", self.url + self.badge["name"]).status_code,
+            requests.codes.ok,
+            "Could not delete badge"
+        )
+
+    def test_cannot_delete_non_existing_badge(self):
+        self.assertEqual(
+            self.request("delete", self.url + "test").status_code,
+            requests.codes.not_found,
+            "Could delete badge that was not created"
+        )
+
+    def test_cannot_delete_badge_when_not_authenticated(self):
+        self.check_precondition(
+            self.request("post", self.url, json=self.badge),
+            requests.codes.created,
+            "Could not create first application badge"
+        )
+        self.assertEqual(
+            requests.delete(self.url + self.badge["name"]).status_code,
+            requests.codes.unauthorized,
+            "Wrong answer when trying to delete a badge without authentication"
+        )
+
+    def test_cannot_delete_badge_from_another_application(self):
+        self.check_precondition(
+            self.request("post", self.url, json=self.badge),
+            requests.codes.created,
+            "Could not create first application badge"
+        )
+
+        new_token = "Bearer {}".format(self.register_application("goat"))
+        self.assertEqual(
+            requests.delete(self.url + self.badge["name"], headers=dict(Authorization=new_token)).status_code,
+            requests.codes.not_found,
+            "Wrong answer when trying to delete a badge from another application"
+        )
+
     def test_two_applications_can_have_same_badge_name(self):
         self.check_precondition(
             self.request("post", self.url, json=self.badge),
