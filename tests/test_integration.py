@@ -106,17 +106,17 @@ class IntegrationTest(DatabaseWiperTestMixin, APITestMixin, TestCase):
         # check that user was indeed created and given the points but no award
         users = self.request("get", self.url + "/users/").json()
         self.assertEqual(len(users), 1, "More user are present than what we prepared.")
-        user = users[0]
+        r_user = users[0]
 
         self.assertEqual(
-            len(user["points"]),
+            len(r_user["points"]),
             1,
             "User received points in more than one pointScale which we did not create, or in none"
         )
 
-        self.assertEqual(user["points"][0]["points"], 1, "User did not receive the one point it was awarded.")
+        self.assertEqual(r_user["points"][0]["points"], 1, "User did not receive the one point it was awarded.")
 
-        self.assertEqual(len(user["badges"]), 0, "User was awarded points even though he shouldn't have.")
+        self.assertEqual(len(r_user["badges"]), 0, "User was awarded points even though he shouldn't have.")
 
         # give more points to get the award
         data = dict(type=event_test_fixed, username=user)
@@ -127,4 +127,39 @@ class IntegrationTest(DatabaseWiperTestMixin, APITestMixin, TestCase):
                 "Could not create an additional event"
             )
 
-        # check that user gained award and points
+        # check that user gained badge and points
+        users = self.request("get", self.url + "/users/").json()
+        self.assertEqual(len(users), 1, "More user are present than what we prepared.")
+        r_user = users[0]
+
+        self.assertEqual(
+            len(r_user["points"]),
+            1,
+            "User received points in more than one pointScale which we did not create, or in none"
+        )
+
+        self.assertEqual(r_user["points"][0]["points"], 7, "User did not receive the one point it was awarded.")
+
+        self.assertEqual(len(r_user["badges"]), 1, "User was awarded not awarded the badges it should have.")
+        self.assertEqual(r_user["badges"][0]["name"], agile_tester_badge)
+
+        # add point to another user
+        data = dict(type=event_test_fixed, username="goatsy-2")
+        self.check_answer(
+            self.request("post", self.url + "/events/", json=data),
+            requests.codes.created,
+            "Could not give points to another user."
+        )
+
+        # check that first user did not get more points
+        users = self.request("get", self.url + "/users/").json()
+        self.assertEqual(len(users), 2, "More user are present than what we prepared.")
+        r_user = users[0]
+
+        self.assertEqual(
+            len(r_user["points"]),
+            1,
+            "User received points in more than one pointScale which we did not create, or in none"
+        )
+
+        self.assertEqual(r_user["points"][0]["points"], 7, "User did not receive the one point it was awarded.")
