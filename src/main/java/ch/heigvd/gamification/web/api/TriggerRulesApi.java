@@ -57,13 +57,13 @@ public interface TriggerRulesApi {
                     response = TriggerRuleDTO.class)
     })
     @RequestMapping(
-            value = "/rules/triggers/{id}/",
+            value = "/rules/triggers/{name}/",
             produces = {"application/json"},
             method = RequestMethod.GET
     )
     TriggerRuleDTO getTriggerRule(Application app,
-                                  @ApiParam(value = "The id of the trigger rule.", required = true)
-                                  @PathVariable("id") long id);
+                                  @ApiParam(value = "The name of the trigger rule.", required = true)
+                                  @PathVariable("name") String name);
 
     @ApiOperation(
             value = "Creates a new trigger rule.",
@@ -124,14 +124,14 @@ public interface TriggerRulesApi {
             )
     })
     @RequestMapping(
-            value = "/rules/triggers/{id}/",
+            value = "/rules/triggers/{name}/",
             produces = {"application/json"},
             consumes = {"application/json"},
             method = RequestMethod.DELETE
     )
     ResponseEntity<Void> deleteTriggerRule(Application app,
-                                           @ApiParam(value = "The id of the given trigger rule.", required = true)
-                                           @PathVariable("id") long id);
+                                           @ApiParam(value = "The name of the given trigger rule.", required = true)
+                                           @PathVariable("name") String name);
 
 
     //TODO

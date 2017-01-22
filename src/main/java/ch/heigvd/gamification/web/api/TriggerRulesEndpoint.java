@@ -4,7 +4,6 @@ import ch.heigvd.gamification.dao.ApplicationRepository;
 import ch.heigvd.gamification.dao.BadgeRepository;
 import ch.heigvd.gamification.dao.PointScaleRepository;
 import ch.heigvd.gamification.dao.TriggerRuleRepository;
-import ch.heigvd.gamification.dto.RuleDTO;
 import ch.heigvd.gamification.dto.TriggerRuleDTO;
 import ch.heigvd.gamification.exception.ConflictException;
 import ch.heigvd.gamification.exception.NotFoundException;
@@ -59,11 +58,11 @@ public class TriggerRulesEndpoint implements TriggerRulesApi {
                 .collect(Collectors.toList());
     }
 
-    @RequestMapping(method = RequestMethod.GET, value = "/{id}")
+    @RequestMapping(method = RequestMethod.GET, value = "/{name}")
     public TriggerRuleDTO getTriggerRule(@ApiIgnore @RequestAttribute("application") Application app,
-                           @PathVariable long id) {
+                           @PathVariable String name) {
         TriggerRule rule =  triggerRuleRepository
-                .findByApplicationNameAndId(app.getName(), id)
+                .findByApplicationNameAndName(app.getName(), name)
                 .orElseThrow(NotFoundException::new);
 
         return toTriggerRuleDTO(rule);
@@ -102,22 +101,22 @@ public class TriggerRulesEndpoint implements TriggerRulesApi {
             triggerRuleRepository.save(rule);
 
             URI location = ServletUriComponentsBuilder
-                    .fromCurrentRequest().path("/{id}")
-                    .buildAndExpand(rule.getId()).toUri();
+                    .fromCurrentRequest().path("/{name}")
+                    .buildAndExpand(rule.getName()).toUri();
 
             return ResponseEntity.created(location).build();
         }
         catch (DataIntegrityViolationException e) {
-            // The name of a rule must be unique in a gamified application.
+            // The name of a trigger rule must be unique in a gamified application.
             throw new ConflictException("name");
         }
     }
 
-    @RequestMapping(method = RequestMethod.DELETE, value = "/{id}")
+    @RequestMapping(method = RequestMethod.DELETE, value = "/{name}")
     public ResponseEntity<Void> deleteTriggerRule(@ApiIgnore @RequestAttribute("application") Application app,
-                                                  @PathVariable long id) {
+                                                  @PathVariable String name) {
         TriggerRule rule = triggerRuleRepository
-                .findByApplicationNameAndId(app.getName(), id)
+                .findByApplicationNameAndName(app.getName(), name)
                 .orElseThrow(NotFoundException::new);
 
         triggerRuleRepository.delete(rule);

@@ -45,11 +45,11 @@ public class PointScalesEndpoint implements PointScalesApi {
                 .collect(Collectors.toList());
     }
 
-    @RequestMapping(method = RequestMethod.GET, value = "/{id}")
+    @RequestMapping(method = RequestMethod.GET, value = "/{name}")
     public PointScaleDTO getPointScale(@ApiIgnore @RequestAttribute("application") Application app,
-                                       @PathVariable long id) {
+                                       @PathVariable String name) {
         PointScale pointScale = pointScaleRepository
-                .findByApplicationNameAndId(app.getName(), id)
+                .findByApplicationNameAndName(app.getName(), name)
                 .orElseThrow(NotFoundException::new);
 
         return toPointScaleDTO(pointScale);
@@ -69,8 +69,8 @@ public class PointScalesEndpoint implements PointScalesApi {
             pointScaleRepository.save(pointScale);
 
             URI location = ServletUriComponentsBuilder
-                    .fromCurrentRequest().path("/{id}")
-                    .buildAndExpand(pointScale.getId()).toUri();
+                    .fromCurrentRequest().path("/{name}")
+                    .buildAndExpand(pointScale.getName()).toUri();
 
             return ResponseEntity.created(location).build();
         }
@@ -80,11 +80,11 @@ public class PointScalesEndpoint implements PointScalesApi {
         }
     }
 
-    @RequestMapping(method = RequestMethod.DELETE, value = "/{id}")
+    @RequestMapping(method = RequestMethod.DELETE, value = "/{name}")
     public ResponseEntity<Void> deletePointScale(@ApiIgnore @RequestAttribute("application") Application app,
-                                                 @PathVariable long id) {
+                                                 @PathVariable String name) {
         PointScale pointScale = pointScaleRepository
-                .findByApplicationNameAndId(app.getName(), id)
+                .findByApplicationNameAndName(app.getName(), name)
                 .orElseThrow(NotFoundException::new);
 
         pointScaleRepository.delete(pointScale);
