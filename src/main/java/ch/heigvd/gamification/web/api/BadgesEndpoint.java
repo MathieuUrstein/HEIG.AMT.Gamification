@@ -25,8 +25,6 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping(URIs.BADGES)
 public class BadgesEndpoint implements BadgesApi {
-    // TODO : endpoint for images (badges)
-
     private final BadgeRepository badgeRepository;
     private final ApplicationRepository applicationRepository;
 
@@ -61,14 +59,12 @@ public class BadgesEndpoint implements BadgesApi {
     @RequestMapping(method = RequestMethod.POST)
     public ResponseEntity<Void> createBadge(@ApiIgnore @RequestAttribute("application") Application application,
                                             @Valid @RequestBody BadgeDTO badgeDTO) {
-        // TODO : image with a url
 
         try {
             Application app = applicationRepository.findByName(application.getName());
             Badge badge = new Badge();
 
             badge.setName(badgeDTO.getName());
-            badge.setImage(badgeDTO.getImage());
             badge.setApplication(app);
             app.addBadge(badge);
 

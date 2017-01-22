@@ -35,12 +35,6 @@ public interface RegisterApi {
                     response = Void.class
             )
     })
-    @RequestMapping(
-            value = "/register/",
-            produces = {"application/json"},
-            consumes = {"application/json"},
-            method = RequestMethod.POST
-    )
     ResponseEntity<Void> register(@ApiParam(value = "The credentials of the application to create.", required = true)
                                   @RequestBody CredentialsDTO body);
 

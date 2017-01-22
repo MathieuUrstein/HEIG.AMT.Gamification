@@ -29,11 +29,6 @@ public interface BadgesApi {
                     response = BadgeDTO.class
             )
     })
-    @RequestMapping(
-            value = "/badges/",
-            produces = {"application/json"},
-            method = RequestMethod.GET
-    )
     List<BadgeDTO> getBadges(@ApiIgnore @RequestAttribute("application") Application app);
 
     @ApiOperation(
@@ -56,11 +51,6 @@ public interface BadgesApi {
                     response = Void.class
             )
     })
-    @RequestMapping(
-            value = "/badges/{name}/",
-            produces = {"application/json"},
-            method = RequestMethod.GET
-    )
     BadgeDTO getBadge(@ApiIgnore @RequestAttribute("application") Application app,
                       @ApiParam(value = "The name of the badge.", required = true) @PathVariable("name") String name);
 
@@ -91,10 +81,6 @@ public interface BadgesApi {
                     response = Void.class
             )
     })
-    @RequestMapping(value = "/badges/",
-            produces = {"application/json"},
-            consumes = {"application/json"},
-            method = RequestMethod.POST)
     ResponseEntity<Void> createBadge(@ApiIgnore @RequestAttribute("application") Application application,
                                      @ApiParam(value = "The info needed to create the badge.", required = true)
                                      @Valid @RequestBody BadgeDTO badgeDTO);
@@ -109,10 +95,6 @@ public interface BadgesApi {
         @ApiResponse(code = 404, message = "Badge not found.", response = Void.class),
         @ApiResponse(code = 409, message = "Error code 3: Badge name must be unique in the current application.",
         response = Void.class) })
-    @RequestMapping(value = "/badges/{id}/",
-        produces = { "application/json" },
-        consumes = { "application/json" },
-        method = RequestMethod.PATCH)
     ResponseEntity<Void> badgesIdPatch(@ApiParam(value = "The id of the badge.",required=true ) @PathVariable("id")
     BigDecimal id,
         @ApiParam(value = "The new info of the badge."  ) @RequestBody Badge body);
@@ -126,10 +108,6 @@ public interface BadgesApi {
         @ApiResponse(code = 404, message = "Badge not found.", response = Void.class),
         @ApiResponse(code = 409, message = "Error code 3: Badge name must be unique in the current application.",
         response = Void.class) })
-    @RequestMapping(value = "/badges/{id}/",
-        produces = { "application/json" },
-        consumes = { "application/json" },
-        method = RequestMethod.PUT)
     ResponseEntity<Void> badgesIdPut(@ApiParam(value = "The id of the badge.",required=true ) @PathVariable("id")
     BigDecimal id,
         @ApiParam(value = "The new info of the badge." ,required=true ) @RequestBody Badge body);*/
@@ -149,12 +127,6 @@ public interface BadgesApi {
                     response = Void.class
             )
     })
-    @RequestMapping(
-            value = "/badges/{name}/",
-            produces = {"application/json"},
-            consumes = {"application/json"},
-            method = RequestMethod.DELETE
-    )
     ResponseEntity<Void> deleteBadge(@ApiIgnore @RequestAttribute("application") Application app,
                                      @ApiParam(value = "The name of the badge.", required = true)
                                      @PathVariable("name") String name);

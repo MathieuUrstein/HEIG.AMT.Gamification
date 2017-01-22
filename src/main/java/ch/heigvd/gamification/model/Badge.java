@@ -70,6 +70,6 @@ public class Badge {
     }
 
     public BadgeDTO toDTO() {
-        return new BadgeDTO(name, image);
+        return new BadgeDTO(name);
     }
 }

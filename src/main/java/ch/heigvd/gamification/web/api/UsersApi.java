@@ -28,11 +28,6 @@ public interface UsersApi {
                     response = UserDTO.class
             )
     })
-    @RequestMapping(
-            value = "/users/",
-            produces = {"application/json"},
-            method = RequestMethod.GET
-    )
     List<UserDTO> getUsers(Application app);
 
 
@@ -56,11 +51,6 @@ public interface UsersApi {
                     response = Void.class
             )
     })
-    @RequestMapping(
-            value = "/users/{username}/",
-            produces = {"application/json"},
-            method = RequestMethod.GET
-    )
     UserDTO getUser(Application app,
                     @ApiParam(value = "The username of the user.", required = true)
                     @PathVariable("username") String username);
