@@ -21,7 +21,6 @@ public class TriggerRule extends Rule {
     private PointScale pointScale;
 
     public TriggerRule() {
-        super();
     }
 
     public int getLimit() {

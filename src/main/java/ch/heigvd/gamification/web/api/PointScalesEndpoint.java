@@ -75,7 +75,7 @@ public class PointScalesEndpoint implements PointScalesApi {
             return ResponseEntity.created(location).build();
         }
         catch (DataIntegrityViolationException e) {
-            // The name of a point scales must be unique in a gamified application.
+            // The name of a point scales must be unique in a gamified application
             throw new ConflictException("name");
         }
     }

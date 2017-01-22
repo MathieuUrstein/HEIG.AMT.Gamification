@@ -6,6 +6,7 @@ import ch.heigvd.gamification.dao.PointScaleRepository;
 import ch.heigvd.gamification.dto.EventRuleDTO;
 import ch.heigvd.gamification.exception.ConflictException;
 import ch.heigvd.gamification.exception.NotFoundException;
+import ch.heigvd.gamification.exception.PointScaleNotFoundException;
 import ch.heigvd.gamification.model.Application;
 import ch.heigvd.gamification.model.EventRule;
 import ch.heigvd.gamification.model.PointScale;
@@ -22,7 +23,6 @@ import springfox.documentation.annotations.ApiIgnore;
 import javax.validation.Valid;
 import java.net.URI;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RestController
@@ -68,19 +68,16 @@ public class EventRulesEndpoint implements EventRulesAPi {
                                                 @Valid @RequestBody EventRuleDTO ruleDTO) {
         try {
             Application app = applicationRepository.findByName(application.getName());
-            Optional<PointScale> opt = pointScaleRepository
-                    .findByApplicationNameAndName(application.getName(), ruleDTO.getName());
-
-            if (!opt.isPresent()) {
-                throw new NotFoundException();
-            }
+            PointScale pointScale = pointScaleRepository
+                    .findByApplicationNameAndName(application.getName(), ruleDTO.getPointScale())
+                    .orElseThrow(PointScaleNotFoundException::new);
 
             EventRule rule = new EventRule();
 
             rule.setName(ruleDTO.getName());
             rule.setApplication(app);
             rule.setEvent(ruleDTO.getEvent());
-            rule.setPointScale(opt.get());
+            rule.setPointScale(pointScale);
             rule.setPointsGiven(ruleDTO.getPointsGiven());
             app.addRules(rule);
 
@@ -94,7 +91,7 @@ public class EventRulesEndpoint implements EventRulesAPi {
         }
 
         catch (DataIntegrityViolationException e) {
-            // The name of a event rule must be unique in a gamified application.
+            // The name of a event rule must be unique in a gamified application
             throw new ConflictException("name");
         }
     }

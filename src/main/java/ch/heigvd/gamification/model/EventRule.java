@@ -17,7 +17,6 @@ public class EventRule extends Rule {
     private PointScale pointScale;
 
     public EventRule() {
-        super();
     }
 
     public String getEvent() {

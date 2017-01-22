@@ -81,7 +81,7 @@ public class BadgesEndpoint implements BadgesApi {
             return ResponseEntity.created(location).build();
         }
         catch (DataIntegrityViolationException e) {
-            // The name of a badge must be unique in a gamified application.
+            // The name of a badge must be unique in a gamified application
             throw new ConflictException("name");
         }
     }

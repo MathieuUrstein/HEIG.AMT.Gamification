@@ -24,7 +24,6 @@ import springfox.documentation.annotations.ApiIgnore;
 import javax.validation.Valid;
 import java.net.URI;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RestController
@@ -73,26 +72,20 @@ public class TriggerRulesEndpoint implements TriggerRulesApi {
                                                @Valid @RequestBody TriggerRuleDTO ruleDTO) {
         try {
             Application app = applicationRepository.findByName(application.getName());
-            Optional<PointScale> optPS = pointScaleRepository
-                    .findByApplicationNameAndName(application.getName(), ruleDTO.getName());
+            PointScale pointScale = pointScaleRepository
+                    .findByApplicationNameAndName(application.getName(), ruleDTO.getName())
+                    .orElseThrow(NotFoundException::new);
 
-            if (!optPS.isPresent()) {
-                throw new NotFoundException();
-            }
-
-            Optional<Badge> optBadge = badgeRepository
-                    .findByApplicationNameAndName(application.getName(), ruleDTO.getBadgeAwarded());
-
-            if (!optBadge.isPresent()) {
-                throw new NotFoundException();
-            }
+            Badge badge = badgeRepository
+                    .findByApplicationNameAndName(application.getName(), ruleDTO.getBadgeAwarded())
+                    .orElseThrow(NotFoundException::new);
 
             TriggerRule rule = new TriggerRule();
 
             rule.setName(ruleDTO.getName());
             rule.setApplication(app);
-            rule.setBadgeAwarded(optBadge.get());
-            rule.setPointScale(optPS.get());
+            rule.setBadgeAwarded(badge);
+            rule.setPointScale(pointScale);
             rule.setLimit(ruleDTO.getLimit());
             rule.setAboveLimit(ruleDTO.getAboveLimit());
 
@@ -107,7 +100,7 @@ public class TriggerRulesEndpoint implements TriggerRulesApi {
             return ResponseEntity.created(location).build();
         }
         catch (DataIntegrityViolationException e) {
-            // The name of a trigger rule must be unique in a gamified application.
+            // The name of a rule must be unique in a gamified application
             throw new ConflictException("name");
         }
     }
