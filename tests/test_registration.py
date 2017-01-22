@@ -6,7 +6,7 @@ from sqlalchemy import select
 from utils import HTTP_METHODS, BASE_URL
 from utils.mixins.database import DatabaseWiperTestMixin
 from utils.mixins.api import RestAPITestMixin
-from utils.mixins.load import ConcurrentTesterMixin
+from utils.mixins.concurrency import ConcurrentTesterMixin
 from utils.models import Application
 
 
@@ -16,8 +16,6 @@ class TestRegistration(DatabaseWiperTestMixin, RestAPITestMixin, ConcurrentTeste
     required_fields = {"name", "password"}
 
     application = dict(name="goatsy", password="goat")
-    concurrency_tests = 1000
-    request_per_concurrent_test = 10
 
     def test_can_register(self):
         r = requests.post(self.url, json=self.application)

@@ -1,5 +1,6 @@
 from multiprocessing.pool import Pool
 
+import os
 import requests
 from collections import defaultdict
 
@@ -10,6 +11,9 @@ def request(data):
 
 
 class ConcurrentTesterMixin:
+    concurrency_tests = os.environ.get("GAMIFICATION_CONCURRENCY_TESTS", 100)
+    request_per_concurrent_test = os.environ.get("GAMIFICATION_REQUEST_PER_CONCURRENT_TEST", 10)
+
     def only_one_with_status(self, status, results):
         g = iter(result.status_code == status for result in results)
         return any(g) and not any(g)

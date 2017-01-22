@@ -6,10 +6,11 @@ from sqlalchemy import select
 from utils import BASE_URL, HTTP_METHODS
 from utils.mixins.database import DatabaseWiperTestMixin
 from utils.mixins.api import AuthenticatedRestAPIMixin
+from utils.mixins.concurrency import ConcurrentTesterMixin
 from utils.models import Badge
 
 
-class TestBadges(DatabaseWiperTestMixin, AuthenticatedRestAPIMixin, unittest.TestCase):
+class TestBadges(DatabaseWiperTestMixin, AuthenticatedRestAPIMixin, ConcurrentTesterMixin, unittest.TestCase):
     url = BASE_URL + "/badges/"
     invalid_methods = HTTP_METHODS - {"get", "post"}
     required_fields = {"name"}
@@ -61,6 +62,21 @@ class TestBadges(DatabaseWiperTestMixin, AuthenticatedRestAPIMixin, unittest.Tes
     @unittest.skip("Image upload is not yet implemented")
     def test_can_add_image_to_badge(self):
         raise NotImplementedError()
+
+    def test_can_only_create_one_badge_with_a_given_name(self):
+        self.check_precondition(
+            self.request("post", self.url, json=self.badge),
+            requests.codes.created,
+            "Could not create badge, aborting test"
+        )
+        headers = {"Authorization": "Bearer {}".format(self.token)}
+
+        for i in range(self.concurrency_tests):
+            app = dict(name="badge-conc-{}".format(i))
+            res = self.request_concurrently(
+                "post", self.url, self.request_per_concurrent_test, json=app, headers=headers
+            )
+            self.check_only_one_created(res)
 
 
 if __name__ == '__main__':
