@@ -1,19 +1,36 @@
 package ch.heigvd.gamification.dto;
 
+import java.util.List;
+
 public class UserDTO {
-    // TODO : send links
+    private String username;
+    private List<BadgeDTO> badges;
+    private List<PointsOnPointScaleDTO> points;
 
-    private String name;
-
-    public UserDTO(String name) {
-        this.name = name;
+    public UserDTO() {
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
-    public String getName() {
-        return name;
+    public String getUsername() {
+        return username;
+    }
+
+    public List<BadgeDTO> getBadges() {
+        return badges;
+    }
+
+    public void setBadges(List<BadgeDTO> badges) {
+        this.badges = badges;
+    }
+
+    public List<PointsOnPointScaleDTO> getPoints() {
+        return points;
+    }
+
+    public void setPoints(List<PointsOnPointScaleDTO> points) {
+        this.points = points;
     }
 }

@@ -1,8 +1,15 @@
 package ch.heigvd.gamification.model;
 
+import ch.heigvd.gamification.dto.BadgeDTO;
+import ch.heigvd.gamification.dto.PointsOnPointScaleDTO;
+import ch.heigvd.gamification.dto.UserDTO;
+
 import javax.persistence.*;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Entity
 @Table(name = "user", uniqueConstraints = @UniqueConstraint(columnNames = {"username", "application_id"}))
@@ -81,5 +88,31 @@ public class User {
 
     public void addPointAward(PointAward pointAward) {
         pointAwards.add(pointAward);
+    }
+
+    public UserDTO toDTO() {
+        List<BadgeDTO> badges = badgeAwards
+                .stream()
+                .map(ba -> ba.getBadge().toDTO())
+                .collect(Collectors.toList());
+
+        Map<Long, Integer> pointsOnPointScales = new HashMap<>();
+        for (PointAward pa: pointAwards) {
+            long key = pa.getPointScale().getId();
+            int points = pointsOnPointScales.containsKey(key) ? pointsOnPointScales.get(key) : 0;
+            pointsOnPointScales.put(key, points + pa.getPoints());
+        }
+
+        List<PointsOnPointScaleDTO> points = pointsOnPointScales.entrySet()
+                .stream()
+                .map(i -> new PointsOnPointScaleDTO(i.getKey(), i.getValue()))
+                .collect(Collectors.toList());
+
+        UserDTO res = new UserDTO();
+        res.setUsername(username);
+        res.setBadges(badges);
+        res.setPoints(points);
+
+        return res;
     }
 }

@@ -1,5 +1,7 @@
 package ch.heigvd.gamification.model;
 
+import ch.heigvd.gamification.dto.BadgeDTO;
+
 import javax.persistence.*;
 import java.util.LinkedList;
 import java.util.List;
@@ -65,5 +67,9 @@ public class Badge {
 
     public void addPointAward(BadgeAward badgeAward) {
         badgeAwards.add(badgeAward);
+    }
+
+    public BadgeDTO toDTO() {
+        return new BadgeDTO(name, image);
     }
 }
