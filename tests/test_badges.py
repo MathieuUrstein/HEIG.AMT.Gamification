@@ -1,12 +1,13 @@
 import unittest
 
+import os
 import requests
 from sqlalchemy import select
 
 from utils import BASE_URL, HTTP_METHODS
 from utils.mixins.database import DatabaseWiperTestMixin
 from utils.mixins.api import AuthenticatedRestAPIMixin
-from utils.mixins.concurrency import ConcurrentTesterMixin
+from utils.mixins.concurrency import ConcurrentTesterMixin, skip_concurrency_env_variable
 from utils.models import Badge
 
 
@@ -63,6 +64,10 @@ class TestBadges(DatabaseWiperTestMixin, AuthenticatedRestAPIMixin, ConcurrentTe
     def test_can_add_image_to_badge(self):
         raise NotImplementedError()
 
+    @unittest.skipIf(
+        os.environ.get(skip_concurrency_env_variable, False),
+        "Skipping concurrency test because {} is set".format(skip_concurrency_env_variable)
+    )
     def test_can_only_create_one_badge_with_a_given_name(self):
         self.check_precondition(
             self.request("post", self.url, json=self.badge),

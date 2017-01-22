@@ -114,9 +114,15 @@ class IntegrationTest(DatabaseWiperTestMixin, APITestMixin, TestCase):
 
         self.assertEqual(user["points"][0]["points"], 1, "User did not receive the one point it was awarded")
 
+        data = dict(type=event_test_created, username=user)
+        self.check_answer(
+            self.request("post", self.url + "/events/", json=data),
+            requests.codes.created,
+            "Could not create an event"
+        )
         # give more points to get the award
+        data = dict(type=event_test_fixed, username=user)
         for _ in range(2):
-            data = dict(type=event_test_fixed, username=user)
             self.check_answer(
                 self.request("post", self.url + "/events/", json=data),
                 requests.codes.created,

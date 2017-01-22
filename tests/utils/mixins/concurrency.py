@@ -5,6 +5,9 @@ import requests
 from collections import defaultdict
 
 
+skip_concurrency_env_variable = "GAMIFICATION_SKIP_CONCURRENCY_TESTS"
+
+
 def request(data):
     x = requests.request(data["method"], data["url"], **data["kwargs"])
     return x

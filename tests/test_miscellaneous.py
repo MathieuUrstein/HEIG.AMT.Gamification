@@ -11,7 +11,6 @@ from utils.models import Application
 
 class TestMiscellaneous(DatabaseWiperTestMixin, unittest.TestCase):
     def check_server_accepts_weird_chars(self, name):
-
         application = dict(name=name, password="goat")
         r = requests.post(BASE_URL + "/register/", json=application)
         self.assertEqual(r.status_code, requests.codes.created)

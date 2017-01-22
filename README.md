@@ -71,6 +71,8 @@ Requirements:
 4. Still at the root of the project, run `python -m unittest discover tests`.
 5. The results of the unit tests are displayed.
 
+*Note : you can skip running concurrency tests, which take quite some time, by setting GAMIFICATION_SKIP_CONCURRENCY_TESTS*
+
 
 # Authors
 

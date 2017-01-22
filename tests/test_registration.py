@@ -1,12 +1,13 @@
 import unittest
 
+import os
 import requests
 from sqlalchemy import select
 
 from utils import HTTP_METHODS, BASE_URL
 from utils.mixins.database import DatabaseWiperTestMixin
 from utils.mixins.api import RestAPITestMixin
-from utils.mixins.concurrency import ConcurrentTesterMixin
+from utils.mixins.concurrency import ConcurrentTesterMixin, skip_concurrency_env_variable
 from utils.models import Application
 
 
@@ -45,6 +46,10 @@ class TestRegistration(DatabaseWiperTestMixin, RestAPITestMixin, ConcurrentTeste
         ).first()
         self.assertNotEqual(self.application["password"], result["password"], msg="Password is not hashed")
 
+    @unittest.skipIf(
+        os.environ.get(skip_concurrency_env_variable, False),
+        "Skipping concurrency test because {} is set".format(skip_concurrency_env_variable)
+    )
     def test_can_only_create_one_application_with_a_given_name(self):
         self.check_precondition(
             requests.post(self.url, json=self.application),
