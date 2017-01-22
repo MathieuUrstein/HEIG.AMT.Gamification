@@ -1,5 +1,6 @@
 import unittest
 
+import os
 import requests
 from sqlalchemy import select
 
@@ -18,6 +19,7 @@ class TestMiscellaneous(DatabaseWiperTestMixin, unittest.TestCase):
         data = self.database_connection.execute(select([Application])).first()
         self.assertEqual(name, data["name"], msg="Saving object in UTF-8 doesn't keep the correct charset")
 
+    @unittest.skipIf(os.environ.get("TRAVIS", False), "Travis' database doesn't support full utf8mb4")
     def test_server_accepts_emojis(self):
         self.check_server_accepts_weird_chars("😁")
 
