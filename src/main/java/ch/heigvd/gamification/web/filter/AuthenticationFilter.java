@@ -43,8 +43,6 @@ public class AuthenticationFilter implements Filter {
         String uri = request.getRequestURI().substring(request.getContextPath().length());
         String token = JWTUtils.extractToken(request.getHeader("Authorization"));
 
-        boolean staticFiles = uri.startsWith(URIs.STATIC);
-
         boolean doc = uri.equals(URIs.DOCUMENTATION) ||
                 uri.equals(URIs.SWAGGER_HTML) ||
                 uri.startsWith(URIs.SWAGGER_UI_RESOURCES) ||
@@ -53,7 +51,7 @@ public class AuthenticationFilter implements Filter {
 
         boolean authRequest = uri.equals(URIs.AUTH);
 
-        if (staticFiles || doc || uri.equals(URIs.REGISTER) || (authRequest && token == null)) {
+        if (doc || uri.equals(URIs.REGISTER) || (authRequest && token == null)) {
             chain.doFilter(servletRequest, response);
             return;
         }

@@ -16,5 +16,4 @@ public interface URIs {
     String SWAGGER_UI_RESOURCES = "/webjars/springfox-swagger-ui/";
     String SWAGGER_RESOURCES = "/swagger-resources";
     String V2_API_DOCS = "/v2/api-docs";
-    String STATIC = "/static/";
 }
