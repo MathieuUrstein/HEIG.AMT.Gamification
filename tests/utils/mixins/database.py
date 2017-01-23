@@ -47,6 +47,12 @@ class DatabaseAccessMixin:
 
 class DatabaseWiperTestMixin(DatabaseAccessMixin):
     """Mixin to clear the database between each test."""
+
+    def setUp(self):
+        for table in reversed(self.database_meta.sorted_tables):
+            self.database_connection.execute(table.delete())
+        super().setUp()
+
     def tearDown(self):
         super().tearDown()
 
