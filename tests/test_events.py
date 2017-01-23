@@ -83,7 +83,7 @@ class TestEvents(DatabaseWiperTestMixin, AuthenticatedRestAPIMixin, ConcurrentTe
                 "post", self.url, self.request_per_concurrent_test, json=self.event, headers=headers
             )
 
-            if not self.all_with_status(requests.codes.ok, res):
+            if not self.all_with_status(requests.codes.created, res):
                 self.fail(
                     self._format_msg("Not all events were accepted", self._format_responses(self._parse_responses(res)))
                 )
