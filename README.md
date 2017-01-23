@@ -20,7 +20,7 @@ To deploy our app, you will need the following:
 
 1. Clone the repo and cd into it.
 2. Copy `deployment/env.sample` to `deployment/env` and edit the file to your liking. Be careful, it will contain your database password !
-2. `$ docker-compose up --build db`: this is required the first time you launch the databse, otherwise the app will fail.
+2. `$ docker-compose up --build db`: this is required the first time you deploy in order to prepare the container of the db and ensure that the server will not start before the db.
 3. `$ ctrl + C`, to stop the database once it is setup.
 4. `$ docker-compose up --build`
 5. That's it, the app should be listening at [http://localhost:8080/api](http://localhost:8080/api). There, you can see the documentation of the API of the platform. Of course, if you don't run docker directly on your system (for example on a vm), the host should be the address of the docker host and not `localhost`. Moreover if you redefined `$GAMIFICATION_APP_PORT` then you need to adapt the port accordingly.
