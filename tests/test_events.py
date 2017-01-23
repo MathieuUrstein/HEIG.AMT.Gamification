@@ -57,7 +57,7 @@ class TestEvents(DatabaseWiperTestMixin, AuthenticatedRestAPIMixin, ConcurrentTe
             "Could not create our pointScale."
         )
         data = dict(
-            pointScale="pointscale", name="rule-event", event="event", pointsGiven=1
+            pointScale="pointscale", name="rule-event", event=self.event["type"], pointsGiven=1
         )
         self.check_precondition(
             self.request("post", BASE_URL + "/rules/events/", json=data),
@@ -90,9 +90,8 @@ class TestEvents(DatabaseWiperTestMixin, AuthenticatedRestAPIMixin, ConcurrentTe
 
             r = self.request("get", BASE_URL + "/users/")
             self.assertEqual(r.status_code, requests.codes.ok, self.prepare_message("Couldn't get list of users", r))
-
             for u in r.json():
-                if u["name"] != event["username"]:
+                if u["username"] != event["username"]:
                     continue
 
                 self.assertEqual(len(u["badges"]), 1, msg=self.prepare_message("User did not receive his badge", r))
