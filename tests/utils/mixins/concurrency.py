@@ -14,8 +14,8 @@ def request(data):
 
 
 class ConcurrentTesterMixin:
-    concurrency_tests = os.environ.get("GAMIFICATION_CONCURRENCY_TESTS", 100)
-    request_per_concurrent_test = os.environ.get("GAMIFICATION_REQUEST_PER_CONCURRENT_TEST", 10)
+    concurrency_tests = int(os.environ.get("GAMIFICATION_CONCURRENCY_TESTS", 100))
+    request_per_concurrent_test = int(os.environ.get("GAMIFICATION_REQUEST_PER_CONCURRENT_TEST", 10))
 
     def only_one_with_status(self, status, results):
         g = iter(result.status_code == status for result in results)
@@ -27,6 +27,10 @@ class ConcurrentTesterMixin:
 
     def none_with_status(self, status, results):
         g = iter(result.status_code != status for result in results)
+        return all(g)
+
+    def all_with_status(self, status, results):
+        g = iter(result.status_code == status for result in results)
         return all(g)
 
     def _parse_responses(self, responses):

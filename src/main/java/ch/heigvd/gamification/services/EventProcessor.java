@@ -85,8 +85,11 @@ public class EventProcessor {
         Map<PointScale, Integer> sumPointsByScale = computeSumPointsByScale(appName, user.getUsername());
 
         for (TriggerRule tr : triggerRuleRepository.findByApplicationName(appName)) {
-            int totPointsReceived = sumPointsByScale.get(tr.getPointScale());
+
+            PointScale key = tr.getPointScale();
+            int totPointsReceived = sumPointsByScale.containsKey(key) ? sumPointsByScale.get(key) : 0;
             boolean above = tr.getAboveLimit();
+
             if ((above && totPointsReceived >= tr.getLimit()) || (!above && totPointsReceived <= tr.getLimit())) {
                 createBadgeAwardIfNotOwned(user, tr.getBadgeAwarded(), badgeAwards);
             }
