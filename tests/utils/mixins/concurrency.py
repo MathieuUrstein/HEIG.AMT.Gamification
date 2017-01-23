@@ -29,6 +29,10 @@ class ConcurrentTesterMixin:
         g = iter(result.status_code != status for result in results)
         return all(g)
 
+    def all_with_status(self, status, results):
+        g = iter(result.status_code == status for result in results)
+        return all(g)
+
     def _parse_responses(self, responses):
         data = dict(messages=defaultdict(lambda: 0), codes=defaultdict(lambda: 0))
 
