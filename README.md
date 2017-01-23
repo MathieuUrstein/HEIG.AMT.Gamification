@@ -40,7 +40,7 @@ you will need to do the following:
 2. You must either:
   * Specify the `MYSQL_USER`, `MYSQL_PASSWORD`, `DATABASE_HOST`, `MYSQL_DATABASE` environment variables before launching the project 
   * Create a configuration file. If you chose the first option, you can stop here. However, the configuration file is still useful to specify hibernate behaviour on startup (see note below).
-2. create a [configuration file](http://docs.spring.io/spring-boot/docs/current/reference/html/boot-features-external-config.html#boot-features-external-config-profile-specific-properties)
+2. Create a [configuration file](http://docs.spring.io/spring-boot/docs/current/reference/html/boot-features-external-config.html#boot-features-external-config-profile-specific-properties)
 in `/src/main/resources/` named `application-default.properties`. You can name it differently (`application-{profile}.properties`),
 but then you will have to specify later the profile used when you run the project.
 3. Inside, put the following lines: 
