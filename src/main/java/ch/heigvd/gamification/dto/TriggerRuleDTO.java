@@ -21,7 +21,7 @@ public class TriggerRuleDTO extends RuleDTO {
         this.aboveLimit = aboveLimit;
     }
 
-    @ApiModelProperty(value = "The badge awarded when rule condition matched.", required = true)
+    @ApiModelProperty(value = "The badge awarded when rule condition matches.", required = true)
     public String getBadgeAwarded() {
         return badgeAwarded;
     }
@@ -39,7 +39,7 @@ public class TriggerRuleDTO extends RuleDTO {
         this.pointScale = pointScale;
     }
 
-    @ApiModelProperty(value = "The point limit to award the badge.", required = true)
+    @ApiModelProperty(value = "The point limit to award the badge. The limit is inclusive.", required = true)
     public Integer getLimit() {
         return limit;
     }
@@ -48,7 +48,8 @@ public class TriggerRuleDTO extends RuleDTO {
         this.limit = limit;
     }
 
-    @ApiModelProperty(value = "Whether the badge is given above or below point limit.", required = true)
+    @ApiModelProperty(value = "Whether the badge is awarded when current points is >= the limit or <= limit of points to reach",
+            required = true)
     public Boolean getAboveLimit() {
         return aboveLimit;
     }
